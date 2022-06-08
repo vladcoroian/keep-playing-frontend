@@ -4,6 +4,7 @@ import 'package:keep_playing_frontend/widgets/event_widget.dart';
 
 import '../../../constants.dart';
 import '../../../models/event.dart';
+import '../../../widgets/buttons.dart';
 
 class FeedEventWidget extends StatelessWidget {
   final Event event;
@@ -14,36 +15,18 @@ class FeedEventWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return EventWidget(
         event: event,
-        leftButton: _detailsButton(context),
-        rightButton: _takeJobButton());
-  }
-
-  Widget _detailsButton(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
-            onPressed: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return DetailsEventDialog(event: event);
-                  });
-            },
-            child: const Text('Details')));
-  }
-
-  Widget _takeJobButton() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
-            onPressed: () {},
-            child: const Text('Take Job')));
+        leftButton: DetailsButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return DetailsEventDialog(event: event);
+                });
+          },
+        ),
+        rightButton: TakeJobButton(
+          onPressed: () {},
+        ));
   }
 }
 
@@ -68,6 +51,14 @@ class DetailsEventDialog extends StatelessWidget {
         const SizedBox(height: DEFAULT_PADDING),
         const Divider(),
         Text(event.details),
+        const Divider(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CancelButton(onPressed: () => {}),
+            AcceptButton(onPressed: () => {})
+          ],
+        ),
       ],
     );
   }
