@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:io';
 
 import '../../../constants.dart';
 import '../../../models/event.dart';
@@ -26,6 +27,8 @@ class EventWidget extends StatelessWidget {
               ),
               title: Text(event.name, textAlign: TextAlign.left),
               subtitle: Text(event.location, textAlign: TextAlign.left),
+              trailing: Text(
+                  NumberFormat.simpleCurrency(name: "GBP").format(event.price)),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -40,7 +43,8 @@ class EventWidget extends StatelessWidget {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
+                textStyle:
+                    const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
             onPressed: () {},
             child: const Text('Details')));
   }
@@ -50,7 +54,8 @@ class EventWidget extends StatelessWidget {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
+                textStyle:
+                    const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
             onPressed: () {},
             child: const Text('Take Job')));
   }

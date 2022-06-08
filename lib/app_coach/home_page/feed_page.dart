@@ -10,7 +10,7 @@ class FeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text('Feed')),
-        body: Column(children: [
+        body: ListView(children: [
           EventWidget(Event(
               name: "Muay Thai Training Session",
               location:
