@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 
+import 'app_organiser/organiser_home_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -50,7 +52,7 @@ class _LogInPageState extends State<LogInPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const Text('TODO')),
+            MaterialPageRoute(builder: (context) => const OrganiserHomePage()),
           );
         },
         child: const Text('Enter as organiser'));
