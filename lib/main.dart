@@ -3,6 +3,7 @@ import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 
 import 'app_organiser/organiser_home_page.dart';
 import 'constants.dart';
+import 'widgets/dialogs.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,24 +34,38 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => ExitDialog(
+              context: context,
+              title: 'Are you sure that you want to exit the app?',
+              text: ''),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-            child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _enterAsOrganiserButton(),
-        const SizedBox(height: 50),
-        _enterAsCoachButton(),
-      ],
-    )));
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+          body: Center(
+              child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _enterAsOrganiserButton(),
+          const SizedBox(height: 50),
+          _enterAsCoachButton(),
+        ],
+      ))),
+    );
   }
 
   Widget _enterAsOrganiserButton() {
     return SizedBox(
         height: 50.0,
-        width: 250.0,
+        width: 300.0,
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 25)),
@@ -67,7 +82,7 @@ class _LogInPageState extends State<LogInPage> {
   Widget _enterAsCoachButton() {
     return SizedBox(
         height: 50.0,
-        width: 250.0,
+        width: 300.0,
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 25)),

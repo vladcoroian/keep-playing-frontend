@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../../constants.dart';
 import '../../../widgets/buttons.dart';
@@ -13,18 +14,32 @@ class NewEventPage extends StatefulWidget {
 }
 
 class _NewEventPageState extends State<NewEventPage> {
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => ExitDialog(
+              context: context,
+              title: 'Are you sure that you want to exit?',
+              text: 'You haven\'t finished editing the new event'),
+        )) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('New Event')),
-      body: ListView(children: [
-        _selectSportForm(),
-        _selectDateForm(),
-        Center(
-            child: SubmitButton(
-          onPressed: () {},
-        )),
-      ]),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(title: const Text('New Event')),
+        body: ListView(children: [
+          _selectSportForm(),
+          _selectDateForm(),
+          Center(
+              child: SubmitButton(
+            onPressed: () {},
+          )),
+        ]),
+      ),
     );
   }
 
@@ -58,27 +73,5 @@ class _NewEventPageState extends State<NewEventPage> {
                 lastDate: DateTime(2100));
           },
         ));
-  }
-}
-
-class ConfirmationDialog extends StatelessWidget {
-  const ConfirmationDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
-      title: const Center(child: Text('Confirmation')),
-      children: <Widget>[
-        const Text('Are you sure that you want to post this job?'),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CancelButton(onPressed: () => {Navigator.pop(context)}),
-            AcceptButton(onPressed: () => {})
-          ],
-        ),
-      ],
-    );
   }
 }

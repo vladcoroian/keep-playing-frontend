@@ -13,7 +13,7 @@ class FeedPage extends StatelessWidget {
         body: ListView(children: [
           FeedEventWidget(
               event: Event(
-                  name: "Muay Thai Training Session",
+                  name: "Muay Thai Training Session Part 1",
                   location:
                       "Imperial College, Exhibition Rd, South Kensington, London SW7 2BX",
                   dateTime: DateTime(2022, 10, 12, 13, 14),

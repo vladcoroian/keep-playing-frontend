@@ -5,6 +5,7 @@ import 'package:keep_playing_frontend/widgets/event_widget.dart';
 import '../../../constants.dart';
 import '../../../models/event.dart';
 import '../../../widgets/buttons.dart';
+import '../../../widgets/dialogs.dart';
 
 class FeedEventWidget extends StatelessWidget {
   final Event event;
@@ -71,33 +72,16 @@ class AcceptDialog extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return const ConfirmationDialog();
+                          return ConfirmationDialog(
+                            text:
+                                'Are you sure that you want to accept this job?',
+                            onCancelPressed: () => {Navigator.pop(context)},
+                            onAcceptPressed: () {},
+                          );
                         })
                   })
         ],
       ),
-    );
-  }
-}
-
-class ConfirmationDialog extends StatelessWidget {
-  const ConfirmationDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
-      title: const Center(child: Text('Confirmation')),
-      children: <Widget>[
-        const Text('Are you sure that you want to accept this job?'),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CancelButton(onPressed: () => {Navigator.pop(context)}),
-            AcceptButton(onPressed: () => {})
-          ],
-        ),
-      ],
     );
   }
 }

@@ -39,53 +39,53 @@ class CancelButton extends CustomButton {
 class MessageButton extends CustomButton {
   const MessageButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Message',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Message',
+          color: APP_COLOR,
+        );
 }
 
 class AcceptButton extends CustomButton {
   const AcceptButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Accept',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Accept',
+          color: APP_COLOR,
+        );
 }
 
 class ManageButton extends CustomButton {
   const ManageButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Manage',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Manage',
+          color: APP_COLOR,
+        );
 }
 
 class DetailsButton extends CustomButton {
   const DetailsButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Details',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Details',
+          color: APP_COLOR,
+        );
 }
 
 class TakeJobButton extends CustomButton {
   const TakeJobButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Take Job',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Take Job',
+          color: APP_COLOR,
+        );
 }
 
 class SubmitButton extends CustomButton {
   const SubmitButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Submit',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Submit',
+          color: APP_COLOR,
+        );
 }
