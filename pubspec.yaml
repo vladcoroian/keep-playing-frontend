@@ -38,6 +38,9 @@ dependencies:
   # intl package:
   intl: 0.17.0
 
+  # Date Time Picker package:
+  datetime_picker_formfield: ^2.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

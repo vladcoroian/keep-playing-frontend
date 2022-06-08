@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/new_event_page.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/pending_event_widget.dart';
 import 'package:keep_playing_frontend/constants.dart';
 
@@ -29,7 +30,12 @@ class PendingEventsPage extends StatelessWidget {
                   price: 40))
         ]),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => {},
+          onPressed: () => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const NewEventPage()),
+            )
+          },
           extendedTextStyle:
               const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS),
           tooltip: 'Increment',

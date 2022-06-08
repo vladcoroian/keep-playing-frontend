@@ -43,7 +43,7 @@ class DetailsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DetailsAndAcceptForms(
+    return DetailsAndAcceptDialogBuilder(
       event: event,
       lastWidget: Align(
         alignment: Alignment.center,
@@ -60,7 +60,7 @@ class AcceptDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DetailsAndAcceptForms(
+    return DetailsAndAcceptDialogBuilder(
       event: event,
       lastWidget: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,11 +102,11 @@ class ConfirmationDialog extends StatelessWidget {
   }
 }
 
-class DetailsAndAcceptForms extends StatelessWidget {
+class DetailsAndAcceptDialogBuilder extends StatelessWidget {
   final Event event;
   final Widget lastWidget;
 
-  const DetailsAndAcceptForms(
+  const DetailsAndAcceptDialogBuilder(
       {super.key, required this.event, required this.lastWidget});
 
   @override

@@ -80,3 +80,12 @@ class TakeJobButton extends CustomButton {
     color: APP_COLOR,
   );
 }
+
+class SubmitButton extends CustomButton {
+  const SubmitButton({Key? key, required super.onPressed})
+      : super(
+    key: key,
+    text: 'Submit',
+    color: APP_COLOR,
+  );
+}
