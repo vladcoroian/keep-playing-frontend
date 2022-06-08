@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/app_coach/home_page/feed/event_widget.dart';
+import 'package:keep_playing_frontend/app_coach/home_page/feed/feed_event_widget.dart';
 
 import '../../models/event.dart';
 
@@ -11,7 +11,7 @@ class FeedPage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(title: const Text('Feed')),
         body: ListView(children: [
-          EventWidget(
+          FeedEventWidget(
               event: Event(
                   name: "Muay Thai Training Session",
                   location:
@@ -19,7 +19,7 @@ class FeedPage extends StatelessWidget {
                   dateTime: DateTime(2022, 10, 12, 13, 14),
                   details: "To be announced",
                   price: 50)),
-          EventWidget(
+          FeedEventWidget(
               event: Event(
                   name: "Muay Thai",
                   location: "Imperial College",

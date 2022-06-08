@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../constants.dart';
-import '../../../models/event.dart';
+import '../constants.dart';
+import '../models/event.dart';
 
 class EventWidget extends StatelessWidget {
   final Event event;
+  final Widget leftButton;
+  final Widget rightButton;
 
-  const EventWidget({super.key, required this.event});
+  const EventWidget(
+      {super.key,
+      required this.event,
+      required this.leftButton,
+      required this.rightButton});
 
   @override
   Widget build(BuildContext context) {
@@ -31,31 +37,9 @@ class EventWidget extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [_detailsButton(), _takeJobButton()],
+              children: [leftButton, rightButton],
             ),
           ],
         ));
-  }
-
-  Widget _detailsButton() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
-            onPressed: () {},
-            child: const Text('Details')));
-  }
-
-  Widget _takeJobButton() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                textStyle:
-                    const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
-            onPressed: () {},
-            child: const Text('Take Job')));
   }
 }
