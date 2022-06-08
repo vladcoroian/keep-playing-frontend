@@ -40,34 +40,42 @@ class _LogInPageState extends State<LogInPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _enterAsOrganiserButton(),
+        const SizedBox(height: 50),
         _enterAsCoachButton(),
       ],
     )));
   }
 
   Widget _enterAsOrganiserButton() {
-    return ElevatedButton(
-        style:
-            ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20)),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const OrganiserHomePage()),
-          );
-        },
-        child: const Text('Enter as organiser'));
+    return Container(
+        height: 50.0,
+        width: 250.0,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 25)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const OrganiserHomePage()),
+              );
+            },
+            child: const Text('Enter as organiser')));
   }
 
   Widget _enterAsCoachButton() {
-    return ElevatedButton(
-        style:
-            ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20)),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CoachHomePage()),
-          );
-        },
-        child: const Text('Enter as coach'));
+    return Container(
+        height: 50.0,
+        width: 250.0,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 25)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CoachHomePage()),
+              );
+            },
+            child: const Text('Enter as coach')));
   }
 }
