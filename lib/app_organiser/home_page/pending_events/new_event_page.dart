@@ -34,6 +34,8 @@ class _NewEventPageState extends State<NewEventPage> {
         body: ListView(children: [
           _selectSportForm(),
           _selectDateForm(),
+          _selectStartTimeForm(),
+          _selectEndTimeForm(),
           Center(
               child: SubmitButton(
             onPressed: () {},
@@ -73,5 +75,70 @@ class _NewEventPageState extends State<NewEventPage> {
                 lastDate: DateTime(2100));
           },
         ));
+  }
+
+  TimeOfDay _startTime = TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _endTime = TimeOfDay(hour: 0, minute: 0);
+
+  void _selectStartTime() async {
+    final TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: _startTime,
+    );
+    if (newTime != null) {
+      setState(() {
+        _startTime = newTime;
+      });
+    }
+  }
+
+  void _selectEndTime() async {
+    final TimeOfDay? newTime = await showTimePicker(
+      context: context,
+      initialTime: _endTime,
+    );
+    if (newTime != null) {
+      setState(() {
+        _endTime = newTime;
+      });
+    }
+  }
+
+  Widget _selectStartTimeForm() {
+    return Container(
+        padding: const EdgeInsets.all(DEFAULT_PADDING),
+        child: Row(
+          children: [
+            Text("Start time: ${_startTime.format(context)}"),
+            ElevatedButton(
+              onPressed: _selectStartTime,
+              child: const Icon(
+                Icons.access_time,
+                color: Colors.white,
+                size: 36.0,
+              ),
+            ),
+          ],
+        ),
+      );
+  }
+
+  Widget _selectEndTimeForm() {
+    return Container(
+      padding: const EdgeInsets.all(DEFAULT_PADDING),
+      child: Row(
+        children: [
+          Text("End time: ${_endTime.format(context)}"),
+          ElevatedButton(
+            onPressed: _selectEndTime,
+            child: const Icon(
+              Icons.access_time,
+              color: Colors.white,
+              size: 36.0,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
