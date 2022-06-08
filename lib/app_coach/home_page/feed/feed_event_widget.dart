@@ -16,24 +16,24 @@ class FeedEventWidget extends StatelessWidget {
     return EventWidget(
         event: event,
         leftButton: DetailsButton(
+          onPressed: () {},
+        ),
+        rightButton: TakeJobButton(
           onPressed: () {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return DetailsEventDialog(event: event);
+                  return AcceptEventDialog(event: event);
                 });
           },
-        ),
-        rightButton: TakeJobButton(
-          onPressed: () {},
         ));
   }
 }
 
-class DetailsEventDialog extends StatelessWidget {
+class AcceptEventDialog extends StatelessWidget {
   final Event event;
 
-  const DetailsEventDialog({super.key, required this.event});
+  const AcceptEventDialog({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +55,15 @@ class DetailsEventDialog extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CancelButton(onPressed: () => {}),
-            AcceptButton(onPressed: () => {})
+            CancelButton(onPressed: () => {Navigator.pop(context)}),
+            AcceptButton(
+                onPressed: () => {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const ConfirmationDialog();
+                          })
+                    })
           ],
         ),
       ],
@@ -102,5 +109,27 @@ class DetailsEventDialog extends StatelessWidget {
 
   Widget _showPay() {
     return _detailTextWidget('Pay: ', event.getPriceInPounds());
+  }
+}
+
+class ConfirmationDialog extends StatelessWidget {
+  const ConfirmationDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
+      title: const Center(child: Text('Confirmation')),
+      children: <Widget>[
+        const Text('Are you sure that you want to accept this job?'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CancelButton(onPressed: () => {Navigator.pop(context)}),
+            AcceptButton(onPressed: () => {})
+          ],
+        ),
+      ],
+    );
   }
 }
