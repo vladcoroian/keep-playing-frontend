@@ -1,1 +1,1 @@
-const double DEFAULT_PADDING = 10;
+const double DEFAULT_PADDING = 16;
