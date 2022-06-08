@@ -4,10 +4,10 @@ import 'package:intl/intl.dart';
 import '../../../constants.dart';
 import '../../../models/event.dart';
 
-class EventWidget extends StatelessWidget {
+class UpcomingJobWidget extends StatelessWidget {
   final Event event;
 
-  const EventWidget({super.key, required this.event});
+  const UpcomingJobWidget({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -31,24 +31,25 @@ class EventWidget extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [_detailsButton(), _takeJobButton()],
+              children: [_cancelButton(), _messageButton()],
             ),
           ],
         ));
   }
 
-  Widget _detailsButton() {
+  Widget _cancelButton() {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
+                primary: Colors.red,
                 textStyle:
                     const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
             onPressed: () {},
-            child: const Text('Details')));
+            child: const Text('Cancel')));
   }
 
-  Widget _takeJobButton() {
+  Widget _messageButton() {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: ElevatedButton(
@@ -56,6 +57,6 @@ class EventWidget extends StatelessWidget {
                 textStyle:
                     const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
             onPressed: () {},
-            child: const Text('Take Job')));
+            child: const Text('Message')));
   }
 }
