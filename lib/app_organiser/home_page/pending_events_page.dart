@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/pending_event_widget.dart';
+
+import '../../models/event.dart';
 
 class PendingEventsPage extends StatelessWidget {
   const PendingEventsPage({Key? key}) : super(key: key);
@@ -7,6 +10,22 @@ class PendingEventsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text('Pending Events')),
-        body: const Text('Pending Events Page'));
+        body: ListView(children: [
+          PendingEventWidget(
+              event: Event(
+                  name: "Muay Thai Training Session",
+                  location:
+                      "Imperial College, Exhibition Rd, South Kensington, London SW7 2BX",
+                  dateTime: DateTime(2022, 10, 12, 13, 14),
+                  details: "To be announced",
+                  price: 50)),
+          PendingEventWidget(
+              event: Event(
+                  name: "Muay Thai",
+                  location: "Imperial College",
+                  dateTime: DateTime(2022, 10, 12, 13, 14),
+                  details: "To be announced",
+                  price: 40))
+        ]));
   }
 }
