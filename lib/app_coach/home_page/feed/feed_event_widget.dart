@@ -16,24 +16,98 @@ class FeedEventWidget extends StatelessWidget {
     return EventWidget(
         event: event,
         leftButton: DetailsButton(
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return DetailsDialog(event: event);
+                });
+          },
         ),
         rightButton: TakeJobButton(
           onPressed: () {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AcceptEventDialog(event: event);
+                  return AcceptDialog(event: event);
                 });
           },
         ));
   }
 }
 
-class AcceptEventDialog extends StatelessWidget {
+class DetailsDialog extends StatelessWidget {
   final Event event;
 
-  const AcceptEventDialog({super.key, required this.event});
+  const DetailsDialog({Key? key, required this.event}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DetailsAndAcceptForms(
+      event: event,
+      lastWidget: Align(
+        alignment: Alignment.center,
+        child: CancelButton(onPressed: () => {Navigator.pop(context)}),
+      ),
+    );
+  }
+}
+
+class AcceptDialog extends StatelessWidget {
+  final Event event;
+
+  const AcceptDialog({super.key, required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return DetailsAndAcceptForms(
+      event: event,
+      lastWidget: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CancelButton(onPressed: () => {Navigator.pop(context)}),
+          AcceptButton(
+              onPressed: () => {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const ConfirmationDialog();
+                        })
+                  })
+        ],
+      ),
+    );
+  }
+}
+
+class ConfirmationDialog extends StatelessWidget {
+  const ConfirmationDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
+      title: const Center(child: Text('Confirmation')),
+      children: <Widget>[
+        const Text('Are you sure that you want to accept this job?'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CancelButton(onPressed: () => {Navigator.pop(context)}),
+            AcceptButton(onPressed: () => {})
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class DetailsAndAcceptForms extends StatelessWidget {
+  final Event event;
+  final Widget lastWidget;
+
+  const DetailsAndAcceptForms(
+      {super.key, required this.event, required this.lastWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -52,20 +126,7 @@ class AcceptEventDialog extends StatelessWidget {
         const Divider(),
         Text(event.details),
         const Divider(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CancelButton(onPressed: () => {Navigator.pop(context)}),
-            AcceptButton(
-                onPressed: () => {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const ConfirmationDialog();
-                          })
-                    })
-          ],
-        ),
+        lastWidget,
       ],
     );
   }
@@ -109,27 +170,5 @@ class AcceptEventDialog extends StatelessWidget {
 
   Widget _showPay() {
     return _detailTextWidget('Pay: ', event.getPriceInPounds());
-  }
-}
-
-class ConfirmationDialog extends StatelessWidget {
-  const ConfirmationDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
-      title: const Center(child: Text('Confirmation')),
-      children: <Widget>[
-        const Text('Are you sure that you want to accept this job?'),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CancelButton(onPressed: () => {Navigator.pop(context)}),
-            AcceptButton(onPressed: () => {})
-          ],
-        ),
-      ],
-    );
   }
 }
