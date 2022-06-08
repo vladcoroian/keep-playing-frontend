@@ -40,7 +40,7 @@ class EventWidget extends StatelessWidget {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 16)),
+                textStyle: const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
             onPressed: () {},
             child: const Text('Details')));
   }
@@ -50,7 +50,7 @@ class EventWidget extends StatelessWidget {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 16)),
+                textStyle: const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
             onPressed: () {},
             child: const Text('Take Job')));
   }
