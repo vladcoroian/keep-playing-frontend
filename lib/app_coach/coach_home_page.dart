@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keep_playing_frontend/constants.dart';
 
 import 'home_page/account_page.dart';
 import 'home_page/feed_page.dart';
@@ -40,7 +41,7 @@ class _CoachHomePageState extends State<CoachHomePage> {
           _accountNavigationButton(),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.lightBlueAccent,
+        selectedItemColor: BOTTOM_NAVIGATION_BAR_COLOR,
         onTap: _onItemTapped,
       ),
     );

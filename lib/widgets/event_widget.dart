@@ -32,8 +32,7 @@ class EventWidget extends StatelessWidget {
               ),
               title: Text(event.name, textAlign: TextAlign.left),
               subtitle: Text(event.location, textAlign: TextAlign.left),
-              trailing: Text(
-                  NumberFormat.simpleCurrency(name: "GBP").format(event.price)),
+              trailing: Text(event.getPriceInPounds()),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

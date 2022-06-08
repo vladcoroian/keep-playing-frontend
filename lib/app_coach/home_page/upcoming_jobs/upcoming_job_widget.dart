@@ -22,7 +22,7 @@ class UpcomingJobWidget extends StatelessWidget {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-                primary: Colors.red,
+                primary: CANCEL_BUTTON_COLOR,
                 textStyle:
                     const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS)),
             onPressed: () {},

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keep_playing_frontend/constants.dart';
 
 import 'home_page/account_page.dart';
 import 'home_page/pending_events_page.dart';
@@ -37,7 +38,7 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
           _accountNavigationButton(),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.lightBlueAccent,
+        selectedItemColor: BOTTOM_NAVIGATION_BAR_COLOR,
         onTap: _onItemTapped,
       ),
     );

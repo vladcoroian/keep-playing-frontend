@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Event {
   String name;
   String location;
@@ -11,4 +13,8 @@ class Event {
       required this.dateTime,
       required this.details,
       required this.price});
+
+  String getPriceInPounds() {
+    return NumberFormat.simpleCurrency(name: "GBP").format(price);
+  }
 }

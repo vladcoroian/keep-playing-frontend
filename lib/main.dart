@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 
 import 'app_organiser/organiser_home_page.dart';
+import 'constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Keep Playing',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: APP_COLOR,
       ),
       home: const LogInPage(title: 'Log In Page'),
     );
@@ -47,7 +48,7 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   Widget _enterAsOrganiserButton() {
-    return Container(
+    return SizedBox(
         height: 50.0,
         width: 250.0,
         child: ElevatedButton(
@@ -64,7 +65,7 @@ class _LogInPageState extends State<LogInPage> {
   }
 
   Widget _enterAsCoachButton() {
-    return Container(
+    return SizedBox(
         height: 50.0,
         width: 250.0,
         child: ElevatedButton(
