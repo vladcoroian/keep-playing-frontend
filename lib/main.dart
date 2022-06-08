@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'constants.dart';
+import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,21 +15,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Keep Playing'),
+      home: const LogInPage(title: 'Keep Playing'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class LogInPage extends StatefulWidget {
+  const LogInPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<LogInPage> createState() => _LogInPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _LogInPageState extends State<LogInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +47,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return ElevatedButton(
         style:
             ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20)),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Text('TODO')),
+          );
+        },
         child: const Text('Enter as organiser'));
   }
 
@@ -56,7 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return ElevatedButton(
         style:
             ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20)),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CoachHomePage()),
+          );
+        },
         child: const Text('Enter as coach'));
   }
 }
