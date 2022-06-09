@@ -46,8 +46,11 @@ class _ManageEventPageState extends State<ManageEventPage> {
             children: [
               CancelEventButton(
                 onPressed: () {
-                  _cancelEvent(widget.event.pk);
-
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return _confirmDeletionOfEventDialog();
+                      });
                 },
               ),
               SaveChangesButton(
@@ -57,6 +60,20 @@ class _ManageEventPageState extends State<ManageEventPage> {
           )
         ]),
       ),
+    );
+  }
+
+  Widget _confirmDeletionOfEventDialog() {
+    return ConfirmationDialog(
+      title: 'Are you sure that you want to delete this event?',
+      onCancelPressed: () {
+        Navigator.pop(context);
+      },
+      onAcceptPressed: () {
+        _cancelEvent(widget.event.pk);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
     );
   }
 }

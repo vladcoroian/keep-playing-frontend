@@ -73,8 +73,7 @@ class AcceptDialog extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return ConfirmationDialog(
-                            text:
-                                'Are you sure that you want to accept this job?',
+                            title: 'Are you sure that you want to accept this job?',
                             onCancelPressed: () => {Navigator.pop(context)},
                             onAcceptPressed: () {},
                           );

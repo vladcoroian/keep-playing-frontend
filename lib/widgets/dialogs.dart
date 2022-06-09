@@ -22,8 +22,7 @@ class CustomDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
       title: Center(child: Text(title)),
       children: <Widget>[
-        Container(
-            padding: const EdgeInsets.all(10), child: Text(text)),
+        Container(padding: const EdgeInsets.all(10), child: Text(text)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [leftButton, rightButton],
@@ -39,12 +38,12 @@ class ConfirmationDialog extends CustomDialog {
 
   ConfirmationDialog(
       {Key? key,
-      required super.text,
+      required super.title,
       required this.onCancelPressed,
       required this.onAcceptPressed})
       : super(
             key: key,
-            title: 'Confirmation',
+            text: '',
             leftButton: CancelButton(onPressed: onCancelPressed),
             rightButton: AcceptButton(onPressed: onAcceptPressed));
 }
