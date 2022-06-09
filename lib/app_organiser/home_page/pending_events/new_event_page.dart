@@ -103,42 +103,67 @@ class _NewEventPageState extends State<NewEventPage> {
       });
     }
   }
+  TextEditingController startTimeInput = TextEditingController();
+  TextEditingController endTimeInput = TextEditingController();
+
+  @override
+  void initState() {
+    startTimeInput.text = "";
+    endTimeInput.text = "";
+    super.initState();
+  }
 
   Widget _selectStartTimeForm() {
     return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: Row(
-          children: [
-            Text("Start time: ${_startTime.format(context)}"),
-            ElevatedButton(
-              onPressed: _selectStartTime,
-              child: const Icon(
-                Icons.access_time,
-                color: Colors.white,
-                size: 36.0,
-              ),
-            ),
-          ],
+      padding: const EdgeInsets.all(DEFAULT_PADDING),
+      child: TextField(
+        controller: startTimeInput,
+        decoration: const InputDecoration(
+            icon: Icon(Icons.timer),
+            labelText: "Enter Start Time"
         ),
-      );
+        readOnly: true,
+        onTap: () async {
+          final TimeOfDay? newTime = await showTimePicker(
+            context: context,
+            initialTime: _startTime,
+            );
+          if (newTime != null) {
+            setState(() {
+              _startTime = newTime;
+              DateTime parsedTime = DateFormat.jm().parse(_startTime.format(context).toString());
+              startTimeInput.text = DateFormat('HH:mm').format(parsedTime);
+            });
+          }
+        }
+      )
+    );
   }
 
   Widget _selectEndTimeForm() {
     return Container(
-      padding: const EdgeInsets.all(DEFAULT_PADDING),
-      child: Row(
-        children: [
-          Text("End time: ${_endTime.format(context)}"),
-          ElevatedButton(
-            onPressed: _selectEndTime,
-            child: const Icon(
-              Icons.access_time,
-              color: Colors.white,
-              size: 36.0,
+        padding: const EdgeInsets.all(DEFAULT_PADDING),
+        child: TextField(
+            controller: endTimeInput,
+            decoration: const InputDecoration(
+                icon: Icon(Icons.timer),
+                labelText: "Enter End Time"
             ),
-          ),
-        ],
-      ),
+            readOnly: true,
+            onTap: () async {
+              final TimeOfDay? newTime = await showTimePicker(
+                context: context,
+                initialTime: _endTime,
+              );
+              if (newTime != null) {
+                setState(() {
+                  _endTime = newTime;
+                  DateTime parsedTime = DateFormat.jm().parse(_endTime.format(context).toString());
+                  endTimeInput.text = DateFormat('HH:mm').format(parsedTime);
+                });
+              }
+            }
+        )
     );
   }
 }
