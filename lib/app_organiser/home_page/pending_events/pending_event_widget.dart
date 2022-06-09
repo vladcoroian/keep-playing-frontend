@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/manage_event_page.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
-import 'package:keep_playing_frontend/widgets/events.dart';
+import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
 import '../../../models/event.dart';
 

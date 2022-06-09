@@ -3,12 +3,51 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-import 'package:keep_playing_frontend/widgets/events.dart';
-import '../../../constants.dart';
-import '../../../models/event.dart';
-import '../../../urls.dart';
-import '../../../widgets/buttons.dart';
-import '../../../widgets/dialogs.dart';
+import 'package:keep_playing_frontend/urls.dart';
+import '../constants.dart';
+import '../models/event.dart';
+import 'buttons.dart';
+import 'dialogs.dart';
+
+class EventWidget extends StatelessWidget {
+  final Event event;
+  final Widget leftButton;
+  final Widget rightButton;
+
+  const EventWidget(
+      {super.key,
+      required this.event,
+      required this.leftButton,
+      required this.rightButton});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        margin: const EdgeInsets.all(DEFAULT_PADDING),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ListTile(
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(DateFormat("MMMM dd").format(event.getDate())),
+                  Text(event.getStartTimeToString()),
+                  Text(event.getEndTimeToString()),
+                ],
+              ),
+              title: Text(event.name, textAlign: TextAlign.left),
+              subtitle: Text(event.location, textAlign: TextAlign.left),
+              trailing: Text(event.getPriceInPounds()),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [leftButton, rightButton],
+            ),
+          ],
+        ));
+  }
+}
 
 class FeedEventWidget extends StatelessWidget {
   final Event event;
@@ -24,7 +63,7 @@ class FeedEventWidget extends StatelessWidget {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return DetailsDialog(event: event);
+                  return EventDetailsDialog(event: event);
                 });
           },
         ),
@@ -33,17 +72,55 @@ class FeedEventWidget extends StatelessWidget {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return AcceptDialog(event: event);
+                  return AcceptJobDialog(event: event);
                 });
           },
         ));
   }
 }
 
-class DetailsDialog extends StatelessWidget {
+class UpcomingJobWidget extends StatelessWidget {
   final Event event;
 
-  const DetailsDialog({Key? key, required this.event}) : super(key: key);
+  final Client client = http.Client();
+
+  UpcomingJobWidget({super.key, required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return EventWidget(
+        event: event,
+        leftButton: CancelButton(onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return ConfirmationDialog(
+                  title:
+                  'Are you sure that you want to cancel this job?',
+                  onCancelPressed: () => {Navigator.pop(context)},
+                  onAcceptPressed: () {
+                    client.patch(URL.updateEvent(event.pk),
+                        body: {"coach": "false"});
+                    Navigator.pop(context);
+                  },
+                );
+              });
+        }),
+        rightButton: MessageButton(
+          onPressed: () {},
+        ));
+  }
+}
+
+/* ========================================================================== */
+/* ========================================================================== */
+/* ========================================================================== */
+/* ========================================================================== */
+
+class EventDetailsDialog extends StatelessWidget {
+  final Event event;
+
+  const EventDetailsDialog({Key? key, required this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,12 +134,12 @@ class DetailsDialog extends StatelessWidget {
   }
 }
 
-class AcceptDialog extends StatelessWidget {
+class AcceptJobDialog extends StatelessWidget {
   final Event event;
 
   final Client client = http.Client();
 
-  AcceptDialog({super.key, required this.event});
+  AcceptJobDialog({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
