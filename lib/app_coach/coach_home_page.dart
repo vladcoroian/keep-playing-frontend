@@ -38,7 +38,7 @@ class _CoachHomePageState extends State<CoachHomePage> {
         items: <BottomNavigationBarItem>[
           _feedPageNavigationButton(),
           _upcomingJobsNavigationButton(),
-          _accountNavigationButton(),
+          // _accountNavigationButton(),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: BOTTOM_NAVIGATION_BAR_COLOR,
@@ -56,8 +56,8 @@ class _CoachHomePageState extends State<CoachHomePage> {
         icon: Icon(Icons.business), label: 'Upcoming Jobs');
   }
 
-  BottomNavigationBarItem _accountNavigationButton() {
-    return const BottomNavigationBarItem(
-        icon: Icon(Icons.account_circle), label: 'Account');
-  }
+  // BottomNavigationBarItem _accountNavigationButton() {
+  //   return const BottomNavigationBarItem(
+  //       icon: Icon(Icons.account_circle), label: 'Account');
+  // }
 }

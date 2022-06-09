@@ -74,7 +74,6 @@ class _ManageEventPageState extends State<ManageEventPage> {
         _cancelEvent(widget.event.pk);
         Navigator.pop(context);
         Navigator.pop(context);
-        setState(() {});
       },
     );
   }

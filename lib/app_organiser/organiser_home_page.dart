@@ -32,15 +32,15 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
       body: Center(
         child: currentWidget,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          _pendingEventsNavigationButton(),
-          _accountNavigationButton(),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: BOTTOM_NAVIGATION_BAR_COLOR,
-        onTap: _onItemTapped,
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   items: <BottomNavigationBarItem>[
+      //     _pendingEventsNavigationButton(),
+      //     _accountNavigationButton(),
+      //   ],
+      //   currentIndex: _selectedIndex,
+      //   selectedItemColor: BOTTOM_NAVIGATION_BAR_COLOR,
+      //   onTap: _onItemTapped,
+      // ),
     );
   }
 
