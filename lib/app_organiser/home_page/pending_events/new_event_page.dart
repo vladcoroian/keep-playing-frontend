@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:keep_playing_frontend/urls.dart';
+
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../../constants.dart';
@@ -14,16 +18,17 @@ class NewEventPage extends StatefulWidget {
 }
 
 class _NewEventPageState extends State<NewEventPage> {
-  String name = '';
-  String location = '';
-  String details = '';
+  String _name = '';
+  String _location = '';
+  String _details = '';
 
-  String date = '';
-  String start_time = '';
-  String end_time ='';
+  String _date = '';
+  TimeOfDay _startTime = TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _endTime = TimeOfDay(hour: 0, minute: 0);
 
-  double price = 0;
+  double _price = 0;
 
+  Client client = http.Client();
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -31,8 +36,7 @@ class _NewEventPageState extends State<NewEventPage> {
           builder: (context) => ExitDialog(
               context: context,
               title: 'Are you sure that you want to exit?',
-              text: 'You haven\'t finished editing the new event'
-          ),
+              text: 'You haven\'t finished editing the new event'),
         )) ??
         false;
   }
@@ -45,12 +49,30 @@ class _NewEventPageState extends State<NewEventPage> {
         appBar: AppBar(title: const Text('New Event')),
         body: ListView(children: [
           _writeTitleForm(),
+          _writeLocationForm(),
+          _writeDetailsForm(),
           _selectDateForm(),
           _selectStartTimeForm(),
           _selectEndTimeForm(),
-          Center(
-              child: SubmitButton(
-            onPressed: () {},
+          Text(_startTime.format(context)),
+          Text(_endTime.format(context)),
+          _selectPriceForm(),
+          Center(child: SubmitButton(
+            onPressed: () {
+              client.patch(URL.addEvent(), headers: {
+                "Connection": "Keep-Alive",
+                "Keep-Alive": "timeout=5, max=1000"
+              }, body: {
+                "name": _name,
+                "location": _location,
+                "details": _details,
+                "date": _date,
+                "start_time": "18:27:00",
+                "end_time": "19:40:00",
+                "price": _price.toString(),
+                "coach": "False"
+              });
+            },
           )),
         ]),
       ),
@@ -61,12 +83,42 @@ class _NewEventPageState extends State<NewEventPage> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
-          decoration: const InputDecoration(
-            icon: Icon(Icons.sports),
-            hintText: 'Enter the title',
-            labelText: 'Title',
-          ),
-        ));
+            decoration: const InputDecoration(
+              icon: Icon(Icons.sports),
+              hintText: 'Enter the title',
+              labelText: 'Title',
+            ),
+            onChanged: (text) {
+              _name = text;
+            }));
+  }
+
+  Widget _writeLocationForm() {
+    return Container(
+        padding: const EdgeInsets.all(DEFAULT_PADDING),
+        child: TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.sports),
+              hintText: 'Enter the location',
+              labelText: 'Location',
+            ),
+            onChanged: (text) {
+              _location = text;
+            }));
+  }
+
+  Widget _writeDetailsForm() {
+    return Container(
+        padding: const EdgeInsets.all(DEFAULT_PADDING),
+        child: TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.sports),
+              hintText: 'Enter details',
+              labelText: 'Details',
+            ),
+            onChanged: (text) {
+              _details = text;
+            }));
   }
 
   Widget _selectDateForm() {
@@ -86,11 +138,11 @@ class _NewEventPageState extends State<NewEventPage> {
                 initialDate: currentValue ?? DateTime.now(),
                 lastDate: DateTime(2100));
           },
+          onChanged: (date) {
+            _date = DateFormat('yyyy-mm-dd').format(date!);
+          },
         ));
   }
-
-  TimeOfDay _startTime = TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay _endTime = TimeOfDay(hour: 0, minute: 0);
 
   void _selectStartTime() async {
     final TimeOfDay? newTime = await showTimePicker(
@@ -115,6 +167,7 @@ class _NewEventPageState extends State<NewEventPage> {
       });
     }
   }
+
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
 
@@ -127,29 +180,26 @@ class _NewEventPageState extends State<NewEventPage> {
 
   Widget _selectStartTimeForm() {
     return Container(
-      padding: const EdgeInsets.all(DEFAULT_PADDING),
-      child: TextField(
-        controller: startTimeInput,
-        decoration: const InputDecoration(
-            icon: Icon(Icons.access_time),
-            labelText: "Enter Start Time"
-        ),
-        readOnly: true,
-        onTap: () async {
-          final TimeOfDay? newTime = await showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.now(),
-          );
-          if (newTime != null) {
-            setState(() {
-              _startTime = newTime;
-              DateTime parsedTime = DateFormat.jm().parse(_startTime.format(context).toString());
-              startTimeInput.text = DateFormat('HH:mm').format(parsedTime);
-            });
-          }
-        }
-      )
-    );
+        padding: const EdgeInsets.all(DEFAULT_PADDING),
+        child: TextField(
+            controller: startTimeInput,
+            decoration: const InputDecoration(
+                icon: Icon(Icons.access_time), labelText: "Enter Start Time"),
+            readOnly: true,
+            onTap: () async {
+              final TimeOfDay? newTime = await showTimePicker(
+                context: context,
+                initialTime: TimeOfDay.now(),
+              );
+              if (newTime != null) {
+                setState(() {
+                  _startTime = newTime;
+                  DateTime parsedTime = DateFormat.jm()
+                      .parse(_startTime.format(context).toString());
+                  startTimeInput.text = DateFormat('HH:mm').format(parsedTime);
+                });
+              }
+            }));
   }
 
   Widget _selectEndTimeForm() {
@@ -158,9 +208,7 @@ class _NewEventPageState extends State<NewEventPage> {
         child: TextField(
             controller: endTimeInput,
             decoration: const InputDecoration(
-                icon: Icon(Icons.access_time),
-                labelText: "Enter End Time"
-            ),
+                icon: Icon(Icons.access_time), labelText: "Enter End Time"),
             readOnly: true,
             onTap: () async {
               final TimeOfDay? newTime = await showTimePicker(
@@ -170,12 +218,26 @@ class _NewEventPageState extends State<NewEventPage> {
               if (newTime != null) {
                 setState(() {
                   _endTime = newTime;
-                  DateTime parsedTime = DateFormat.jm().parse(_endTime.format(context).toString());
+                  DateTime parsedTime = DateFormat.jm()
+                      .parse(_endTime.format(context).toString());
                   endTimeInput.text = DateFormat('HH:mm').format(parsedTime);
                 });
               }
-            }
-        )
-    );
+            }));
+  }
+
+  Widget _selectPriceForm() {
+    return Container(
+        padding: const EdgeInsets.all(DEFAULT_PADDING),
+        child: TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.sports),
+              hintText: 'Enter the price',
+              labelText: 'Price',
+            ),
+            onChanged: (text) {
+              // TODO: Remove this cast.
+              _price = double.parse(text);
+            }));
   }
 }
