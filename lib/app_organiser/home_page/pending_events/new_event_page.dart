@@ -87,6 +87,7 @@ class _NewEventPageState extends State<NewEventPage> {
                     'price': _price.toInt().toString(),
                     'coach': 'False'
                   }));
+              Navigator.pop(context);
             },
           )),
         ]),
