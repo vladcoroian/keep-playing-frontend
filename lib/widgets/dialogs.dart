@@ -48,6 +48,22 @@ class ConfirmationDialog extends CustomDialog {
             rightButton: AcceptButton(onPressed: onAcceptPressed));
 }
 
+class YesNoDialog extends CustomDialog {
+  final VoidCallback? onCancelPressed;
+  final VoidCallback? onAcceptPressed;
+
+  YesNoDialog(
+      {Key? key,
+        required super.title,
+        required this.onCancelPressed,
+        required this.onAcceptPressed})
+      : super(
+      key: key,
+      text: '',
+      leftButton: NoButton(onPressed: onCancelPressed),
+      rightButton: YesButton(onPressed: onAcceptPressed));
+}
+
 class ConfirmCancellationOfEventDialog extends CustomDialog {
   final VoidCallback? onCancelPressed;
   final VoidCallback? onAcceptPressed;

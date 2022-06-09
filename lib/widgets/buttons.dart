@@ -27,6 +27,24 @@ class CustomButton extends StatelessWidget {
   }
 }
 
+class NoButton extends CustomButton {
+  const NoButton({Key? key, required super.onPressed})
+      : super(
+    key: key,
+    text: 'No',
+    color: APP_COLOR,
+  );
+}
+
+class YesButton extends CustomButton {
+  const YesButton({Key? key, required super.onPressed})
+      : super(
+    key: key,
+    text: 'Yes',
+    color: APP_COLOR,
+  );
+}
+
 class CancelButton extends CustomButton {
   const CancelButton({Key? key, required super.onPressed})
       : super(

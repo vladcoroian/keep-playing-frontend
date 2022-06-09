@@ -94,7 +94,7 @@ class UpcomingJobWidget extends StatelessWidget {
           showDialog(
               context: context,
               builder: (BuildContext context) {
-                return ConfirmationDialog(
+                return YesNoDialog(
                   title:
                   'Are you sure that you want to cancel this job?',
                   onCancelPressed: () => {Navigator.pop(context)},
