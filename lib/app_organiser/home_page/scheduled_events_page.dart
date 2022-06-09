@@ -41,7 +41,7 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Pending Events')),
+      appBar: AppBar(title: const Text('Scheduled Events')),
       body: RefreshIndicator(
           onRefresh: () async {
             _retrieveEvents();

@@ -28,7 +28,7 @@ class _NewEventPageState extends State<NewEventPage> {
   TimeOfDay _startTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
 
-  double _price = 0;
+  int _price = 0;
 
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
@@ -84,7 +84,7 @@ class _NewEventPageState extends State<NewEventPage> {
                     'end_time': const DefaultMaterialLocalizations()
                         .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true),
                     // TODO : Remove this cast.
-                    'price': _price.toInt().toString(),
+                    'price': _price.toString(),
                     'coach': 'False'
                   }));
               Navigator.pop(context);
@@ -176,9 +176,8 @@ class _NewEventPageState extends State<NewEventPage> {
               if (newTime != null) {
                 setState(() {
                   _startTime = newTime;
-                  DateTime parsedTime = DateFormat.jm()
-                      .parse(_startTime.format(context).toString());
-                  startTimeInput.text = DateFormat('HH:mm').format(parsedTime);
+                  startTimeInput.text = const DefaultMaterialLocalizations()
+                      .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
                 });
               }
             }));
@@ -200,9 +199,8 @@ class _NewEventPageState extends State<NewEventPage> {
               if (newTime != null) {
                 setState(() {
                   _endTime = newTime;
-                  DateTime parsedTime = DateFormat.jm()
-                      .parse(_endTime.format(context).toString());
-                  endTimeInput.text = DateFormat('HH:mm').format(parsedTime);
+                  endTimeInput.text = const DefaultMaterialLocalizations()
+                      .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
                 });
               }
             }));
@@ -219,7 +217,7 @@ class _NewEventPageState extends State<NewEventPage> {
             ),
             onChanged: (text) {
               // TODO: Remove this cast.
-              _price = double.parse(text);
+              _price = int.parse(text);
             }));
   }
 }
