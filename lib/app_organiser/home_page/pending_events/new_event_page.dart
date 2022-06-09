@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -23,10 +25,20 @@ class _NewEventPageState extends State<NewEventPage> {
   String _details = '';
 
   String _date = '';
-  TimeOfDay _startTime = TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay _endTime = TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _startTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
 
   double _price = 0;
+
+  TextEditingController startTimeInput = TextEditingController();
+  TextEditingController endTimeInput = TextEditingController();
+
+  @override
+  void initState() {
+    startTimeInput.text = "";
+    endTimeInput.text = "";
+    super.initState();
+  }
 
   Client client = http.Client();
 
@@ -54,24 +66,27 @@ class _NewEventPageState extends State<NewEventPage> {
           _selectDateForm(),
           _selectStartTimeForm(),
           _selectEndTimeForm(),
-          Text(_startTime.format(context)),
-          Text(_endTime.format(context)),
           _selectPriceForm(),
           Center(child: SubmitButton(
             onPressed: () {
-              client.patch(URL.addEvent(), headers: {
-                "Connection": "Keep-Alive",
-                "Keep-Alive": "timeout=5, max=1000"
-              }, body: {
-                "name": _name,
-                "location": _location,
-                "details": _details,
-                "date": _date,
-                "start_time": "18:27:00",
-                "end_time": "19:40:00",
-                "price": _price.toString(),
-                "coach": "False"
-              });
+              client.post(URL.addEvent(),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                  body: jsonEncode(<String, String>{
+                    "name": _name,
+                    'location': _location,
+                    'details': _details,
+                    'date': _date,
+                    'start_time': const DefaultMaterialLocalizations()
+                        .formatTimeOfDay(_startTime,
+                            alwaysUse24HourFormat: true),
+                    'end_time': const DefaultMaterialLocalizations()
+                        .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true),
+                    // TODO : Remove this cast.
+                    'price': _price.toInt().toString(),
+                    'coach': 'False'
+                  }));
             },
           )),
         ]),
@@ -139,43 +154,9 @@ class _NewEventPageState extends State<NewEventPage> {
                 lastDate: DateTime(2100));
           },
           onChanged: (date) {
-            _date = DateFormat('yyyy-mm-dd').format(date!);
+            _date = DateFormat('yyyy-MM-dd').format(date!);
           },
         ));
-  }
-
-  void _selectStartTime() async {
-    final TimeOfDay? newTime = await showTimePicker(
-      context: context,
-      initialTime: _startTime,
-    );
-    if (newTime != null) {
-      setState(() {
-        _startTime = newTime;
-      });
-    }
-  }
-
-  void _selectEndTime() async {
-    final TimeOfDay? newTime = await showTimePicker(
-      context: context,
-      initialTime: _endTime,
-    );
-    if (newTime != null) {
-      setState(() {
-        _endTime = newTime;
-      });
-    }
-  }
-
-  TextEditingController startTimeInput = TextEditingController();
-  TextEditingController endTimeInput = TextEditingController();
-
-  @override
-  void initState() {
-    startTimeInput.text = "";
-    endTimeInput.text = "";
-    super.initState();
   }
 
   Widget _selectStartTimeForm() {
