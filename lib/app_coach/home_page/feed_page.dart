@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 
 import '../../models/event.dart';
 import '../../urls.dart';
@@ -15,7 +17,7 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  http.Client client = http.Client();
+  Client client = http.Client();
   List<Event> events = [];
 
   @override
@@ -53,5 +55,35 @@ class _FeedPageState extends State<FeedPage> {
         ),
       ),
     );
+  }
+}
+
+class FeedEventWidget extends StatelessWidget {
+  final Event event;
+
+  const FeedEventWidget({super.key, required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return EventWidget(
+        event: event,
+        leftButton: DetailsButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return EventDetailsDialog(event: event);
+                });
+          },
+        ),
+        rightButton: TakeJobButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AcceptJobDialog(event: event);
+                });
+          },
+        ));
   }
 }

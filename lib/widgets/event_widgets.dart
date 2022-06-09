@@ -49,72 +49,17 @@ class EventWidget extends StatelessWidget {
   }
 }
 
-class FeedEventWidget extends StatelessWidget {
-  final Event event;
 
-  const FeedEventWidget({super.key, required this.event});
 
-  @override
-  Widget build(BuildContext context) {
-    return EventWidget(
-        event: event,
-        leftButton: DetailsButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return EventDetailsDialog(event: event);
-                });
-          },
-        ),
-        rightButton: TakeJobButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AcceptJobDialog(event: event);
-                });
-          },
-        ));
-  }
-}
 
-class UpcomingJobWidget extends StatelessWidget {
-  final Event event;
 
-  final Client client = http.Client();
-
-  UpcomingJobWidget({super.key, required this.event});
-
-  @override
-  Widget build(BuildContext context) {
-    return EventWidget(
-        event: event,
-        leftButton: CancelButton(onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return YesNoDialog(
-                  title:
-                  'Are you sure that you want to cancel this job?',
-                  onCancelPressed: () => {Navigator.pop(context)},
-                  onAcceptPressed: () {
-                    client.patch(URL.updateEvent(event.pk),
-                        body: {"coach": "false"});
-                    Navigator.pop(context);
-                  },
-                );
-              });
-        }),
-        rightButton: MessageButton(
-          onPressed: () {},
-        ));
-  }
-}
 
 /* ========================================================================== */
+
 /* ========================================================================== */
+
 /* ========================================================================== */
+
 /* ========================================================================== */
 
 class EventDetailsDialog extends StatelessWidget {
