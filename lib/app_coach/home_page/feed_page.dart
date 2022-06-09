@@ -38,11 +38,16 @@ class _FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Feed')),
-      body: ListView.builder(
-        itemCount: events.length,
-        itemBuilder: (BuildContext context, int index) {
-          return FeedEventWidget(event: events[index]);
+      body: RefreshIndicator(
+        onRefresh: () async {
+          _retrieveEvents();
         },
+        child: ListView.builder(
+          itemCount: events.length,
+          itemBuilder: (BuildContext context, int index) {
+            return FeedEventWidget(event: events[index]);
+          },
+        ),
       ),
     );
   }

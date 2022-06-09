@@ -42,12 +42,16 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: const Text('Pending Events')),
-        body: ListView.builder(
-          itemCount: events.length,
-          itemBuilder: (BuildContext context, int index) {
-            return PendingEventWidget(event: events[index]);
-          },
-        ),
+        body: RefreshIndicator(
+            onRefresh: () async {
+              _retrieveEvents();
+            },
+            child: ListView.builder(
+              itemCount: events.length,
+              itemBuilder: (BuildContext context, int index) {
+                return PendingEventWidget(event: events[index]);
+              },
+            )),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => {
             Navigator.push(
