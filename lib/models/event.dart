@@ -48,7 +48,8 @@ class Event {
 
   String getStartTimeToString() {
     final splitStartTime = start_time.split(':');
-    return "${int.parse(splitStartTime[0])}:${int.parse(splitStartTime[1])}";
+    final lessThan10 = int.parse(splitStartTime[1]) < 10 ? "0" : "";
+    return "${int.parse(splitStartTime[0])}:${lessThan10}${int.parse(splitStartTime[1])}";
   }
 
   TimeOfDay getEndTime() {
@@ -59,7 +60,8 @@ class Event {
 
   String getEndTimeToString() {
     final splitEndTime = end_time.split(':');
-    return "${int.parse(splitEndTime[0])}:${int.parse(splitEndTime[1])}";
+    final lessThan10 = int.parse(splitEndTime[1]) < 10 ? "0" : "";
+    return "${int.parse(splitEndTime[0])}:${lessThan10}${int.parse(splitEndTime[1])}";
   }
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);

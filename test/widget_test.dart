@@ -9,8 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:keep_playing_frontend/main.dart';
+import 'package:keep_playing_frontend/app_organiser/home_page/pending_events_page.dart';
 
 void main() {
-  testWidgets('Empty Test', (WidgetTester tester) async {
+  testWidgets('Landing Page shows two buttons ', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
+    expect(find.text('Enter as organiser'), findsOneWidget);
+    expect(find.text('Enter as coach'), findsOneWidget);
   });
 }
