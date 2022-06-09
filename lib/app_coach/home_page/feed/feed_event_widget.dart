@@ -103,7 +103,9 @@ class DetailsAndAcceptDialogBuilder extends StatelessWidget {
         const SizedBox(height: DEFAULT_PADDING),
         _showDate(),
         const SizedBox(height: DEFAULT_PADDING),
-        _showTime(),
+        _showStartTime(),
+        const SizedBox(height: DEFAULT_PADDING),
+        _showEndTime(),
         const SizedBox(height: DEFAULT_PADDING),
         _showPay(),
         const SizedBox(height: DEFAULT_PADDING),
@@ -144,12 +146,17 @@ class DetailsAndAcceptDialogBuilder extends StatelessWidget {
 
   Widget _showDate() {
     return _detailTextWidget(
-        'Date: ', DateFormat("MMMM dd").format(event.dateTime));
+        'Date: ', DateFormat("MMMM dd").format(event.getDate()));
   }
 
-  Widget _showTime() {
+  Widget _showStartTime() {
     return _detailTextWidget(
-        'Time: ', DateFormat("hh:mm").format(event.dateTime));
+        'Start Time: ', event.getStartTime().toString());
+  }
+
+  Widget _showEndTime() {
+    return _detailTextWidget(
+        'Start Time: ', event.getEndTime().toString());
   }
 
   Widget _showPay() {
