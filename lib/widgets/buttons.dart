@@ -36,6 +36,15 @@ class CancelButton extends CustomButton {
         );
 }
 
+class CancelEventButton extends CustomButton {
+  const CancelEventButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Cancel Event',
+          color: CANCEL_BUTTON_COLOR,
+        );
+}
+
 class MessageButton extends CustomButton {
   const MessageButton({Key? key, required super.onPressed})
       : super(
@@ -88,4 +97,13 @@ class SubmitButton extends CustomButton {
           text: 'Submit',
           color: APP_COLOR,
         );
+}
+
+class SaveChangesButton extends CustomButton {
+  const SaveChangesButton({Key? key, required super.onPressed})
+      : super(
+    key: key,
+    text: 'Save Changes',
+    color: APP_COLOR,
+  );
 }
