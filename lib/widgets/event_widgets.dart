@@ -49,11 +49,6 @@ class EventWidget extends StatelessWidget {
   }
 }
 
-
-
-
-
-
 /* ========================================================================== */
 
 /* ========================================================================== */
@@ -69,7 +64,7 @@ class EventDetailsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DetailsAndAcceptDialogBuilder(
+    return DetailsAndAcceptJobsDialogBuilder(
       event: event,
       lastWidget: Align(
         alignment: Alignment.center,
@@ -88,7 +83,7 @@ class AcceptJobDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DetailsAndAcceptDialogBuilder(
+    return DetailsAndAcceptJobsDialogBuilder(
       event: event,
       lastWidget: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,11 +113,11 @@ class AcceptJobDialog extends StatelessWidget {
   }
 }
 
-class DetailsAndAcceptDialogBuilder extends StatelessWidget {
+class DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
   final Event event;
   final Widget lastWidget;
 
-  const DetailsAndAcceptDialogBuilder(
+  const DetailsAndAcceptJobsDialogBuilder(
       {super.key, required this.event, required this.lastWidget});
 
   @override

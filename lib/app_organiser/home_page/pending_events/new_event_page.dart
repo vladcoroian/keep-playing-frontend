@@ -139,12 +139,6 @@ class _NewEventPageState extends State<NewEventPage> {
           final TimeOfDay? newTime = await showTimePicker(
             context: context,
             initialTime: TimeOfDay.now(),
-            builder: (context, child) {
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-                child: child ?? Container(),
-              );
-            },
           );
           if (newTime != null) {
             setState(() {
@@ -172,12 +166,6 @@ class _NewEventPageState extends State<NewEventPage> {
               final TimeOfDay? newTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay.now(),
-                builder: (context, child) {
-                  return MediaQuery(
-                    data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-                    child: child ?? Container(),
-                  );
-                },
               );
               if (newTime != null) {
                 setState(() {
