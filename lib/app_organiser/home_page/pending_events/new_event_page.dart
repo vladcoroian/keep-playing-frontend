@@ -20,7 +20,8 @@ class _NewEventPageState extends State<NewEventPage> {
           builder: (context) => ExitDialog(
               context: context,
               title: 'Are you sure that you want to exit?',
-              text: 'You haven\'t finished editing the new event'),
+              text: 'You haven\'t finished editing the new event'
+          ),
         )) ??
         false;
   }
@@ -119,15 +120,21 @@ class _NewEventPageState extends State<NewEventPage> {
       child: TextField(
         controller: startTimeInput,
         decoration: const InputDecoration(
-            icon: Icon(Icons.timer),
+            icon: Icon(Icons.access_time),
             labelText: "Enter Start Time"
         ),
         readOnly: true,
         onTap: () async {
           final TimeOfDay? newTime = await showTimePicker(
             context: context,
-            initialTime: _startTime,
-            );
+            initialTime: TimeOfDay.now(),
+            builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                child: child ?? Container(),
+              );
+            },
+          );
           if (newTime != null) {
             setState(() {
               _startTime = newTime;
@@ -146,14 +153,20 @@ class _NewEventPageState extends State<NewEventPage> {
         child: TextField(
             controller: endTimeInput,
             decoration: const InputDecoration(
-                icon: Icon(Icons.timer),
+                icon: Icon(Icons.access_time),
                 labelText: "Enter End Time"
             ),
             readOnly: true,
             onTap: () async {
               final TimeOfDay? newTime = await showTimePicker(
                 context: context,
-                initialTime: _endTime,
+                initialTime: TimeOfDay.now(),
+                builder: (context, child) {
+                  return MediaQuery(
+                    data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+                    child: child ?? Container(),
+                  );
+                },
               );
               if (newTime != null) {
                 setState(() {
