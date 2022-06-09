@@ -151,12 +151,12 @@ class DetailsAndAcceptDialogBuilder extends StatelessWidget {
 
   Widget _showStartTime() {
     return _detailTextWidget(
-        'Start Time: ', event.getStartTime().toString());
+        'Start Time: ', event.getStartTimeToString());
   }
 
   Widget _showEndTime() {
     return _detailTextWidget(
-        'Start Time: ', event.getEndTime().toString());
+        'End Time: ', event.getEndTimeToString());
   }
 
   Widget _showPay() {

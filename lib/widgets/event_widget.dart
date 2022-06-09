@@ -27,8 +27,8 @@ class EventWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(DateFormat("MMMM dd").format(event.getDate())),
-                  Text(event.start_time.toString()),
-                  Text(event.end_time.toString()),
+                  Text(event.getStartTimeToString()),
+                  Text(event.getEndTimeToString()),
                 ],
               ),
               title: Text(event.name, textAlign: TextAlign.left),

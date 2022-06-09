@@ -42,10 +42,20 @@ class Event {
         minute: int.parse(splitStartTime[1]));
   }
 
+  String getStartTimeToString() {
+    final splitStartTime = start_time.split(':');
+    return "${int.parse(splitStartTime[0])}:${int.parse(splitStartTime[1])}";
+  }
+
   TimeOfDay getEndTime() {
     final splitEndTime = end_time.split(':');
     return TimeOfDay(
         hour: int.parse(splitEndTime[0]), minute: int.parse(splitEndTime[1]));
+  }
+
+  String getEndTimeToString() {
+    final splitEndTime = end_time.split(':');
+    return "${int.parse(splitEndTime[0])}:${int.parse(splitEndTime[1])}";
   }
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
