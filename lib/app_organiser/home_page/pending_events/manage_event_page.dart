@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'package:keep_playing_frontend/urls.dart';
 
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import '../../../models/event.dart';
 import '../../../widgets/dialogs.dart';
 
@@ -14,6 +17,8 @@ class ManageEventPage extends StatefulWidget {
 }
 
 class _ManageEventPageState extends State<ManageEventPage> {
+  Client client = http.Client();
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -23,6 +28,10 @@ class _ManageEventPageState extends State<ManageEventPage> {
               text: 'You haven\'t finished editing the event'),
         )) ??
         false;
+  }
+
+  void _cancelEvent(int pk) {
+    client.delete(URL.deleteEvent(pk));
   }
 
   @override
@@ -36,7 +45,10 @@ class _ManageEventPageState extends State<ManageEventPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CancelEventButton(
-                onPressed: () {},
+                onPressed: () {
+                  _cancelEvent(widget.event.pk);
+
+                },
               ),
               SaveChangesButton(
                 onPressed: () {},

@@ -6,6 +6,7 @@ part 'event.g.dart';
 
 @JsonSerializable()
 class Event {
+  int pk;
   String name;
   String location;
   String details;
@@ -17,7 +18,8 @@ class Event {
   double price;
 
   Event(
-      {required this.name,
+      {required this.pk,
+      required this.name,
       required this.location,
       required this.details,
       required this.date,

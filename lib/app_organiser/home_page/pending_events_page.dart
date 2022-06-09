@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/new_event_page.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/pending_event_widget.dart';
@@ -18,7 +19,7 @@ class PendingEventsPage extends StatefulWidget {
 }
 
 class _PendingEventsPageState extends State<PendingEventsPage> {
-  http.Client client = http.Client();
+  Client client = http.Client();
   List<Event> events = [];
 
   @override
