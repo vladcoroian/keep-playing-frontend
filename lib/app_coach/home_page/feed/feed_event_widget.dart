@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/widgets/events.dart';
 
+import 'package:keep_playing_frontend/widgets/events.dart';
 import '../../../constants.dart';
 import '../../../models/event.dart';
+import '../../../urls.dart';
 import '../../../widgets/buttons.dart';
 import '../../../widgets/dialogs.dart';
 
@@ -57,7 +60,9 @@ class DetailsDialog extends StatelessWidget {
 class AcceptDialog extends StatelessWidget {
   final Event event;
 
-  const AcceptDialog({super.key, required this.event});
+  final Client client = http.Client();
+
+  AcceptDialog({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +78,15 @@ class AcceptDialog extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return ConfirmationDialog(
-                            title: 'Are you sure that you want to accept this job?',
+                            title:
+                                'Are you sure that you want to accept this job?',
                             onCancelPressed: () => {Navigator.pop(context)},
-                            onAcceptPressed: () {},
+                            onAcceptPressed: () {
+                              client.patch(URL.updateEvent(event.pk),
+                                  body: {"coach": "true"});
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
                           );
                         })
                   })
@@ -149,13 +160,11 @@ class DetailsAndAcceptDialogBuilder extends StatelessWidget {
   }
 
   Widget _showStartTime() {
-    return _detailTextWidget(
-        'Start Time: ', event.getStartTimeToString());
+    return _detailTextWidget('Start Time: ', event.getStartTimeToString());
   }
 
   Widget _showEndTime() {
-    return _detailTextWidget(
-        'End Time: ', event.getEndTimeToString());
+    return _detailTextWidget('End Time: ', event.getEndTimeToString());
   }
 
   Widget _showPay() {
