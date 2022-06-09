@@ -14,6 +14,17 @@ class NewEventPage extends StatefulWidget {
 }
 
 class _NewEventPageState extends State<NewEventPage> {
+  String name = '';
+  String location = '';
+  String details = '';
+
+  String date = '';
+  String start_time = '';
+  String end_time ='';
+
+  double price = 0;
+
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -33,7 +44,7 @@ class _NewEventPageState extends State<NewEventPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('New Event')),
         body: ListView(children: [
-          _selectSportForm(),
+          _writeTitleForm(),
           _selectDateForm(),
           _selectStartTimeForm(),
           _selectEndTimeForm(),
@@ -46,14 +57,14 @@ class _NewEventPageState extends State<NewEventPage> {
     );
   }
 
-  Widget _selectSportForm() {
+  Widget _writeTitleForm() {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
           decoration: const InputDecoration(
             icon: Icon(Icons.sports),
-            hintText: 'Enter the sport',
-            labelText: 'Sport',
+            hintText: 'Enter the title',
+            labelText: 'Title',
           ),
         ));
   }

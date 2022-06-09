@@ -14,7 +14,8 @@ Event _$EventFromJson(Map<String, dynamic> json) => Event(
       date: json['date'] as String,
       start_time: json['start_time'] as String,
       end_time: json['end_time'] as String,
-      price: (json['price'] as num).toDouble(),
+      price: json['price'] as int,
+      coach: json['coach'] as bool,
     );
 
 Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
@@ -26,4 +27,5 @@ Map<String, dynamic> _$EventToJson(Event instance) => <String, dynamic>{
       'start_time': instance.start_time,
       'end_time': instance.end_time,
       'price': instance.price,
+      'coach': instance.coach,
     };

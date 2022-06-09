@@ -15,7 +15,8 @@ class Event {
   String start_time;
   String end_time;
 
-  double price;
+  int price;
+  bool coach;
 
   Event(
       {required this.pk,
@@ -25,7 +26,8 @@ class Event {
       required this.date,
       required this.start_time,
       required this.end_time,
-      required this.price});
+      required this.price,
+      required this.coach});
 
   String getPriceInPounds() {
     return NumberFormat.simpleCurrency(name: "GBP").format(price);
