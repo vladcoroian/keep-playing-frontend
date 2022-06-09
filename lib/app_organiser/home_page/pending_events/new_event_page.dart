@@ -100,7 +100,7 @@ class _NewEventPageState extends State<NewEventPage> {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
             decoration: const InputDecoration(
-              icon: Icon(Icons.sports),
+              icon: Icon(Icons.sports_soccer),
               hintText: 'Enter the title',
               labelText: 'Title',
             ),
@@ -114,7 +114,7 @@ class _NewEventPageState extends State<NewEventPage> {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
             decoration: const InputDecoration(
-              icon: Icon(Icons.sports),
+              icon: Icon(Icons.location_on),
               hintText: 'Enter the location',
               labelText: 'Location',
             ),
@@ -128,7 +128,7 @@ class _NewEventPageState extends State<NewEventPage> {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
             decoration: const InputDecoration(
-              icon: Icon(Icons.sports),
+              icon: Icon(Icons.details),
               hintText: 'Enter details',
               labelText: 'Details',
             ),
@@ -213,7 +213,7 @@ class _NewEventPageState extends State<NewEventPage> {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
             decoration: const InputDecoration(
-              icon: Icon(Icons.sports),
+              icon: Icon(Icons.price_change),
               hintText: 'Enter the price',
               labelText: 'Price',
             ),
