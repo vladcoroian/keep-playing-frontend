@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/manage_event_page.dart';
+import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
 
 import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/new_event_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
@@ -51,6 +51,9 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
             child: ListView.builder(
               itemCount: events.length,
               itemBuilder: (BuildContext context, int index) {
+                if (events[index].coach) {
+                  return const SizedBox(width: 0, height: 0);
+                }
                 return PendingEventWidget(event: events[index]);
               },
             )),

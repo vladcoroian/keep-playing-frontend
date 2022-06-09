@@ -4,8 +4,8 @@ import 'package:http/http.dart';
 import 'package:keep_playing_frontend/urls.dart';
 
 import 'package:keep_playing_frontend/widgets/buttons.dart';
-import '../../../models/event.dart';
-import '../../../widgets/dialogs.dart';
+import '../../models/event.dart';
+import '../../widgets/dialogs.dart';
 
 class ManageEventPage extends StatefulWidget {
   final Event event;
