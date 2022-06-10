@@ -43,7 +43,7 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Pending Events')),
+        appBar: AppBar(title: const Text('Small Change')),
         body: RefreshIndicator(
             onRefresh: () async {
               _retrieveEvents();
