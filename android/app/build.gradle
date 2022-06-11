@@ -66,6 +66,14 @@ flutter {
     source '../..'
 }
 
+buildTypes {
+    release {
+        signingConfig signingConfigs.config
+        shrinkResources false
+        minifyEnabled false
+    }
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
