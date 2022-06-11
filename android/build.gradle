@@ -18,6 +18,14 @@ allprojects {
     }
 }
 
+buildTypes {
+    release {
+        shrinkResources false
+        minifyEnabled false
+        signingConfig signingConfigs.debug
+    }
+}
+
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
