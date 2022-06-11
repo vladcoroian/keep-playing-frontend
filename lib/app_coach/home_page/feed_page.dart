@@ -19,6 +19,15 @@ class FeedPage extends StatefulWidget {
   State<FeedPage> createState() => _FeedPageState();
 }
 
+class _DetailsButton extends ColoredButton {
+  const _DetailsButton({Key? key, required super.onPressed})
+      : super(
+    key: key,
+    text: 'Details',
+    color: APP_COLOR,
+  );
+}
+
 class _FeedPageState extends State<FeedPage> {
   Client client = http.Client();
   List<Event> events = [];
@@ -89,15 +98,6 @@ class FeedEventWidget extends StatelessWidget {
           },
         ));
   }
-}
-
-class _DetailsButton extends ColoredButton {
-  const _DetailsButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Details',
-          color: APP_COLOR,
-        );
 }
 
 class _TakeJobButton extends ColoredButton {

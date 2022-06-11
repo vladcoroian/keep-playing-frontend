@@ -18,6 +18,24 @@ class UpcomingJobsPage extends StatefulWidget {
   State<UpcomingJobsPage> createState() => _UpcomingJobsPageState();
 }
 
+class _CancelButton extends ColoredButton {
+  const _CancelButton({Key? key, required super.onPressed})
+      : super(
+    key: key,
+    text: 'Cancel',
+    color: CANCEL_BUTTON_COLOR,
+  );
+}
+
+class _MessageButton extends ColoredButton {
+  const _MessageButton({Key? key, required super.onPressed})
+      : super(
+    key: key,
+    text: 'Message',
+    color: APP_COLOR,
+  );
+}
+
 class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
   Client client = http.Client();
   List<Event> events = [];
@@ -92,20 +110,3 @@ class UpcomingJobWidget extends StatelessWidget {
   }
 }
 
-class _CancelButton extends ColoredButton {
-  const _CancelButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel',
-          color: CANCEL_BUTTON_COLOR,
-        );
-}
-
-class _MessageButton extends ColoredButton {
-  const _MessageButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Message',
-          color: APP_COLOR,
-        );
-}

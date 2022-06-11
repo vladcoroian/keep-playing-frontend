@@ -47,7 +47,7 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
 
 class _PendingEventsNavigationButton extends BottomNavigationBarItem {
   const _PendingEventsNavigationButton()
-      : super(icon: const Icon(Icons.account_circle), label: 'Account');
+      : super(icon: const Icon(Icons.event_busy), label: 'Pending Events');
 }
 
 class _ScheduledEventsNavigationButton extends BottomNavigationBarItem {
