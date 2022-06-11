@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
-
+import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
@@ -69,7 +69,7 @@ class ScheduledEventWidget extends StatelessWidget {
     return EventWidget(
         event: event,
         leftButton: const SizedBox(width: 0, height: 0),
-        rightButton: ManageButton(
+        rightButton: _ManageButton(
           onPressed: () {
             Navigator.push(
               context,
@@ -79,4 +79,13 @@ class ScheduledEventWidget extends StatelessWidget {
           },
         ));
   }
+}
+
+class _ManageButton extends ColoredButton {
+  const _ManageButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Manage',
+          color: APP_COLOR,
+        );
 }

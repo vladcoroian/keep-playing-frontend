@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
-
 import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/new_event_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
@@ -43,7 +42,7 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Small Change')),
+        appBar: AppBar(title: const Text('Pending Events')),
         body: RefreshIndicator(
             onRefresh: () async {
               _retrieveEvents();
@@ -65,7 +64,7 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
             )
           },
           extendedTextStyle:
-              const TextStyle(fontSize: DEFAULT_FONT_SIZE_BUTTONS),
+              const TextStyle(fontSize: DEFAULT_BUTTON_FONT_SIZE),
           tooltip: 'Increment',
           icon: const Icon(Icons.add),
           label: const Text("New Job"),
@@ -83,7 +82,7 @@ class PendingEventWidget extends StatelessWidget {
     return EventWidget(
         event: event,
         leftButton: const SizedBox(width: 0, height: 0),
-        rightButton: ManageButton(
+        rightButton: _ManageButton(
           onPressed: () {
             Navigator.push(
               context,
@@ -93,4 +92,13 @@ class PendingEventWidget extends StatelessWidget {
           },
         ));
   }
+}
+
+class _ManageButton extends ColoredButton {
+  const _ManageButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Manage',
+          color: APP_COLOR,
+        );
 }

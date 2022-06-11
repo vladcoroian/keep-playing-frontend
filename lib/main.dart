@@ -3,7 +3,6 @@ import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 
 import 'app_organiser/organiser_home_page.dart';
 import 'constants.dart';
-import 'widgets/dialogs.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,35 +33,58 @@ class LogInPage extends StatefulWidget {
 }
 
 class _LogInPageState extends State<LogInPage> {
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (context) => ExitDialog(
-              context: context,
-              title: 'Are you sure that you want to exit the app?',
-              text: ''),
-        )) ??
-        false;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _EnterAsOrganiserButton(context: context),
+          const SizedBox(height: 50),
+          _EnterAsCoachButton(context: context),
+        ],
+      )),
+    );
   }
+}
+
+class _EnterAsCoachButton extends StatelessWidget {
+  const _EnterAsCoachButton({
+    Key? key,
+    required this.context,
+  }) : super(key: key);
+
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-          body: Center(
-              child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _enterAsOrganiserButton(),
-          const SizedBox(height: 50),
-          _enterAsCoachButton(),
-        ],
-      ))),
-    );
+    return SizedBox(
+        height: 50.0,
+        width: 300.0,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(fontSize: 25)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CoachHomePage()),
+              );
+            },
+            child: const Text('Enter as coach')));
   }
+}
 
-  Widget _enterAsOrganiserButton() {
+class _EnterAsOrganiserButton extends StatelessWidget {
+  const _EnterAsOrganiserButton({
+    Key? key,
+    required this.context,
+  }) : super(key: key);
+
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
         height: 50.0,
         width: 300.0,
@@ -77,21 +99,5 @@ class _LogInPageState extends State<LogInPage> {
               );
             },
             child: const Text('Enter as organiser')));
-  }
-
-  Widget _enterAsCoachButton() {
-    return SizedBox(
-        height: 50.0,
-        width: 300.0,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 25)),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const CoachHomePage()),
-              );
-            },
-            child: const Text('Enter as coach')));
   }
 }

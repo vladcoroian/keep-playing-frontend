@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/urls.dart';
-
 import 'package:keep_playing_frontend/widgets/buttons.dart';
+
 import '../../models/event.dart';
 import '../../widgets/dialogs.dart';
 
@@ -44,7 +45,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CancelEventButton(
+              _CancelEventButton(
                 onPressed: () {
                   showDialog(
                       context: context,
@@ -53,7 +54,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
                       });
                 },
               ),
-              SaveChangesButton(
+              _SaveChangesButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -66,15 +67,34 @@ class _ManageEventPageState extends State<ManageEventPage> {
   }
 
   Widget _confirmCancellationOfEventDialog() {
-    return ConfirmCancellationOfEventDialog(
-      onCancelPressed: () {
+    return ConfirmationDialog(
+      title: 'Are you sure you want to cancel this event?',
+      onNoPressed: () {
         Navigator.pop(context);
       },
-      onAcceptPressed: () {
+      onYesPressed: () {
         _cancelEvent(widget.event.pk);
         Navigator.pop(context);
         Navigator.pop(context);
       },
     );
   }
+}
+
+class _SaveChangesButton extends ColoredButton {
+  const _SaveChangesButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Save Changes',
+          color: APP_COLOR,
+        );
+}
+
+class _CancelEventButton extends ColoredButton {
+  const _CancelEventButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Cancel Event',
+          color: CANCEL_BUTTON_COLOR,
+        );
 }

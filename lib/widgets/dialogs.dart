@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'buttons.dart';
 
-class CustomDialog extends StatelessWidget {
+class TwoOptionsDialog extends StatelessWidget {
   final String title;
   final String text;
   final Widget leftButton;
   final Widget rightButton;
 
-  const CustomDialog(
+  const TwoOptionsDialog(
       {super.key,
       required this.title,
       required this.text,
@@ -32,55 +32,23 @@ class CustomDialog extends StatelessWidget {
   }
 }
 
-class ConfirmationDialog extends CustomDialog {
-  final VoidCallback? onCancelPressed;
-  final VoidCallback? onAcceptPressed;
+class ConfirmationDialog extends TwoOptionsDialog {
+  final VoidCallback? onNoPressed;
+  final VoidCallback? onYesPressed;
 
   ConfirmationDialog(
       {Key? key,
       required super.title,
-      required this.onCancelPressed,
-      required this.onAcceptPressed})
+      super.text = '',
+      required this.onNoPressed,
+      required this.onYesPressed})
       : super(
             key: key,
-            text: '',
-            leftButton: CancelButton(onPressed: onCancelPressed),
-            rightButton: AcceptButton(onPressed: onAcceptPressed));
+            leftButton: _YesButton(onPressed: onYesPressed),
+            rightButton: _NoButton(onPressed: onNoPressed));
 }
 
-class YesNoDialog extends CustomDialog {
-  final VoidCallback? onCancelPressed;
-  final VoidCallback? onAcceptPressed;
-
-  YesNoDialog(
-      {Key? key,
-        required super.title,
-        required this.onCancelPressed,
-        required this.onAcceptPressed})
-      : super(
-      key: key,
-      text: '',
-      leftButton: NoButton(onPressed: onCancelPressed),
-      rightButton: YesButton(onPressed: onAcceptPressed));
-}
-
-class ConfirmCancellationOfEventDialog extends CustomDialog {
-  final VoidCallback? onCancelPressed;
-  final VoidCallback? onAcceptPressed;
-
-  ConfirmCancellationOfEventDialog(
-      {Key? key,
-        required this.onCancelPressed,
-        required this.onAcceptPressed})
-      : super(
-      key: key,
-      title: 'Are you sure you want to cancel this event?',
-      text: '',
-      leftButton: CancelButton(onPressed: onCancelPressed),
-      rightButton: AcceptButton(onPressed: onAcceptPressed));
-}
-
-class ExitDialog extends CustomDialog {
+class ExitDialog extends TwoOptionsDialog {
   final BuildContext context;
 
   ExitDialog(
@@ -89,12 +57,28 @@ class ExitDialog extends CustomDialog {
       required super.title,
       required super.text})
       : super(
-            key: key,
-            leftButton: TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('No'),
-            ),
-            rightButton: TextButton(
-                onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('Yes')));
+          key: key,
+          leftButton:
+              _YesButton(onPressed: () => Navigator.of(context).pop(true)),
+          rightButton:
+              _NoButton(onPressed: () => Navigator.of(context).pop(false)),
+        );
+}
+
+class _NoButton extends ColoredButton {
+  const _NoButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'No',
+          color: DEFAULT_BUTTON_GRAY_COLOR,
+        );
+}
+
+class _YesButton extends ColoredButton {
+  const _YesButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Yes',
+          color: APP_COLOR,
+        );
 }

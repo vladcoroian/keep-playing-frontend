@@ -33,9 +33,9 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
         child: currentWidget,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          _pendingEventsNavigationButton(),
-          _scheduledEventsNavigationButton()
+        items: const <BottomNavigationBarItem>[
+          _PendingEventsNavigationButton(),
+          _ScheduledEventsNavigationButton(),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: BOTTOM_NAVIGATION_BAR_COLOR,
@@ -43,19 +43,15 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
       ),
     );
   }
+}
 
-  BottomNavigationBarItem _pendingEventsNavigationButton() {
-    return const BottomNavigationBarItem(
-        icon: Icon(Icons.event_busy), label: 'Pending Events');
-  }
+class _PendingEventsNavigationButton extends BottomNavigationBarItem {
+  const _PendingEventsNavigationButton()
+      : super(icon: const Icon(Icons.account_circle), label: 'Account');
+}
 
-  BottomNavigationBarItem _scheduledEventsNavigationButton() {
-    return const BottomNavigationBarItem(
-        icon: Icon(Icons.event_available), label: 'Scheduled Events');
-  }
-
-  BottomNavigationBarItem _accountNavigationButton() {
-    return const BottomNavigationBarItem(
-        icon: Icon(Icons.account_circle), label: 'Account');
-  }
+class _ScheduledEventsNavigationButton extends BottomNavigationBarItem {
+  const _ScheduledEventsNavigationButton()
+      : super(
+            icon: const Icon(Icons.event_available), label: 'Scheduled Events');
 }

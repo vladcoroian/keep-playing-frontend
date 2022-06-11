@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/constants.dart';
 
-import 'home_page/account_page.dart';
 import 'home_page/feed_page.dart';
 import 'home_page/upcoming_jobs_page.dart';
 
@@ -17,7 +16,6 @@ class _CoachHomePageState extends State<CoachHomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     FeedPage(),
     UpcomingJobsPage(),
-    AccountPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -35,9 +33,9 @@ class _CoachHomePageState extends State<CoachHomePage> {
         child: currentWidget,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          _feedPageNavigationButton(),
-          _upcomingJobsNavigationButton(),
+        items: const <BottomNavigationBarItem>[
+          _FeedPageNavigationButton(),
+          _UpcomingJobsNavigationButton(),
           // _accountNavigationButton(),
         ],
         currentIndex: _selectedIndex,
@@ -46,18 +44,14 @@ class _CoachHomePageState extends State<CoachHomePage> {
       ),
     );
   }
+}
 
-  BottomNavigationBarItem _feedPageNavigationButton() {
-    return const BottomNavigationBarItem(icon: Icon(Icons.feed), label: 'Feed');
-  }
+class _FeedPageNavigationButton extends BottomNavigationBarItem {
+  const _FeedPageNavigationButton()
+      : super(icon: const Icon(Icons.feed), label: 'Feed');
+}
 
-  BottomNavigationBarItem _upcomingJobsNavigationButton() {
-    return const BottomNavigationBarItem(
-        icon: Icon(Icons.business), label: 'Upcoming Jobs');
-  }
-
-  // BottomNavigationBarItem _accountNavigationButton() {
-  //   return const BottomNavigationBarItem(
-  //       icon: Icon(Icons.account_circle), label: 'Account');
-  // }
+class _UpcomingJobsNavigationButton extends BottomNavigationBarItem {
+  const _UpcomingJobsNavigationButton()
+      : super(icon: const Icon(Icons.business), label: 'Upcoming Jobs');
 }

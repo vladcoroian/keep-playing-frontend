@@ -1,12 +1,11 @@
 import 'dart:convert';
 
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/urls.dart';
-
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../../constants.dart';
@@ -67,7 +66,7 @@ class _NewEventPageState extends State<NewEventPage> {
           _selectStartTimeForm(),
           _selectEndTimeForm(),
           _selectPriceForm(),
-          Center(child: SubmitButton(
+          Center(child: _SubmitButton(
             onPressed: () {
               client.post(URL.addEvent(),
                   headers: <String, String>{
@@ -220,4 +219,13 @@ class _NewEventPageState extends State<NewEventPage> {
               _price = int.parse(text);
             }));
   }
+}
+
+class _SubmitButton extends ColoredButton {
+  const _SubmitButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Submit',
+          color: APP_COLOR,
+        );
 }

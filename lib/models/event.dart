@@ -47,9 +47,8 @@ class Event {
   }
 
   String getStartTimeToString() {
-    final splitStartTime = start_time.split(':');
-    final lessThan10 = int.parse(splitStartTime[1]) < 10 ? "0" : "";
-    return "${int.parse(splitStartTime[0])}:${lessThan10}${int.parse(splitStartTime[1])}";
+    return const DefaultMaterialLocalizations()
+        .formatTimeOfDay(getStartTime(), alwaysUse24HourFormat: true);
   }
 
   TimeOfDay getEndTime() {
@@ -59,9 +58,8 @@ class Event {
   }
 
   String getEndTimeToString() {
-    final splitEndTime = end_time.split(':');
-    final lessThan10 = int.parse(splitEndTime[1]) < 10 ? "0" : "";
-    return "${int.parse(splitEndTime[0])}:${lessThan10}${int.parse(splitEndTime[1])}";
+    return const DefaultMaterialLocalizations()
+        .formatTimeOfDay(getEndTime(), alwaysUse24HourFormat: true);
   }
 
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
