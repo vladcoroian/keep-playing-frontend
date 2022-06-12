@@ -4,18 +4,17 @@ import 'package:keep_playing_frontend/events/event_widgets.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class PendingEventsCalendarPage extends StatefulWidget {
+class PendingEventsListPage extends StatefulWidget {
   final List<Event> pendingEvents;
 
-  const PendingEventsCalendarPage({Key? key, required this.pendingEvents})
+  const PendingEventsListPage({Key? key, required this.pendingEvents})
       : super(key: key);
 
   @override
-  State<PendingEventsCalendarPage> createState() =>
-      _PendingEventsCalendarPageState();
+  State<PendingEventsListPage> createState() => _PendingEventsListPageState();
 }
 
-class _PendingEventsCalendarPageState extends State<PendingEventsCalendarPage> {
+class _PendingEventsListPageState extends State<PendingEventsListPage> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();

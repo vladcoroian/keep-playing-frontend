@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
+import 'package:keep_playing_frontend/events/manage_event_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/events/event_widgets.dart';

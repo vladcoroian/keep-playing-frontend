@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
+import 'package:keep_playing_frontend/events/manage_event_page.dart';
 import 'package:keep_playing_frontend/events/new_event_page.dart';
 
 import '../constants.dart';
@@ -87,6 +87,42 @@ class NewJobButton extends FloatingActionButton {
           icon: const Icon(Icons.add),
           label: const Text("New Job"),
         );
+}
+
+class CalendarViewButton extends StatelessWidget {
+  final Function()? onTap;
+  const CalendarViewButton({Key? key, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
+        child: GestureDetector(
+          onTap: onTap,
+          child: const Icon(
+            Icons.calendar_month,
+            size: APP_BAR_BUTTON_SIZE,
+          ),
+        ));
+  }
+}
+
+class ListViewButton extends StatelessWidget {
+  final Function()? onTap;
+  const ListViewButton({Key? key, this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
+        child: GestureDetector(
+          onTap: onTap,
+          child: const Icon(
+            Icons.list,
+            size: APP_BAR_BUTTON_SIZE,
+          ),
+        ));
+  }
 }
 
 class _ManageButton extends ColoredButton {
