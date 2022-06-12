@@ -72,4 +72,11 @@ class API {
     events.retainWhere((event) => event.coach);
     return events;
   }
+
+  static retrieveScheduledEventsForDay(DateTime day) async {
+    List<Event> events = await retrieveEvents();
+    events
+        .retainWhere((event) => event.coach && isSameDay(event.getDate(), day));
+    return events;
+  }
 }

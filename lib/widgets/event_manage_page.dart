@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/constants.dart';
-import 'package:keep_playing_frontend/api-manager.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 
 import '../models/event.dart';

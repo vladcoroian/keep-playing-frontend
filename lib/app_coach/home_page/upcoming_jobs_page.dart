@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/constants.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
-import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/events_views.dart';
 
-import '../../widgets/event_widgets.dart';
+import '../../api_manager.dart';
 import '../../models/event.dart';
-import '../../api-manager.dart';
+import '../../widgets/event_widgets.dart';
 
 class UpcomingJobsPage extends StatefulWidget {
   const UpcomingJobsPage({Key? key}) : super(key: key);
@@ -14,88 +12,39 @@ class UpcomingJobsPage extends StatefulWidget {
   State<UpcomingJobsPage> createState() => _UpcomingJobsPageState();
 }
 
-class _CancelButton extends ColoredButton {
-  const _CancelButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel',
-          color: CANCEL_BUTTON_COLOR,
-        );
-}
-
-class _MessageButton extends ColoredButton {
-  const _MessageButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Message',
-          color: APP_COLOR,
-        );
-}
-
 class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
-  List<Event> events = [];
+  List<Event> upcomingJobs = [];
 
-  @override
-  void initState() {
-    _retrieveEvents();
-    super.initState();
-  }
-
-  _retrieveEvents() async {
-    List<Event> retrievedEvents = await API.retrieveEvents();
+  _retrieveUpcomingJobs() async {
+    List<Event> events = await API.retrieveScheduledEvents();
 
     setState(() {
-      events = retrievedEvents;
+      upcomingJobs = events;
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Upcoming Jobs')),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          _retrieveEvents();
-        },
-        child: ListView.builder(
-          itemCount: events.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (events[index].coach) {
-              return UpcomingJobWidget(event: events[index]);
-            }
-            return const SizedBox(width: 0, height: 0);
-          },
-        ),
-      ),
-    );
+  void initState() {
+    _retrieveUpcomingJobs();
+    super.initState();
   }
-}
-
-class UpcomingJobWidget extends StatelessWidget {
-  final Event event;
-
-  const UpcomingJobWidget({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
-    return EventWidget(
-        event: event,
-        leftButton: _CancelButton(onPressed: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return ConfirmationDialog(
-                  title: 'Are you sure that you want to cancel this job?',
-                  onNoPressed: () => {Navigator.pop(context)},
-                  onYesPressed: () {
-                    API.eventHasNoCoach(event: event);
-                    Navigator.pop(context);
-                  },
-                );
-              });
-        }),
-        rightButton: _MessageButton(
-          onPressed: () {},
+    return RefreshIndicator(
+        onRefresh: () async {
+          _retrieveUpcomingJobs();
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Upcoming Jobs'),
+          ),
+          body: Center(
+              child: ListViewOfEvents(
+                  events: upcomingJobs,
+                  eventWidgetBuilder: (Event event) => UpcomingJobWidget(
+                        event: event,
+                      ))),
         ));
   }
 }

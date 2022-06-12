@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/api-manager.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/pending_events_for_day_page.dart';
+import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
-import 'package:keep_playing_frontend/widgets/events_calendar.dart';
-import 'package:keep_playing_frontend/widgets/events_list_view.dart';
+import 'package:keep_playing_frontend/widgets/events_pages.dart';
+import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 class PendingEventsPage extends StatefulWidget {
   const PendingEventsPage({Key? key}) : super(key: key);
@@ -30,13 +29,13 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
   @override
   void initState() {
     _buttonOptions = [
-      CalendarViewButton(
+      ListViewButton(
           onTap: () => {
                 setState(() {
                   _selectedIndex = 1;
                 })
               }),
-      ListViewButton(
+      CalendarViewButton(
           onTap: () => {
                 setState(() {
                   _selectedIndex = 0;
@@ -48,7 +47,6 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
     super.initState();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -68,12 +66,12 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      PendingEventsForDayPage(day: day)));
+                                      ScheduledEventsForDayPage(day: day)));
                         },
                       )
                     : ListViewOfEvents(
                         events: pendingEvents,
-                        eventWidgetBuilder: (event) => PendingEventWidget(
+                        eventWidgetBuilder: (Event event) => PendingEventWidget(
                               event: event,
                             ))),
             floatingActionButton: NewJobButton(context: context)));

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/api_manager.dart';
+import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
-import 'package:keep_playing_frontend/widgets/event_manage-page.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
-
-import '../../models/event.dart';
-import '../../api-manager.dart';
+import 'package:keep_playing_frontend/widgets/events_pages.dart';
+import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 class ScheduledEventsPage extends StatefulWidget {
   const ScheduledEventsPage({Key? key}) : super(key: key);
@@ -15,70 +13,68 @@ class ScheduledEventsPage extends StatefulWidget {
 }
 
 class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
-  List<Event> events = [];
+  int _selectedIndex = 0;
+  List<Widget> _buttonOptions = [];
 
-  @override
-  void initState() {
-    _retrieveEvents();
-    super.initState();
-  }
+  List<Event> scheduledEvents = [];
 
-  _retrieveEvents() async {
-    List<Event> retrievedEvents = await API.retrieveEvents();
+  _retrieveScheduledEvents() async {
+    List<Event> events = await API.retrieveScheduledEvents();
 
     setState(() {
-      events = retrievedEvents;
+      scheduledEvents = events;
     });
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Scheduled Events')),
-      body: RefreshIndicator(
-          onRefresh: () async {
-            _retrieveEvents();
-          },
-          child: ListView.builder(
-            itemCount: events.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (events[index].coach) {
-                return ScheduledEventWidget(event: events[index]);
-              }
-              return const SizedBox(width: 0, height: 0);
-            },
-          )),
-    );
+  void initState() {
+    _buttonOptions = [
+      ListViewButton(
+          onTap: () => {
+                setState(() {
+                  _selectedIndex = 1;
+                })
+              }),
+      CalendarViewButton(
+          onTap: () => {
+                setState(() {
+                  _selectedIndex = 0;
+                })
+              }),
+    ];
+    _retrieveScheduledEvents();
+
+    super.initState();
   }
-}
-
-class ScheduledEventWidget extends StatelessWidget {
-  final Event event;
-
-  const ScheduledEventWidget({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
-    return EventWidget(
-        event: event,
-        leftButton: const SizedBox(width: 0, height: 0),
-        rightButton: _ManageButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ManageEventPage(event: event)),
-            );
-          },
-        ));
+    return RefreshIndicator(
+        onRefresh: () async {
+          _retrieveScheduledEvents();
+        },
+        child: Scaffold(
+            appBar: AppBar(
+                title: const Text('Scheduled Events'),
+                actions: [_buttonOptions[_selectedIndex]]),
+            body: Center(
+                child: _selectedIndex == 0
+                    ? CalendarViewOfEvents(
+                        events: scheduledEvents,
+                        onDaySelected: (DateTime day) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ScheduledEventsForDayPage(day: day)));
+                        },
+                      )
+                    : ListViewOfEvents(
+                        events: scheduledEvents,
+                        eventWidgetBuilder: (Event event) =>
+                            ScheduledEventWidget(
+                              event: event,
+                            ))),
+            floatingActionButton: NewJobButton(context: context)));
   }
-}
-
-class _ManageButton extends ColoredButton {
-  const _ManageButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Manage',
-          color: APP_COLOR,
-        );
 }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/api-manager.dart';
+import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../constants.dart';
