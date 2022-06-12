@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/urls.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
-import '../../../constants.dart';
-import '../../../widgets/buttons.dart';
+import '../constants.dart';
+import '../widgets/buttons.dart';
 
 class NewEventPage extends StatefulWidget {
   const NewEventPage({Key? key}) : super(key: key);

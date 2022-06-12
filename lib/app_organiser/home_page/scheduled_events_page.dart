@@ -6,7 +6,7 @@ import 'package:http/http.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
-import 'package:keep_playing_frontend/widgets/event_widgets.dart';
+import 'package:keep_playing_frontend/events/event_widgets.dart';
 
 import '../../models/event.dart';
 import '../../urls.dart';

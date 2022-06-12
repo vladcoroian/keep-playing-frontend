@@ -9,7 +9,7 @@ import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../models/event.dart';
 import '../../urls.dart';
-import '../../widgets/event_widgets.dart';
+import '../../events/event_widgets.dart';
 
 class UpcomingJobsPage extends StatefulWidget {
   const UpcomingJobsPage({Key? key}) : super(key: key);

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
+import 'package:keep_playing_frontend/events/new_event_page.dart';
 
 import '../constants.dart';
 import '../models/event.dart';
-import 'buttons.dart';
+import '../widgets/buttons.dart';
 
 class EventWidget extends StatelessWidget {
   final Event event;
@@ -68,11 +69,31 @@ class PendingEventWidget extends StatelessWidget {
   }
 }
 
+class NewJobButton extends FloatingActionButton {
+  final BuildContext context;
+
+  NewJobButton({Key? key, required this.context})
+      : super.extended(
+          key: key,
+          onPressed: () => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const NewEventPage()),
+            )
+          },
+          extendedTextStyle:
+              const TextStyle(fontSize: DEFAULT_BUTTON_FONT_SIZE),
+          tooltip: 'Increment',
+          icon: const Icon(Icons.add),
+          label: const Text("New Job"),
+        );
+}
+
 class _ManageButton extends ColoredButton {
   const _ManageButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Manage',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Manage',
+          color: APP_COLOR,
+        );
 }

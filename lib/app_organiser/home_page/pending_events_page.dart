@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/new_event_page.dart';
+import 'package:keep_playing_frontend/events/new_event_page.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/pending_events_calendar_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
-import 'package:keep_playing_frontend/widgets/event_widgets.dart';
+import 'package:keep_playing_frontend/events/event_widgets.dart';
 
 import '../../models/event.dart';
 import '../../urls.dart';
@@ -89,5 +87,3 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
         ));
   }
 }
-
-

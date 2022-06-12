@@ -10,7 +10,7 @@ import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../models/event.dart';
 import '../../urls.dart';
-import '../../widgets/event_widgets.dart';
+import '../../events/event_widgets.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key? key}) : super(key: key);
