@@ -44,6 +44,9 @@ dependencies:
   # Date Time Picker package:
   datetime_picker_formfield: ^2.0.0
 
+  # Calendar package:
+  table_calendar: ^3.0.6
+
   # JSON files
   json_annotation: ^4.5.0
 
