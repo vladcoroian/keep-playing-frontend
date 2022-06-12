@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/manage_event_page.dart';
 import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/new_event_page.dart';
+import 'package:keep_playing_frontend/app_organiser/home_page/pending_events/pending_events_calendar_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
@@ -42,7 +43,24 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Pending Events')),
+        appBar: AppBar(title: const Text('Pending Events'), actions: <Widget>[
+          Padding(
+              padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const PendingEventsCalendarPage()),
+                  );
+                },
+                child: const Icon(
+                  Icons.calendar_month,
+                  size: APP_BAR_BUTTON_SIZE,
+                ),
+              )),
+        ]),
         body: RefreshIndicator(
             onRefresh: () async {
               _retrieveEvents();
