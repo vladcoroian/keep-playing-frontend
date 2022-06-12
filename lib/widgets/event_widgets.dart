@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/events/manage_event_page.dart';
-import 'package:keep_playing_frontend/events/new_event_page.dart';
+import 'package:keep_playing_frontend/widgets/event_manage-page.dart';
+import 'package:keep_playing_frontend/widgets/event_new_page.dart';
 
 import '../constants.dart';
 import '../models/event.dart';
-import '../widgets/buttons.dart';
+import 'buttons.dart';
 
 class EventWidget extends StatelessWidget {
   final Event event;
@@ -91,6 +91,7 @@ class NewJobButton extends FloatingActionButton {
 
 class CalendarViewButton extends StatelessWidget {
   final Function()? onTap;
+
   const CalendarViewButton({Key? key, this.onTap}) : super(key: key);
 
   @override
@@ -109,6 +110,7 @@ class CalendarViewButton extends StatelessWidget {
 
 class ListViewButton extends StatelessWidget {
   final Function()? onTap;
+
   const ListViewButton({Key? key, this.onTap}) : super(key: key);
 
   @override

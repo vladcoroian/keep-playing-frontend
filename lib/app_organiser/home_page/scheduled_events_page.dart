@@ -1,15 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-import 'package:keep_playing_frontend/events/manage_event_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/widgets/event_widgets.dart';
+import 'package:keep_playing_frontend/widgets/event_manage-page.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
-import 'package:keep_playing_frontend/events/event_widgets.dart';
 
 import '../../models/event.dart';
-import '../../urls.dart';
+import '../../api-manager.dart';
 
 class ScheduledEventsPage extends StatefulWidget {
   const ScheduledEventsPage({Key? key}) : super(key: key);
@@ -19,7 +15,6 @@ class ScheduledEventsPage extends StatefulWidget {
 }
 
 class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
-  Client client = http.Client();
   List<Event> events = [];
 
   @override
@@ -29,13 +24,11 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   }
 
   _retrieveEvents() async {
-    events = [];
-    List response = json.decode((await client.get(Uri.parse(URL.EVENTS))).body);
-    for (var element in response) {
-      events.add(Event.fromJson(element));
-    }
+    List<Event> retrievedEvents = await API.retrieveEvents();
 
-    setState(() {});
+    setState(() {
+      events = retrievedEvents;
+    });
   }
 
   @override

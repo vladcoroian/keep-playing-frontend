@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
-import '../../events/event_widgets.dart';
+import '../../widgets/event_widgets.dart';
 import '../../models/event.dart';
-import '../../urls.dart';
+import '../../api-manager.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key? key}) : super(key: key);
@@ -36,7 +34,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   _retrieveEvents() async {
-    List<Event> retrievedEvents = await URL.retrieveEvents();
+    List<Event> retrievedEvents = await API.retrieveEvents();
 
     setState(() {
       events = retrievedEvents;
@@ -142,9 +140,7 @@ class _EventDetailsDialog extends StatelessWidget {
 class _AcceptJobDialog extends StatelessWidget {
   final Event event;
 
-  final Client client = http.Client();
-
-  _AcceptJobDialog({required this.event});
+  const _AcceptJobDialog({required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -163,8 +159,7 @@ class _AcceptJobDialog extends StatelessWidget {
                                 'Are you sure that you want to accept this job?',
                             onNoPressed: () => {Navigator.pop(context)},
                             onYesPressed: () {
-                              client.patch(URL.updateEvent(event.pk),
-                                  body: {"coach": "true"});
+                              API.eventHasCoach(event: event);
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },

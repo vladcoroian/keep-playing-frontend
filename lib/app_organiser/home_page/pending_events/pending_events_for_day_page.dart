@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/events/event_widgets.dart';
+import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/models/event.dart';
-import 'package:keep_playing_frontend/urls.dart';
+import 'package:keep_playing_frontend/api-manager.dart';
 
 class PendingEventsForDayPage extends StatefulWidget {
   final DateTime day;
@@ -24,7 +24,8 @@ class _PendingEventsForDayState extends State<PendingEventsForDayPage> {
   }
 
   _retrievePendingEventsForThisDay() async {
-    List<Event> retrievedEvents = await URL.retrievePendingEventsForThisDay(widget.day);
+    List<Event> retrievedEvents =
+        await API.retrievePendingEventsForThisDay(widget.day);
 
     setState(() {
       pendingEventsForThisDay = retrievedEvents;

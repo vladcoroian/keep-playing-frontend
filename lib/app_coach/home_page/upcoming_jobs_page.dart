@@ -1,15 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
+import '../../widgets/event_widgets.dart';
 import '../../models/event.dart';
-import '../../urls.dart';
-import '../../events/event_widgets.dart';
+import '../../api-manager.dart';
 
 class UpcomingJobsPage extends StatefulWidget {
   const UpcomingJobsPage({Key? key}) : super(key: key);
@@ -21,23 +17,22 @@ class UpcomingJobsPage extends StatefulWidget {
 class _CancelButton extends ColoredButton {
   const _CancelButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Cancel',
-    color: CANCEL_BUTTON_COLOR,
-  );
+          key: key,
+          text: 'Cancel',
+          color: CANCEL_BUTTON_COLOR,
+        );
 }
 
 class _MessageButton extends ColoredButton {
   const _MessageButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Message',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Message',
+          color: APP_COLOR,
+        );
 }
 
 class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
-  Client client = http.Client();
   List<Event> events = [];
 
   @override
@@ -47,13 +42,11 @@ class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
   }
 
   _retrieveEvents() async {
-    events = [];
-    List response = json.decode((await client.get(Uri.parse(URL.EVENTS))).body);
-    for (var element in response) {
-      events.add(Event.fromJson(element));
-    }
+    List<Event> retrievedEvents = await API.retrieveEvents();
 
-    setState(() {});
+    setState(() {
+      events = retrievedEvents;
+    });
   }
 
   @override
@@ -81,9 +74,7 @@ class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
 class UpcomingJobWidget extends StatelessWidget {
   final Event event;
 
-  final Client client = http.Client();
-
-  UpcomingJobWidget({super.key, required this.event});
+  const UpcomingJobWidget({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +88,7 @@ class UpcomingJobWidget extends StatelessWidget {
                   title: 'Are you sure that you want to cancel this job?',
                   onNoPressed: () => {Navigator.pop(context)},
                   onYesPressed: () {
-                    client.patch(URL.updateEvent(event.pk),
-                        body: {"coach": "false"});
+                    API.eventHasNoCoach(event: event);
                     Navigator.pop(context);
                   },
                 );
@@ -109,4 +99,3 @@ class UpcomingJobWidget extends StatelessWidget {
         ));
   }
 }
-
