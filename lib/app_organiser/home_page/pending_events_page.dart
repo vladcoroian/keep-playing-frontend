@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -18,21 +16,17 @@ class PendingEventsPage extends StatefulWidget {
 
 class _PendingEventsPageState extends State<PendingEventsPage> {
   int _selectedIndex = 0;
-  List<Widget> _widgetOptions = [];
   List<Widget> _buttonOptions = [];
 
   Client client = http.Client();
   List<Event> pendingEvents = [];
 
   _retrievePendingEvents() async {
-    pendingEvents = [];
-    List response = json.decode((await client.get(Uri.parse(URL.EVENTS))).body);
-    for (var element in response) {
-      Event event = Event.fromJson(element);
-      if (!event.coach) {
-        pendingEvents.add(Event.fromJson(element));
-      }
-    }
+    List<Event> events = await URL.retrievePendingEvents();
+
+    setState(() {
+      pendingEvents = events;
+    });
   }
 
   @override
@@ -52,20 +46,13 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
               }),
     ];
     _retrievePendingEvents();
-    _widgetOptions = <Widget>[
-      _ListViewWidget(pendingEvents: pendingEvents),
-      _CalendarViewWidget(pendingEvents: pendingEvents)
-    ];
+
     super.initState();
   }
 
   @override
-
-
   @override
   Widget build(BuildContext context) {
-    Widget currentWidget = _widgetOptions.elementAt(_selectedIndex);
-
     return RefreshIndicator(
         onRefresh: () async {
           _retrievePendingEvents();
@@ -75,8 +62,9 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
                 title: const Text('Pending Events'),
                 actions: [_buttonOptions[_selectedIndex]]),
             body: Center(
-              child: currentWidget,
-            ),
+                child: _selectedIndex == 0
+                    ? _CalendarViewWidget(pendingEvents: pendingEvents)
+                    : _ListViewWidget(pendingEvents: pendingEvents)),
             floatingActionButton: NewJobButton(context: context)));
   }
 }
