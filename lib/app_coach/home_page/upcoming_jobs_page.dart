@@ -45,17 +45,17 @@ class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
           body: Center(
               child: ListViewOfEvents(
                   events: upcomingJobs,
-                  eventWidgetBuilder: (Event event) => UpcomingJobWidget(
+                  eventWidgetBuilder: (Event event) => _UpcomingJobWidget(
                         event: event,
                       ))),
         ));
   }
 }
 
-class UpcomingJobWidget extends StatelessWidget {
+class _UpcomingJobWidget extends StatelessWidget {
   final Event event;
 
-  const UpcomingJobWidget({super.key, required this.event});
+  const _UpcomingJobWidget({required this.event});
 
   @override
   Widget build(BuildContext context) {

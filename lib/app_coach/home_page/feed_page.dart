@@ -46,17 +46,17 @@ class _FeedPageState extends State<FeedPage> {
           body: Center(
               child: ListViewOfEvents(
                   events: feedEvents,
-                  eventWidgetBuilder: (Event event) => FeedEventWidget(
+                  eventWidgetBuilder: (Event event) => _FeedEventWidget(
                         event: event,
                       ))),
         ));
   }
 }
 
-class FeedEventWidget extends StatelessWidget {
+class _FeedEventWidget extends StatelessWidget {
   final Event event;
 
-  const FeedEventWidget({super.key, required this.event});
+  const _FeedEventWidget({required this.event});
 
   @override
   Widget build(BuildContext context) {

@@ -41,7 +41,17 @@ class _ManageEventPageState extends State<ManageEventPage> {
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return _confirmCancellationOfEventDialog();
+                        return ConfirmationDialog(
+                          title: 'Are you sure you want to cancel this event?',
+                          onNoPressed: () {
+                            Navigator.pop(context);
+                          },
+                          onYesPressed: () {
+                            API.cancelEvent(event: widget.event);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                        );
                       });
                 },
               ),
@@ -54,20 +64,6 @@ class _ManageEventPageState extends State<ManageEventPage> {
           )
         ]),
       ),
-    );
-  }
-
-  Widget _confirmCancellationOfEventDialog() {
-    return ConfirmationDialog(
-      title: 'Are you sure you want to cancel this event?',
-      onNoPressed: () {
-        Navigator.pop(context);
-      },
-      onYesPressed: () {
-        API.cancelEvent(event: widget.event);
-        Navigator.pop(context);
-        Navigator.pop(context);
-      },
     );
   }
 }
