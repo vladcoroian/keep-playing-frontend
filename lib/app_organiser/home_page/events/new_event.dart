@@ -6,10 +6,9 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager.dart';
+import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
-
-import '../constants.dart';
-import 'buttons.dart';
 
 class NewEventPage extends StatefulWidget {
   const NewEventPage({Key? key}) : super(key: key);

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
-
-import '../models/event.dart';
-import 'dialogs.dart';
+import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 class ManageEventPage extends StatefulWidget {
   final Event event;

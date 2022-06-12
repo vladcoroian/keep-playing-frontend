@@ -1,12 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/models/event.dart';
-import 'package:keep_playing_frontend/widgets/event_widgets.dart';
-import 'package:keep_playing_frontend/widgets/events_pages.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
-import '../../constants.dart';
-import '../../widgets/event_new_page.dart';
+import 'events/new_event.dart';
+import 'events_scheduled/scheduled_event_widget.dart';
+import 'events_scheduled/scheduled_events_for_day.dart';
+import 'new_job_button.dart';
 
 class ScheduledEventsPage extends StatefulWidget {
   const ScheduledEventsPage({Key? key}) : super(key: key);
@@ -78,18 +80,25 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
                             ScheduledEventWidget(
                               event: event,
                             ))),
-            floatingActionButton: FloatingActionButton.extended(
+            floatingActionButton: NewJobButton(
+              context: context,
               onPressed: () => {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const NewEventPage()),
-                )
+                ).then((value) => {
+                      if (value != null)
+                        {
+                          setState(() {
+                            final body = jsonDecode(value.body);
+                            body["price"] = int.parse(body["price"]);
+                            body["coach"] =
+                                body["coach"].toLowerCase() == 'true';
+                            scheduledEvents.add(Event.fromJson(body));
+                          })
+                        }
+                    })
               },
-              extendedTextStyle:
-                  const TextStyle(fontSize: DEFAULT_BUTTON_FONT_SIZE),
-              tooltip: 'Increment',
-              icon: const Icon(Icons.add),
-              label: const Text("New Job"),
             )));
   }
 }

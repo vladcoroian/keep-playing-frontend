@@ -3,28 +3,6 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'event_new_page.dart';
-
-class NewJobButton extends FloatingActionButton {
-  final BuildContext context;
-
-  NewJobButton({Key? key, required this.context})
-      : super.extended(
-          key: key,
-          onPressed: () => {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const NewEventPage()),
-            )
-          },
-          extendedTextStyle:
-              const TextStyle(fontSize: DEFAULT_BUTTON_FONT_SIZE),
-          tooltip: 'Increment',
-          icon: const Icon(Icons.add),
-          label: const Text("New Job"),
-        );
-}
-
 class CalendarViewButton extends StatelessWidget {
   final Function()? onTap;
 
