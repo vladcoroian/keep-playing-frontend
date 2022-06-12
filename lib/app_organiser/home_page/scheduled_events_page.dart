@@ -5,6 +5,9 @@ import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/widgets/events_pages.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
+import '../../constants.dart';
+import '../../widgets/event_new_page.dart';
+
 class ScheduledEventsPage extends StatefulWidget {
   const ScheduledEventsPage({Key? key}) : super(key: key);
 
@@ -75,6 +78,18 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
                             ScheduledEventWidget(
                               event: event,
                             ))),
-            floatingActionButton: NewJobButton(context: context)));
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () => {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const NewEventPage()),
+                )
+              },
+              extendedTextStyle:
+                  const TextStyle(fontSize: DEFAULT_BUTTON_FONT_SIZE),
+              tooltip: 'Increment',
+              icon: const Icon(Icons.add),
+              label: const Text("New Job"),
+            )));
   }
 }

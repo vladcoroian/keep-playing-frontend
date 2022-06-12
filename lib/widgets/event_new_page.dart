@@ -68,7 +68,7 @@ class _NewEventPageState extends State<NewEventPage> {
           _selectPriceForm(),
           Center(child: _SubmitButton(
             onPressed: () {
-              client.post(API.addEventLink(),
+              final response = client.post(API.addEventLink(),
                   headers: <String, String>{
                     'Content-Type': 'application/json; charset=UTF-8',
                   },
@@ -86,7 +86,7 @@ class _NewEventPageState extends State<NewEventPage> {
                     'price': _price.toString(),
                     'coach': 'False'
                   }));
-              Navigator.pop(context);
+              Navigator.of(context).pop(response);
             },
           )),
         ]),
