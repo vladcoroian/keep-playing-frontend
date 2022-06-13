@@ -107,6 +107,19 @@ class EventModel {
   Map<String, dynamic> toJson() => _$EventModelToJson(this);
 }
 
+class CustomizeEvent {
+  String name = '';
+  String location = '';
+  String details = '';
+
+  DateTime date = DateTime.now();
+  TimeOfDay startTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay endTime = const TimeOfDay(hour: 0, minute: 0);
+
+  int price = 0;
+  bool coach = false;
+}
+
 class NewEvent {
   final String name;
   final String location;
@@ -128,6 +141,17 @@ class NewEvent {
       required this.endTime,
       required this.price,
       required this.coach});
+
+  NewEvent.fromCustomizeEvent({required CustomizeEvent customizeEvent}) : this(
+    name: customizeEvent.name,
+    location: customizeEvent.location,
+    details: customizeEvent.details,
+    date: customizeEvent.date,
+    startTime: customizeEvent.startTime,
+    endTime: customizeEvent.endTime,
+    price: customizeEvent.price,
+    coach: customizeEvent.coach,
+  );
 
   String toJson() {
     return jsonEncode(<String, String>{
