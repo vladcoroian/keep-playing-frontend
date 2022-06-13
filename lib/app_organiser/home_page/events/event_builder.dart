@@ -6,29 +6,39 @@ import 'package:keep_playing_frontend/models/event.dart';
 
 class EventBuilder extends StatefulWidget {
   final CustomizeEvent customizeEvent;
+  final bool isNewEvent;
 
-  const EventBuilder({Key? key, required this.customizeEvent}) : super(key: key);
+  const EventBuilder(
+      {Key? key, required this.customizeEvent, required this.isNewEvent})
+      : super(key: key);
 
   @override
   State<EventBuilder> createState() => _EventBuilderState();
 }
 
 class _EventBuilderState extends State<EventBuilder> {
-
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
 
   @override
   void initState() {
-    startTimeInput.text = "";
-    endTimeInput.text = "";
+    startTimeInput.text = widget.isNewEvent
+        ? ''
+        : const DefaultMaterialLocalizations().formatTimeOfDay(
+            widget.customizeEvent.startTime,
+            alwaysUse24HourFormat: true);
+    endTimeInput.text = widget.isNewEvent
+        ? ''
+        : const DefaultMaterialLocalizations().formatTimeOfDay(
+            widget.customizeEvent.endTime,
+            alwaysUse24HourFormat: true);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      _writeTitleForm(),
+      _writeNameForm(),
       _writeLocationForm(),
       _writeDetailsForm(),
       _selectDateForm(),
@@ -38,14 +48,15 @@ class _EventBuilderState extends State<EventBuilder> {
     ]);
   }
 
-  Widget _writeTitleForm() {
+  Widget _writeNameForm() {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
+            initialValue: widget.isNewEvent ? null : widget.customizeEvent.name,
             decoration: const InputDecoration(
               icon: Icon(Icons.sports_soccer),
-              hintText: 'Enter the title',
-              labelText: 'Title',
+              hintText: 'Enter the name',
+              labelText: 'Name',
             ),
             onChanged: (text) {
               widget.customizeEvent.name = text;
@@ -56,6 +67,8 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
+            initialValue:
+                widget.isNewEvent ? null : widget.customizeEvent.location,
             decoration: const InputDecoration(
               icon: Icon(Icons.location_on),
               hintText: 'Enter the location',
@@ -70,6 +83,8 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
+            initialValue:
+                widget.isNewEvent ? null : widget.customizeEvent.details,
             decoration: const InputDecoration(
               icon: Icon(Icons.details),
               hintText: 'Enter details',
@@ -84,6 +99,7 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: DateTimeField(
+          initialValue: widget.isNewEvent ? null : widget.customizeEvent.date,
           decoration: const InputDecoration(
             icon: Icon(Icons.date_range),
             hintText: 'Enter the date',
@@ -107,7 +123,7 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextField(
-            controller: startTimeInput,
+            controller: widget.isNewEvent ? null : startTimeInput,
             decoration: const InputDecoration(
                 icon: Icon(Icons.access_time), labelText: "Enter Start Time"),
             readOnly: true,
@@ -120,7 +136,8 @@ class _EventBuilderState extends State<EventBuilder> {
                 setState(() {
                   widget.customizeEvent.startTime = newTime;
                   startTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(widget.customizeEvent.startTime, alwaysUse24HourFormat: true);
+                      .formatTimeOfDay(widget.customizeEvent.startTime,
+                          alwaysUse24HourFormat: true);
                 });
               }
             }));
@@ -130,7 +147,7 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextField(
-            controller: endTimeInput,
+            controller: widget.isNewEvent ? null : endTimeInput,
             decoration: const InputDecoration(
                 icon: Icon(Icons.access_time), labelText: "Enter End Time"),
             readOnly: true,
@@ -143,7 +160,8 @@ class _EventBuilderState extends State<EventBuilder> {
                 setState(() {
                   widget.customizeEvent.endTime = newTime;
                   endTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(widget.customizeEvent.endTime, alwaysUse24HourFormat: true);
+                      .formatTimeOfDay(widget.customizeEvent.endTime,
+                          alwaysUse24HourFormat: true);
                 });
               }
             }));
@@ -153,6 +171,9 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
+            initialValue: widget.isNewEvent
+                ? null
+                : widget.customizeEvent.price.toString(),
             decoration: const InputDecoration(
               icon: Icon(Icons.price_change),
               hintText: 'Enter the price',

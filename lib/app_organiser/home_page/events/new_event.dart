@@ -36,7 +36,7 @@ class _NewEventPageState extends State<NewEventPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('New Event')),
         body: ListView(children: [
-          EventBuilder(customizeEvent: customizeEvent),
+          EventBuilder(customizeEvent: customizeEvent, isNewEvent: true),
           Center(child: _SubmitButton(
             onPressed: () {
               customizeEvent.coach = false;

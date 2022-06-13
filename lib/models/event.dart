@@ -118,6 +118,19 @@ class CustomizeEvent {
 
   int price = 0;
   bool coach = false;
+
+  CustomizeEvent();
+
+  CustomizeEvent.fromEvent(Event event) {
+    name = event.name;
+    location = event.location;
+    details = event.details;
+    date = event.date;
+    startTime = event.startTime;
+    endTime = event.endTime;
+    price = event.price;
+    coach = event.coach;
+  }
 }
 
 class NewEvent {
@@ -142,16 +155,17 @@ class NewEvent {
       required this.price,
       required this.coach});
 
-  NewEvent.fromCustomizeEvent({required CustomizeEvent customizeEvent}) : this(
-    name: customizeEvent.name,
-    location: customizeEvent.location,
-    details: customizeEvent.details,
-    date: customizeEvent.date,
-    startTime: customizeEvent.startTime,
-    endTime: customizeEvent.endTime,
-    price: customizeEvent.price,
-    coach: customizeEvent.coach,
-  );
+  NewEvent.fromCustomizeEvent({required CustomizeEvent customizeEvent})
+      : this(
+          name: customizeEvent.name,
+          location: customizeEvent.location,
+          details: customizeEvent.details,
+          date: customizeEvent.date,
+          startTime: customizeEvent.startTime,
+          endTime: customizeEvent.endTime,
+          price: customizeEvent.price,
+          coach: customizeEvent.coach,
+        );
 
   String toJson() {
     return jsonEncode(<String, String>{

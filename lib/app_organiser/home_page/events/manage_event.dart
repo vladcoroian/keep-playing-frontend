@@ -5,6 +5,8 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
+import 'event_builder.dart';
+
 class ManageEventPage extends StatefulWidget {
   final Event event;
 
@@ -15,6 +17,14 @@ class ManageEventPage extends StatefulWidget {
 }
 
 class _ManageEventPageState extends State<ManageEventPage> {
+  late CustomizeEvent customizeEvent;
+
+  @override
+  void initState() {
+    customizeEvent = CustomizeEvent.fromEvent(widget.event);
+    super.initState();
+  }
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -33,6 +43,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Edit Event')),
         body: ListView(children: [
+          EventBuilder(customizeEvent: customizeEvent, isNewEvent: false),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
