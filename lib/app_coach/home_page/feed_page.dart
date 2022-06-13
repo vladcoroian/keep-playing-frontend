@@ -185,7 +185,12 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
-      title: Center(child: _showName()),
+      title: Center(
+          child: Text(
+        event.name,
+        style: _textStyleForTitle,
+        textScaleFactor: 1.5,
+      )),
       children: <Widget>[
         ListTile(
             leading: const Icon(Icons.location_on),
@@ -207,16 +212,17 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
             subtitle: Text(const DefaultMaterialLocalizations()
                 .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true))),
         ListTile(
-            leading: const Icon(Icons.timer),
+            leading: const Icon(Icons.timer_outlined),
             title: const Text('Flexible Start Time', style: _textStyleForTitle),
             subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
                 event.flexibleStartTime,
                 alwaysUse24HourFormat: true))),
         ListTile(
-            leading: const Icon(Icons.timer),
+            leading: const Icon(Icons.timer_outlined),
             title: const Text('Flexible End Time', style: _textStyleForTitle),
-            subtitle: Text(const DefaultMaterialLocalizations()
-                .formatTimeOfDay(event.flexibleEndTime, alwaysUse24HourFormat: true))),
+            subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
+                event.flexibleEndTime,
+                alwaysUse24HourFormat: true))),
         const Divider(),
         ListTile(
             leading: const Icon(Icons.details),
@@ -228,57 +234,6 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
     );
   }
 
-  static const TextStyle _textStyleForTextSpan = TextStyle(
-    fontSize: 16.0,
-    color: Colors.black,
-  );
   static const TextStyle _textStyleForTitle =
       TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: APP_COLOR);
-
-  Widget _detailTextWidget(String detail, String content) {
-    return RichText(
-      text: TextSpan(
-        style: _textStyleForTextSpan,
-        children: <TextSpan>[
-          TextSpan(text: detail, style: _textStyleForTitle),
-          TextSpan(text: content),
-        ],
-      ),
-    );
-  }
-
-  Widget _showName() {
-    return Text(event.name, style: _textStyleForTitle);
-  }
-
-  Widget _showLocation() {
-    return _detailTextWidget('Location:\n', event.location);
-  }
-
-  Widget _showDate() {
-    return _detailTextWidget(
-        'Date: ', DateFormat("MMMM dd").format(event.date));
-  }
-
-  Widget _showStartTime() {
-    return _detailTextWidget(
-        'Start Time: ',
-        const DefaultMaterialLocalizations()
-            .formatTimeOfDay(event.startTime, alwaysUse24HourFormat: true));
-  }
-
-  Widget _showEndTime() {
-    return _detailTextWidget(
-        'End Time: ',
-        const DefaultMaterialLocalizations()
-            .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true));
-  }
-
-  Widget _showPay() {
-    return _detailTextWidget('Pay: ', event.getPriceInPounds());
-  }
-
-  Widget _showDetails() {
-    return _detailTextWidget('Details:\n', event.details);
-  }
 }
