@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+
+import 'event_builder.dart';
 
 class ManageEventPage extends StatefulWidget {
   final Event event;
@@ -15,6 +18,14 @@ class ManageEventPage extends StatefulWidget {
 }
 
 class _ManageEventPageState extends State<ManageEventPage> {
+  late NewEvent newEvent;
+
+  @override
+  void initState() {
+    newEvent = NewEvent.fromEvent(widget.event);
+    super.initState();
+  }
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
@@ -33,6 +44,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Edit Event')),
         body: ListView(children: [
+          EventBuilder(newEvent: newEvent, isNewEvent: false),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -57,7 +69,11 @@ class _ManageEventPageState extends State<ManageEventPage> {
               ),
               _SaveChangesButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  print(newEvent.toJson());
+                  final Future<Response> response =
+                      API.changeEvent(event: widget.event, newEvent: newEvent);
+                  print(response.toString());
+                  // Navigator.of(context).pop(response);
                 },
               )
             ],
