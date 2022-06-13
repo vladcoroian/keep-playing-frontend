@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
@@ -22,7 +20,7 @@ class _NewEventPageState extends State<NewEventPage> {
   String _location = '';
   String _details = '';
 
-  String _date = '';
+  DateTime _date = DateTime.now();
   TimeOfDay _startTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
 
@@ -37,8 +35,6 @@ class _NewEventPageState extends State<NewEventPage> {
     endTimeInput.text = "";
     super.initState();
   }
-
-  Client client = http.Client();
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -67,24 +63,17 @@ class _NewEventPageState extends State<NewEventPage> {
           _selectPriceForm(),
           Center(child: _SubmitButton(
             onPressed: () {
-              final response = client.post(API.addEventLink(),
-                  headers: <String, String>{
-                    'Content-Type': 'application/json; charset=UTF-8',
-                  },
-                  body: jsonEncode(<String, String>{
-                    "name": _name,
-                    'location': _location,
-                    'details': _details,
-                    'date': _date,
-                    'start_time': const DefaultMaterialLocalizations()
-                        .formatTimeOfDay(_startTime,
-                            alwaysUse24HourFormat: true),
-                    'end_time': const DefaultMaterialLocalizations()
-                        .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true),
-                    // TODO : Remove this cast.
-                    'price': _price.toString(),
-                    'coach': 'False'
-                  }));
+              NewEvent newEvent = NewEvent(
+                  name: _name,
+                  location: _location,
+                  details: _details,
+                  date: _date,
+                  startTime: _startTime,
+                  endTime: _endTime,
+                  price: _price,
+                  coach: false);
+              final Future<Response> response =
+                  API.addNewEvent(newEvent: newEvent);
               Navigator.of(context).pop(response);
             },
           )),
@@ -153,7 +142,7 @@ class _NewEventPageState extends State<NewEventPage> {
                 lastDate: DateTime(2100));
           },
           onChanged: (date) {
-            _date = DateFormat('yyyy-MM-dd').format(date!);
+            _date = date!;
           },
         ));
   }

@@ -40,8 +40,12 @@ class API {
     client.delete(API.deleteEventLink(event.pk));
   }
 
-  static void newEvent({required Event event}) {
-    // TODO: Implement this.
+  static Future<Response> addNewEvent({required NewEvent newEvent}) {
+    return client.post(API.addEventLink(),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: newEvent.toJson());
   }
 
   static Future<List<Event>> retrieveEvents() async {

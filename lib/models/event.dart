@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -65,4 +67,42 @@ class Event {
   factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
 
   Map<String, dynamic> toJson() => _$EventToJson(this);
+}
+
+class NewEvent {
+  final String name;
+  final String location;
+  final String details;
+
+  final DateTime date;
+  final TimeOfDay startTime;
+  final TimeOfDay endTime;
+
+  final int price;
+  final bool coach;
+
+  NewEvent(
+      {required this.name,
+      required this.location,
+      required this.details,
+      required this.date,
+      required this.startTime,
+      required this.endTime,
+      required this.price,
+      required this.coach});
+
+  String toJson() {
+    return jsonEncode(<String, String>{
+      "name": name,
+      'location': location,
+      'details': details,
+      'date': DateFormat('yyyy-MM-dd').format(date),
+      'start_time': const DefaultMaterialLocalizations()
+          .formatTimeOfDay(startTime, alwaysUse24HourFormat: true),
+      'end_time': const DefaultMaterialLocalizations()
+          .formatTimeOfDay(endTime, alwaysUse24HourFormat: true),
+      'price': price.toString(),
+      'coach': coach ? 'True' : 'False'
+    });
+  }
 }
