@@ -27,8 +27,12 @@ class EventWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(DateFormat("MMMM dd").format(event.date)),
-                  Text(event.get24hStartTimeString()),
-                  Text(event.get24hEndTimeString()),
+                  Text(const DefaultMaterialLocalizations().formatTimeOfDay(
+                      event.startTime,
+                      alwaysUse24HourFormat: true)),
+                  Text(const DefaultMaterialLocalizations().formatTimeOfDay(
+                      event.endTime,
+                      alwaysUse24HourFormat: true)),
                 ],
               ),
               title: Text(event.name, textAlign: TextAlign.left),

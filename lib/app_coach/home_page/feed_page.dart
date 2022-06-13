@@ -187,18 +187,41 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
       contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
       title: Center(child: _showName()),
       children: <Widget>[
-        _showLocation(),
-        const SizedBox(height: SPACE_BETWEEN_ROWS),
-        _showDate(),
-        const SizedBox(height: SPACE_BETWEEN_ROWS),
-        _showStartTime(),
-        const SizedBox(height: SPACE_BETWEEN_ROWS),
-        _showEndTime(),
-        const SizedBox(height: SPACE_BETWEEN_ROWS),
-        _showPay(),
-        const SizedBox(height: SPACE_BETWEEN_ROWS),
+        ListTile(
+            leading: const Icon(Icons.location_on),
+            title: const Text('Location', style: _textStyleForTitle),
+            subtitle: Text(event.location)),
+        ListTile(
+            leading: const Icon(Icons.date_range),
+            title: const Text('Date', style: _textStyleForTitle),
+            subtitle: Text(DateFormat("MMMM dd").format(event.date))),
+        ListTile(
+            leading: const Icon(Icons.timer),
+            title: const Text('Start Time', style: _textStyleForTitle),
+            subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
+                event.startTime,
+                alwaysUse24HourFormat: true))),
+        ListTile(
+            leading: const Icon(Icons.timer),
+            title: const Text('End Time', style: _textStyleForTitle),
+            subtitle: Text(const DefaultMaterialLocalizations()
+                .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true))),
+        ListTile(
+            leading: const Icon(Icons.timer),
+            title: const Text('Flexible Start Time', style: _textStyleForTitle),
+            subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
+                event.flexibleStartTime,
+                alwaysUse24HourFormat: true))),
+        ListTile(
+            leading: const Icon(Icons.timer),
+            title: const Text('Flexible End Time', style: _textStyleForTitle),
+            subtitle: Text(const DefaultMaterialLocalizations()
+                .formatTimeOfDay(event.flexibleEndTime, alwaysUse24HourFormat: true))),
         const Divider(),
-        _showDetails(),
+        ListTile(
+            leading: const Icon(Icons.details),
+            title: const Text('Details', style: _textStyleForTitle),
+            subtitle: Text(event.details)),
         const Divider(),
         lastWidget,
       ],
@@ -209,7 +232,7 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
     fontSize: 16.0,
     color: Colors.black,
   );
-  static const TextStyle _textStyleForDetails =
+  static const TextStyle _textStyleForTitle =
       TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: APP_COLOR);
 
   Widget _detailTextWidget(String detail, String content) {
@@ -217,7 +240,7 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
       text: TextSpan(
         style: _textStyleForTextSpan,
         children: <TextSpan>[
-          TextSpan(text: detail, style: _textStyleForDetails),
+          TextSpan(text: detail, style: _textStyleForTitle),
           TextSpan(text: content),
         ],
       ),
@@ -225,7 +248,7 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
   }
 
   Widget _showName() {
-    return Text(event.name, style: _textStyleForDetails);
+    return Text(event.name, style: _textStyleForTitle);
   }
 
   Widget _showLocation() {
@@ -238,11 +261,17 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
   }
 
   Widget _showStartTime() {
-    return _detailTextWidget('Start Time: ', event.get24hStartTimeString());
+    return _detailTextWidget(
+        'Start Time: ',
+        const DefaultMaterialLocalizations()
+            .formatTimeOfDay(event.startTime, alwaysUse24HourFormat: true));
   }
 
   Widget _showEndTime() {
-    return _detailTextWidget('End Time: ', event.get24hEndTimeString());
+    return _detailTextWidget(
+        'End Time: ',
+        const DefaultMaterialLocalizations()
+            .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true));
   }
 
   Widget _showPay() {

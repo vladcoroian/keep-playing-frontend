@@ -15,6 +15,8 @@ class Event {
   final DateTime date;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
+  final TimeOfDay flexibleStartTime;
+  final TimeOfDay flexibleEndTime;
 
   final int price;
   final bool coach;
@@ -27,6 +29,8 @@ class Event {
       required this.date,
       required this.startTime,
       required this.endTime,
+      required this.flexibleStartTime,
+      required this.flexibleEndTime,
       required this.price,
       required this.coach});
 
@@ -37,23 +41,17 @@ class Event {
             location: eventModel.location,
             details: eventModel.details,
             date: eventModel.getDate(),
-            startTime: eventModel.getStartTime(),
-            endTime: eventModel.getEndTime(),
+            startTime: eventModel.getTimeOfDayFromString(eventModel.start_time),
+            endTime: eventModel.getTimeOfDayFromString(eventModel.end_time),
+            flexibleStartTime: eventModel
+                .getTimeOfDayFromString(eventModel.flexible_start_time),
+            flexibleEndTime: eventModel
+                .getTimeOfDayFromString(eventModel.flexible_start_time),
             price: eventModel.price,
             coach: eventModel.coach);
 
   String getPriceInPounds() {
     return NumberFormat.simpleCurrency(name: "GBP").format(price);
-  }
-
-  String get24hStartTimeString() {
-    return const DefaultMaterialLocalizations()
-        .formatTimeOfDay(startTime, alwaysUse24HourFormat: true);
-  }
-
-  String get24hEndTimeString() {
-    return const DefaultMaterialLocalizations()
-        .formatTimeOfDay(endTime, alwaysUse24HourFormat: true);
   }
 }
 
@@ -67,6 +65,8 @@ class EventModel {
   String date;
   String start_time;
   String end_time;
+  String flexible_start_time;
+  String flexible_end_time;
 
   int price;
   bool coach;
@@ -79,6 +79,8 @@ class EventModel {
       required this.date,
       required this.start_time,
       required this.end_time,
+      required this.flexible_start_time,
+      required this.flexible_end_time,
       required this.price,
       required this.coach});
 
@@ -88,15 +90,8 @@ class EventModel {
         int.parse(splitDate[2]));
   }
 
-  TimeOfDay getStartTime() {
-    final splitStartTime = start_time.split(':');
-    return TimeOfDay(
-        hour: int.parse(splitStartTime[0]),
-        minute: int.parse(splitStartTime[1]));
-  }
-
-  TimeOfDay getEndTime() {
-    final splitEndTime = end_time.split(':');
+  TimeOfDay getTimeOfDayFromString(String time) {
+    final splitEndTime = time.split(':');
     return TimeOfDay(
         hour: int.parse(splitEndTime[0]), minute: int.parse(splitEndTime[1]));
   }
@@ -115,6 +110,8 @@ class NewEvent {
   final DateTime date;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
+  final TimeOfDay flexibleStartTime;
+  final TimeOfDay flexibleEndTime;
 
   final int price;
   final bool coach;
@@ -126,6 +123,8 @@ class NewEvent {
       required this.date,
       required this.startTime,
       required this.endTime,
+      required this.flexibleStartTime,
+      required this.flexibleEndTime,
       required this.price,
       required this.coach});
 
@@ -137,6 +136,8 @@ class NewEvent {
           date: event.date,
           startTime: event.startTime,
           endTime: event.endTime,
+          flexibleStartTime: event.flexibleStartTime,
+          flexibleEndTime: event.flexibleEndTime,
           price: event.price,
           coach: event.coach,
         );
@@ -151,6 +152,10 @@ class NewEvent {
           .formatTimeOfDay(startTime, alwaysUse24HourFormat: true),
       'end_time': const DefaultMaterialLocalizations()
           .formatTimeOfDay(endTime, alwaysUse24HourFormat: true),
+      'flexible_start_time': const DefaultMaterialLocalizations()
+          .formatTimeOfDay(flexibleStartTime, alwaysUse24HourFormat: true),
+      'flexible_end_time': const DefaultMaterialLocalizations()
+          .formatTimeOfDay(flexibleEndTime, alwaysUse24HourFormat: true),
       'price': price.toString(),
       'coach': coach ? 'True' : 'False'
     });

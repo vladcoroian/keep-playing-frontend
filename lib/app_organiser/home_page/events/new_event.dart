@@ -22,6 +22,8 @@ class _NewEventPageState extends State<NewEventPage> {
   DateTime _date = DateTime.now();
   TimeOfDay _startTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _flexibleStartTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _flexibleEndTime = const TimeOfDay(hour: 0, minute: 0);
   int _price = 0;
 
   TextEditingController startTimeInput = TextEditingController();
@@ -68,6 +70,8 @@ class _NewEventPageState extends State<NewEventPage> {
                   date: _date,
                   startTime: _startTime,
                   endTime: _endTime,
+                  flexibleStartTime: _flexibleStartTime,
+                  flexibleEndTime: _flexibleEndTime,
                   price: _price,
                   coach: false);
               final Future<Response> response =

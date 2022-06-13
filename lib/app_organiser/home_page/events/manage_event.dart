@@ -24,6 +24,8 @@ class _ManageEventPageState extends State<ManageEventPage> {
   late DateTime _date;
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
+  late TimeOfDay _flexibleStartTime;
+  late TimeOfDay _flexibleEndTime;
   late int _price;
   late bool _coach;
 
@@ -38,6 +40,8 @@ class _ManageEventPageState extends State<ManageEventPage> {
     _date = widget.event.date;
     _startTime = widget.event.startTime;
     _endTime = widget.event.endTime;
+    _flexibleStartTime = widget.event.flexibleStartTime;
+    _flexibleEndTime = widget.event.flexibleEndTime;
     _price = widget.event.price;
     _coach = widget.event.coach;
 
@@ -105,6 +109,8 @@ class _ManageEventPageState extends State<ManageEventPage> {
                       date: _date,
                       startTime: _startTime,
                       endTime: _endTime,
+                      flexibleStartTime: _flexibleStartTime,
+                      flexibleEndTime: _flexibleEndTime,
                       price: _price,
                       coach: _coach);
                   final Future<Response> response =

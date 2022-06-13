@@ -14,6 +14,8 @@ EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
       date: json['date'] as String,
       start_time: json['start_time'] as String,
       end_time: json['end_time'] as String,
+      flexible_start_time: json['flexible_start_time'] as String,
+      flexible_end_time: json['flexible_end_time'] as String,
       price: json['price'] as int,
       coach: json['coach'] as bool,
     );
@@ -27,6 +29,8 @@ Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
       'date': instance.date,
       'start_time': instance.start_time,
       'end_time': instance.end_time,
+      'flexible_start_time': instance.flexible_start_time,
+      'flexible_end_time': instance.flexible_end_time,
       'price': instance.price,
       'coach': instance.coach,
     };
