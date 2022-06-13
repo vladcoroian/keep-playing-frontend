@@ -176,8 +176,6 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
   final Event event;
   final Widget lastWidget;
 
-  static const double SPACE_BETWEEN_ROWS = 10;
-
   const _DetailsAndAcceptJobsDialogBuilder(
       {required this.event, required this.lastWidget});
 
@@ -210,18 +208,18 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
             leading: const Icon(Icons.timer),
             title: const Text('End Time', style: _textStyleForTitle),
             subtitle: Text(const DefaultMaterialLocalizations()
-                .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true))),
+                .formatTimeOfDay(event.endTime!, alwaysUse24HourFormat: true))),
         ListTile(
             leading: const Icon(Icons.timer_outlined),
             title: const Text('Flexible Start Time', style: _textStyleForTitle),
             subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                event.flexibleStartTime,
+                event.flexibleStartTime!,
                 alwaysUse24HourFormat: true))),
         ListTile(
             leading: const Icon(Icons.timer_outlined),
             title: const Text('Flexible End Time', style: _textStyleForTitle),
             subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                event.flexibleEndTime,
+                event.flexibleEndTime!,
                 alwaysUse24HourFormat: true))),
         const Divider(),
         ListTile(

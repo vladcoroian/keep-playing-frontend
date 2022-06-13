@@ -21,15 +21,18 @@ class _NewEventPageState extends State<NewEventPage> {
   String _details = '';
   DateTime _date = DateTime.now();
   TimeOfDay _startTime = const TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay _flexibleStartTime = const TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay _flexibleEndTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay? _endTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay? _flexibleStartTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay? _flexibleEndTime = const TimeOfDay(hour: 0, minute: 0);
   int _price = 0;
 
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
   TextEditingController flexibleStartTimeInput = TextEditingController();
   TextEditingController flexibleEndTimeInput = TextEditingController();
+
+  bool _endTimeIsKnown = false;
+  bool _flexibleTimesAreAccepted = false;
 
   @override
   void initState() {
@@ -63,9 +66,26 @@ class _NewEventPageState extends State<NewEventPage> {
           _writeDetailsForm(),
           _selectDateForm(),
           _selectStartTimeForm(),
-          _selectEndTimeForm(),
-          _selectFlexibleStartTimeForm(),
-          _selectFlexibleEndTimeForm(),
+          _askIfTheEndTimeIsKnown(),
+          _endTimeIsKnown
+              ? _selectEndTimeForm()
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
+          _askIfFlexibleTimesAreAccepted(),
+          _flexibleTimesAreAccepted
+              ? _selectFlexibleStartTimeForm()
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
+          _flexibleTimesAreAccepted
+              ? _selectFlexibleEndTimeForm()
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
           _selectPriceForm(),
           Center(child: _SubmitButton(
             onPressed: () {
@@ -173,6 +193,21 @@ class _NewEventPageState extends State<NewEventPage> {
             }));
   }
 
+  Widget _askIfTheEndTimeIsKnown() {
+    return CheckboxListTile(
+        value: _endTimeIsKnown,
+        onChanged: (bool? value) => {
+              setState(() {
+                _endTimeIsKnown = value!;
+                if (!_endTimeIsKnown) {
+                  _endTime = null;
+                  endTimeInput.text = '';
+                }
+              })
+            },
+        title: const Text("Is the end time known?"));
+  }
+
   Widget _selectEndTimeForm() {
     return ListTile(
         title: TextField(
@@ -189,10 +224,27 @@ class _NewEventPageState extends State<NewEventPage> {
                 setState(() {
                   _endTime = newTime;
                   endTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
+                      .formatTimeOfDay(_endTime!, alwaysUse24HourFormat: true);
                 });
               }
             }));
+  }
+
+  Widget _askIfFlexibleTimesAreAccepted() {
+    return CheckboxListTile(
+        value: _flexibleTimesAreAccepted,
+        onChanged: (bool? value) => {
+              setState(() {
+                _flexibleTimesAreAccepted = value!;
+                if (!_flexibleTimesAreAccepted) {
+                  _flexibleStartTime = null;
+                  _flexibleEndTime = null;
+                  flexibleStartTimeInput.text = '';
+                  flexibleEndTimeInput.text = '';
+                }
+              })
+            },
+        title: const Text("Do you accept flexible times?"));
   }
 
   Widget _selectFlexibleStartTimeForm() {
@@ -200,7 +252,8 @@ class _NewEventPageState extends State<NewEventPage> {
         title: TextField(
             controller: flexibleStartTimeInput,
             decoration: const InputDecoration(
-                icon: Icon(Icons.timer_outlined), labelText: "Flexible Start Time"),
+                icon: Icon(Icons.timer_outlined),
+                labelText: "Flexible Start Time"),
             readOnly: true,
             onTap: () async {
               final TimeOfDay? newTime = await showTimePicker(
@@ -210,8 +263,10 @@ class _NewEventPageState extends State<NewEventPage> {
               if (newTime != null) {
                 setState(() {
                   _flexibleStartTime = newTime;
-                  flexibleStartTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(_flexibleStartTime, alwaysUse24HourFormat: true);
+                  flexibleStartTimeInput.text =
+                      const DefaultMaterialLocalizations().formatTimeOfDay(
+                          _flexibleStartTime!,
+                          alwaysUse24HourFormat: true);
                 });
               }
             }));
@@ -222,7 +277,8 @@ class _NewEventPageState extends State<NewEventPage> {
         title: TextField(
             controller: flexibleEndTimeInput,
             decoration: const InputDecoration(
-                icon: Icon(Icons.timer_outlined), labelText: "Flexible End Time"),
+                icon: Icon(Icons.timer_outlined),
+                labelText: "Flexible End Time"),
             readOnly: true,
             onTap: () async {
               final TimeOfDay? newTime = await showTimePicker(
@@ -232,8 +288,10 @@ class _NewEventPageState extends State<NewEventPage> {
               if (newTime != null) {
                 setState(() {
                   _flexibleEndTime = newTime;
-                  flexibleEndTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(_flexibleEndTime, alwaysUse24HourFormat: true);
+                  flexibleEndTimeInput.text =
+                      const DefaultMaterialLocalizations().formatTimeOfDay(
+                          _flexibleEndTime!,
+                          alwaysUse24HourFormat: true);
                 });
               }
             }));

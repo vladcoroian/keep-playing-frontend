@@ -14,9 +14,9 @@ class Event {
 
   final DateTime date;
   final TimeOfDay startTime;
-  final TimeOfDay endTime;
-  final TimeOfDay flexibleStartTime;
-  final TimeOfDay flexibleEndTime;
+  final TimeOfDay? endTime;
+  final TimeOfDay? flexibleStartTime;
+  final TimeOfDay? flexibleEndTime;
 
   final int price;
   final bool coach;
@@ -28,9 +28,9 @@ class Event {
       required this.details,
       required this.date,
       required this.startTime,
-      required this.endTime,
-      required this.flexibleStartTime,
-      required this.flexibleEndTime,
+      this.endTime,
+      this.flexibleStartTime,
+      this.flexibleEndTime,
       required this.price,
       required this.coach});
 
@@ -41,12 +41,13 @@ class Event {
             location: eventModel.location,
             details: eventModel.details,
             date: eventModel.getDate(),
-            startTime: eventModel.getTimeOfDayFromString(eventModel.start_time),
-            endTime: eventModel.getTimeOfDayFromString(eventModel.end_time),
+            startTime:
+                eventModel.getTimeOfDayFromString(eventModel.start_time)!,
+            endTime: eventModel.getTimeOfDayFromString(eventModel.end_time!),
             flexibleStartTime: eventModel
-                .getTimeOfDayFromString(eventModel.flexible_start_time),
+                .getTimeOfDayFromString(eventModel.flexible_start_time!),
             flexibleEndTime: eventModel
-                .getTimeOfDayFromString(eventModel.flexible_start_time),
+                .getTimeOfDayFromString(eventModel.flexible_start_time!),
             price: eventModel.price,
             coach: eventModel.coach);
 
@@ -57,19 +58,19 @@ class Event {
 
 @JsonSerializable()
 class EventModel {
-  int pk;
-  String name;
-  String location;
-  String details;
+  final int pk;
+  final String name;
+  final String location;
+  final String details;
 
-  String date;
-  String start_time;
-  String end_time;
-  String flexible_start_time;
-  String flexible_end_time;
+  final String date;
+  final String start_time;
+  final String? end_time;
+  final String? flexible_start_time;
+  final String? flexible_end_time;
 
-  int price;
-  bool coach;
+  final int price;
+  final bool coach;
 
   EventModel(
       {required this.pk,
@@ -90,7 +91,7 @@ class EventModel {
         int.parse(splitDate[2]));
   }
 
-  TimeOfDay getTimeOfDayFromString(String time) {
+  TimeOfDay? getTimeOfDayFromString(String time) {
     final splitEndTime = time.split(':');
     return TimeOfDay(
         hour: int.parse(splitEndTime[0]), minute: int.parse(splitEndTime[1]));
@@ -109,9 +110,9 @@ class NewEvent {
 
   final DateTime date;
   final TimeOfDay startTime;
-  final TimeOfDay endTime;
-  final TimeOfDay flexibleStartTime;
-  final TimeOfDay flexibleEndTime;
+  final TimeOfDay? endTime;
+  final TimeOfDay? flexibleStartTime;
+  final TimeOfDay? flexibleEndTime;
 
   final int price;
   final bool coach;
@@ -122,9 +123,9 @@ class NewEvent {
       required this.details,
       required this.date,
       required this.startTime,
-      required this.endTime,
-      required this.flexibleStartTime,
-      required this.flexibleEndTime,
+      this.endTime,
+      this.flexibleStartTime,
+      this.flexibleEndTime,
       required this.price,
       required this.coach});
 
@@ -151,11 +152,11 @@ class NewEvent {
       'start_time': const DefaultMaterialLocalizations()
           .formatTimeOfDay(startTime, alwaysUse24HourFormat: true),
       'end_time': const DefaultMaterialLocalizations()
-          .formatTimeOfDay(endTime, alwaysUse24HourFormat: true),
+          .formatTimeOfDay(endTime!, alwaysUse24HourFormat: true),
       'flexible_start_time': const DefaultMaterialLocalizations()
-          .formatTimeOfDay(flexibleStartTime, alwaysUse24HourFormat: true),
+          .formatTimeOfDay(flexibleStartTime!, alwaysUse24HourFormat: true),
       'flexible_end_time': const DefaultMaterialLocalizations()
-          .formatTimeOfDay(flexibleEndTime, alwaysUse24HourFormat: true),
+          .formatTimeOfDay(flexibleEndTime!, alwaysUse24HourFormat: true),
       'price': price.toString(),
       'coach': coach ? 'True' : 'False'
     });

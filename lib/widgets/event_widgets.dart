@@ -31,7 +31,7 @@ class EventWidget extends StatelessWidget {
                       event.startTime,
                       alwaysUse24HourFormat: true)),
                   Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                      event.endTime,
+                      event.endTime!,
                       alwaysUse24HourFormat: true)),
                 ],
               ),

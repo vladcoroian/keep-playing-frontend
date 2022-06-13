@@ -20,12 +20,12 @@ class ManageEventPage extends StatefulWidget {
 class _ManageEventPageState extends State<ManageEventPage> {
   late String _name;
   late String _location;
-  late String _details = '';
+  late String _details;
   late DateTime _date;
   late TimeOfDay _startTime;
-  late TimeOfDay _endTime;
-  late TimeOfDay _flexibleStartTime;
-  late TimeOfDay _flexibleEndTime;
+  late TimeOfDay? _endTime;
+  late TimeOfDay? _flexibleStartTime;
+  late TimeOfDay? _flexibleEndTime;
   late int _price;
   late bool _coach;
 
@@ -50,11 +50,11 @@ class _ManageEventPageState extends State<ManageEventPage> {
     startTimeInput.text = const DefaultMaterialLocalizations()
         .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
     endTimeInput.text = const DefaultMaterialLocalizations()
-        .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
+        .formatTimeOfDay(_endTime!, alwaysUse24HourFormat: true);
     flexibleStartTimeInput.text = const DefaultMaterialLocalizations()
-        .formatTimeOfDay(_flexibleStartTime, alwaysUse24HourFormat: true);
+        .formatTimeOfDay(_flexibleStartTime!, alwaysUse24HourFormat: true);
     flexibleEndTimeInput.text = const DefaultMaterialLocalizations()
-        .formatTimeOfDay(_flexibleEndTime, alwaysUse24HourFormat: true);
+        .formatTimeOfDay(_flexibleEndTime!, alwaysUse24HourFormat: true);
 
     super.initState();
   }
@@ -234,7 +234,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
                 setState(() {
                   _endTime = newTime;
                   endTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
+                      .formatTimeOfDay(_endTime!, alwaysUse24HourFormat: true);
                 });
               }
             }));
@@ -258,7 +258,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
                   _flexibleStartTime = newTime;
                   flexibleStartTimeInput.text =
                       const DefaultMaterialLocalizations().formatTimeOfDay(
-                          _flexibleStartTime,
+                          _flexibleStartTime!,
                           alwaysUse24HourFormat: true);
                 });
               }
@@ -283,7 +283,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
                   _flexibleEndTime = newTime;
                   flexibleEndTimeInput.text =
                       const DefaultMaterialLocalizations().formatTimeOfDay(
-                          _flexibleEndTime,
+                          _flexibleEndTime!,
                           alwaysUse24HourFormat: true);
                 });
               }
