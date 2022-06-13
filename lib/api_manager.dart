@@ -44,7 +44,8 @@ class API {
         body: newEvent.toJson());
   }
 
-  static Future<Response> changeEvent({required Event event, required NewEvent newEvent}) {
+  static Future<Response> changeEvent(
+      {required Event event, required NewEvent newEvent}) {
     return client.patch(API.updateEventLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

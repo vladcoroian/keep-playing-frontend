@@ -108,16 +108,16 @@ class EventModel {
 }
 
 class NewEvent {
-  String name;
-  String location;
-  String details;
+  final String name;
+  final String location;
+  final String details;
 
-  DateTime date;
-  TimeOfDay startTime;
-  TimeOfDay endTime;
+  final DateTime date;
+  final TimeOfDay startTime;
+  final TimeOfDay endTime;
 
-  int price;
-  bool coach;
+  final int price;
+  final bool coach;
 
   NewEvent(
       {required this.name,
@@ -139,18 +139,6 @@ class NewEvent {
           endTime: event.endTime,
           price: event.price,
           coach: event.coach,
-        );
-
-  NewEvent.defaultNewEvent()
-      : this(
-          name: '',
-          location: '',
-          details: '',
-          date: DateTime(2100),
-          startTime: const TimeOfDay(hour: 0, minute: 0),
-          endTime: const TimeOfDay(hour: 0, minute: 0),
-          price: 0,
-          coach: false,
         );
 
   String toJson() {
