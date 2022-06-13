@@ -5,11 +5,11 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 
 class EventBuilder extends StatefulWidget {
-  final CustomizeEvent customizeEvent;
+  final NewEvent newEvent;
   final bool isNewEvent;
 
   const EventBuilder(
-      {Key? key, required this.customizeEvent, required this.isNewEvent})
+      {Key? key, required this.newEvent, required this.isNewEvent})
       : super(key: key);
 
   @override
@@ -25,12 +25,12 @@ class _EventBuilderState extends State<EventBuilder> {
     startTimeInput.text = widget.isNewEvent
         ? ''
         : const DefaultMaterialLocalizations().formatTimeOfDay(
-            widget.customizeEvent.startTime,
+            widget.newEvent.startTime,
             alwaysUse24HourFormat: true);
     endTimeInput.text = widget.isNewEvent
         ? ''
         : const DefaultMaterialLocalizations().formatTimeOfDay(
-            widget.customizeEvent.endTime,
+            widget.newEvent.endTime,
             alwaysUse24HourFormat: true);
     super.initState();
   }
@@ -52,14 +52,14 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
-            initialValue: widget.isNewEvent ? null : widget.customizeEvent.name,
+            initialValue: widget.isNewEvent ? null : widget.newEvent.name,
             decoration: const InputDecoration(
               icon: Icon(Icons.sports_soccer),
               hintText: 'Enter the name',
               labelText: 'Name',
             ),
             onChanged: (text) {
-              widget.customizeEvent.name = text;
+              widget.newEvent.name = text;
             }));
   }
 
@@ -68,14 +68,14 @@ class _EventBuilderState extends State<EventBuilder> {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
             initialValue:
-                widget.isNewEvent ? null : widget.customizeEvent.location,
+                widget.isNewEvent ? null : widget.newEvent.location,
             decoration: const InputDecoration(
               icon: Icon(Icons.location_on),
               hintText: 'Enter the location',
               labelText: 'Location',
             ),
             onChanged: (text) {
-              widget.customizeEvent.location = text;
+              widget.newEvent.location = text;
             }));
   }
 
@@ -84,14 +84,14 @@ class _EventBuilderState extends State<EventBuilder> {
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
             initialValue:
-                widget.isNewEvent ? null : widget.customizeEvent.details,
+                widget.isNewEvent ? null : widget.newEvent.details,
             decoration: const InputDecoration(
               icon: Icon(Icons.details),
               hintText: 'Enter details',
               labelText: 'Details',
             ),
             onChanged: (text) {
-              widget.customizeEvent.details = text;
+              widget.newEvent.details = text;
             }));
   }
 
@@ -99,7 +99,7 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: DateTimeField(
-          initialValue: widget.isNewEvent ? null : widget.customizeEvent.date,
+          initialValue: widget.isNewEvent ? null : widget.newEvent.date,
           decoration: const InputDecoration(
             icon: Icon(Icons.date_range),
             hintText: 'Enter the date',
@@ -114,7 +114,7 @@ class _EventBuilderState extends State<EventBuilder> {
                 lastDate: DateTime(2100));
           },
           onChanged: (date) {
-            widget.customizeEvent.date = date!;
+            widget.newEvent.date = date!;
           },
         ));
   }
@@ -134,9 +134,9 @@ class _EventBuilderState extends State<EventBuilder> {
               );
               if (newTime != null) {
                 setState(() {
-                  widget.customizeEvent.startTime = newTime;
+                  widget.newEvent.startTime = newTime;
                   startTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(widget.customizeEvent.startTime,
+                      .formatTimeOfDay(widget.newEvent.startTime,
                           alwaysUse24HourFormat: true);
                 });
               }
@@ -158,9 +158,9 @@ class _EventBuilderState extends State<EventBuilder> {
               );
               if (newTime != null) {
                 setState(() {
-                  widget.customizeEvent.endTime = newTime;
+                  widget.newEvent.endTime = newTime;
                   endTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(widget.customizeEvent.endTime,
+                      .formatTimeOfDay(widget.newEvent.endTime,
                           alwaysUse24HourFormat: true);
                 });
               }
@@ -173,7 +173,7 @@ class _EventBuilderState extends State<EventBuilder> {
         child: TextFormField(
             initialValue: widget.isNewEvent
                 ? null
-                : widget.customizeEvent.price.toString(),
+                : widget.newEvent.price.toString(),
             decoration: const InputDecoration(
               icon: Icon(Icons.price_change),
               hintText: 'Enter the price',
@@ -181,7 +181,7 @@ class _EventBuilderState extends State<EventBuilder> {
             ),
             onChanged: (text) {
               // TODO: Remove this cast.
-              widget.customizeEvent.price = int.parse(text);
+              widget.newEvent.price = int.parse(text);
             }));
   }
 }

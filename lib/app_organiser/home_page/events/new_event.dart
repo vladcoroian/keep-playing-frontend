@@ -16,7 +16,13 @@ class NewEventPage extends StatefulWidget {
 }
 
 class _NewEventPageState extends State<NewEventPage> {
-  CustomizeEvent customizeEvent = CustomizeEvent();
+  NewEvent newEvent = NewEvent.defaultNewEvent();
+
+  @override
+  initState() {
+    newEvent.coach = false;
+    super.initState();
+  }
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -36,12 +42,10 @@ class _NewEventPageState extends State<NewEventPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('New Event')),
         body: ListView(children: [
-          EventBuilder(customizeEvent: customizeEvent, isNewEvent: true),
+          EventBuilder(newEvent: newEvent, isNewEvent: true),
           Center(child: _SubmitButton(
             onPressed: () {
-              customizeEvent.coach = false;
-              NewEvent newEvent =
-                  NewEvent.fromCustomizeEvent(customizeEvent: customizeEvent);
+              print(newEvent.toJson());
               final Future<Response> response =
                   API.addNewEvent(newEvent: newEvent);
               Navigator.of(context).pop(response);

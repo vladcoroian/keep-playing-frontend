@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
@@ -17,11 +18,11 @@ class ManageEventPage extends StatefulWidget {
 }
 
 class _ManageEventPageState extends State<ManageEventPage> {
-  late CustomizeEvent customizeEvent;
+  late NewEvent newEvent;
 
   @override
   void initState() {
-    customizeEvent = CustomizeEvent.fromEvent(widget.event);
+    newEvent = NewEvent.fromEvent(widget.event);
     super.initState();
   }
 
@@ -43,7 +44,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Edit Event')),
         body: ListView(children: [
-          EventBuilder(customizeEvent: customizeEvent, isNewEvent: false),
+          EventBuilder(newEvent: newEvent, isNewEvent: false),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -68,7 +69,11 @@ class _ManageEventPageState extends State<ManageEventPage> {
               ),
               _SaveChangesButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  print(newEvent.toJson());
+                  final Future<Response> response =
+                      API.changeEvent(event: widget.event, newEvent: newEvent);
+                  print(response.toString());
+                  // Navigator.of(context).pop(response);
                 },
               )
             ],

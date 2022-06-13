@@ -107,43 +107,17 @@ class EventModel {
   Map<String, dynamic> toJson() => _$EventModelToJson(this);
 }
 
-class CustomizeEvent {
-  String name = '';
-  String location = '';
-  String details = '';
-
-  DateTime date = DateTime.now();
-  TimeOfDay startTime = const TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay endTime = const TimeOfDay(hour: 0, minute: 0);
-
-  int price = 0;
-  bool coach = false;
-
-  CustomizeEvent();
-
-  CustomizeEvent.fromEvent(Event event) {
-    name = event.name;
-    location = event.location;
-    details = event.details;
-    date = event.date;
-    startTime = event.startTime;
-    endTime = event.endTime;
-    price = event.price;
-    coach = event.coach;
-  }
-}
-
 class NewEvent {
-  final String name;
-  final String location;
-  final String details;
+  String name;
+  String location;
+  String details;
 
-  final DateTime date;
-  final TimeOfDay startTime;
-  final TimeOfDay endTime;
+  DateTime date;
+  TimeOfDay startTime;
+  TimeOfDay endTime;
 
-  final int price;
-  final bool coach;
+  int price;
+  bool coach;
 
   NewEvent(
       {required this.name,
@@ -155,16 +129,28 @@ class NewEvent {
       required this.price,
       required this.coach});
 
-  NewEvent.fromCustomizeEvent({required CustomizeEvent customizeEvent})
+  NewEvent.fromEvent(Event event)
       : this(
-          name: customizeEvent.name,
-          location: customizeEvent.location,
-          details: customizeEvent.details,
-          date: customizeEvent.date,
-          startTime: customizeEvent.startTime,
-          endTime: customizeEvent.endTime,
-          price: customizeEvent.price,
-          coach: customizeEvent.coach,
+          name: event.name,
+          location: event.location,
+          details: event.details,
+          date: event.date,
+          startTime: event.startTime,
+          endTime: event.endTime,
+          price: event.price,
+          coach: event.coach,
+        );
+
+  NewEvent.defaultNewEvent()
+      : this(
+          name: '',
+          location: '',
+          details: '',
+          date: DateTime(2100),
+          startTime: const TimeOfDay(hour: 0, minute: 0),
+          endTime: const TimeOfDay(hour: 0, minute: 0),
+          price: 0,
+          coach: false,
         );
 
   String toJson() {

@@ -36,16 +36,24 @@ class API {
     updateEvent(event: event, body: {"coach": "false"});
   }
 
-  static void cancelEvent({required Event event}) {
-    client.delete(API.deleteEventLink(event.pk));
-  }
-
   static Future<Response> addNewEvent({required NewEvent newEvent}) {
     return client.post(API.addEventLink(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: newEvent.toJson());
+  }
+
+  static Future<Response> changeEvent({required Event event, required NewEvent newEvent}) {
+    return client.patch(API.updateEventLink(event.pk),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: newEvent.toJson());
+  }
+
+  static void cancelEvent({required Event event}) {
+    client.delete(API.deleteEventLink(event.pk));
   }
 
   static Future<List<Event>> retrieveEvents() async {
