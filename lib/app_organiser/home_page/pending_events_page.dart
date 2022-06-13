@@ -92,7 +92,8 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
                           final body = jsonDecode(value.body);
                           body["price"] = int.parse(body["price"]);
                           body["coach"] = body["coach"].toLowerCase() == 'true';
-                          pendingEvents.add(Event.fromJson(body));
+                          pendingEvents.add(
+                              Event(eventModel: EventModel.fromJson(body)));
                         })
                       }
                   })

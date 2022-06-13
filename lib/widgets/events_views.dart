@@ -100,7 +100,7 @@ class _CalendarViewOfEventsState extends State<CalendarViewOfEvents> {
   List<Widget> _getEventsForDay(DateTime day) {
     List<Event> eventsForDay = [];
     for (Event pendingEvent in widget.events) {
-      if (isSameDay(day, pendingEvent.getDate())) {
+      if (isSameDay(day, pendingEvent.date)) {
         eventsForDay.add(pendingEvent);
       }
     }

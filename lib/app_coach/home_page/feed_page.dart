@@ -234,15 +234,15 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
 
   Widget _showDate() {
     return _detailTextWidget(
-        'Date: ', DateFormat("MMMM dd").format(event.getDate()));
+        'Date: ', DateFormat("MMMM dd").format(event.date));
   }
 
   Widget _showStartTime() {
-    return _detailTextWidget('Start Time: ', event.getStartTimeToString());
+    return _detailTextWidget('Start Time: ', event.get24hStartTimeString());
   }
 
   Widget _showEndTime() {
-    return _detailTextWidget('End Time: ', event.getEndTimeToString());
+    return _detailTextWidget('End Time: ', event.get24hEndTimeString());
   }
 
   Widget _showPay() {

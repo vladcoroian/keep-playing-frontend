@@ -52,7 +52,7 @@ class API {
     List<Event> events = [];
     List response = json.decode((await client.get(Uri.parse(API.EVENTS))).body);
     for (var element in response) {
-      events.add(Event.fromJson(element));
+      events.add(Event(eventModel: EventModel.fromJson(element)));
     }
     return events;
   }
@@ -66,8 +66,7 @@ class API {
   static Future<List<Event>> retrievePendingEventsForThisDay(
       DateTime day) async {
     List<Event> events = await retrieveEvents();
-    events.retainWhere(
-        (event) => !event.coach && isSameDay(event.getDate(), day));
+    events.retainWhere((event) => !event.coach && isSameDay(event.date, day));
     return events;
   }
 
@@ -79,8 +78,7 @@ class API {
 
   static retrieveScheduledEventsForDay(DateTime day) async {
     List<Event> events = await retrieveEvents();
-    events
-        .retainWhere((event) => event.coach && isSameDay(event.getDate(), day));
+    events.retainWhere((event) => event.coach && isSameDay(event.date, day));
     return events;
   }
 }
