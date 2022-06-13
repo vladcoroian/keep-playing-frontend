@@ -123,7 +123,7 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextField(
-            controller: widget.isNewEvent ? null : startTimeInput,
+            controller: startTimeInput,
             decoration: const InputDecoration(
                 icon: Icon(Icons.access_time), labelText: "Enter Start Time"),
             readOnly: true,
@@ -147,7 +147,7 @@ class _EventBuilderState extends State<EventBuilder> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextField(
-            controller: widget.isNewEvent ? null : endTimeInput,
+            controller: endTimeInput,
             decoration: const InputDecoration(
                 icon: Icon(Icons.access_time), labelText: "Enter End Time"),
             readOnly: true,
