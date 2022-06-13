@@ -34,6 +34,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
   TextEditingController flexibleStartTimeInput = TextEditingController();
   TextEditingController flexibleEndTimeInput = TextEditingController();
 
+  bool _endTimeIsKnown = false;
+  bool _flexibleTimesAreAccepted = false;
+
   @override
   void initState() {
     _name = widget.event.name;
@@ -82,9 +85,26 @@ class _ManageEventPageState extends State<ManageEventPage> {
           _writeDetailsForm(),
           _selectDateForm(),
           _selectStartTimeForm(),
-          _selectEndTimeForm(),
-          _selectFlexibleStartTimeForm(),
-          _selectFlexibleEndTimeForm(),
+          _askIfTheEndTimeIsKnown(),
+          _endTimeIsKnown
+              ? _selectEndTimeForm()
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
+          _askIfFlexibleTimesAreAccepted(),
+          _flexibleTimesAreAccepted
+              ? _selectFlexibleStartTimeForm()
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
+          _flexibleTimesAreAccepted
+              ? _selectFlexibleEndTimeForm()
+              : const SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
           _selectPriceForm(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -218,6 +238,21 @@ class _ManageEventPageState extends State<ManageEventPage> {
             }));
   }
 
+  Widget _askIfTheEndTimeIsKnown() {
+    return CheckboxListTile(
+        value: _endTimeIsKnown,
+        onChanged: (bool? value) => {
+              setState(() {
+                _endTimeIsKnown = value!;
+                if (!_endTimeIsKnown) {
+                  _endTime = null;
+                  endTimeInput.text = '';
+                }
+              })
+            },
+        title: const Text("Is the end time known?"));
+  }
+
   Widget _selectEndTimeForm() {
     return ListTile(
         title: TextField(
@@ -238,6 +273,23 @@ class _ManageEventPageState extends State<ManageEventPage> {
                 });
               }
             }));
+  }
+
+  Widget _askIfFlexibleTimesAreAccepted() {
+    return CheckboxListTile(
+        value: _flexibleTimesAreAccepted,
+        onChanged: (bool? value) => {
+              setState(() {
+                _flexibleTimesAreAccepted = value!;
+                if (!_flexibleTimesAreAccepted) {
+                  _flexibleStartTime = null;
+                  _flexibleEndTime = null;
+                  flexibleStartTimeInput.text = '';
+                  flexibleEndTimeInput.text = '';
+                }
+              })
+            },
+        title: const Text("Do you accept flexible times?"));
   }
 
   Widget _selectFlexibleStartTimeForm() {

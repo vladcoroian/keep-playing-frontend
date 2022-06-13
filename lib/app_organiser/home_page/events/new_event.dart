@@ -40,6 +40,7 @@ class _NewEventPageState extends State<NewEventPage> {
     endTimeInput.text = "";
     flexibleStartTimeInput.text = "";
     flexibleEndTimeInput.text = "";
+
     super.initState();
   }
 
