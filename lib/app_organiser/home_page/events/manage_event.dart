@@ -40,6 +40,12 @@ class _ManageEventPageState extends State<ManageEventPage> {
     _endTime = widget.event.endTime;
     _price = widget.event.price;
     _coach = widget.event.coach;
+
+    startTimeInput.text = const DefaultMaterialLocalizations()
+        .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
+    endTimeInput.text = const DefaultMaterialLocalizations()
+        .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
+
     super.initState();
   }
 
@@ -131,6 +137,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
+            initialValue: _location,
             decoration: const InputDecoration(
               icon: Icon(Icons.location_on),
               hintText: 'Enter the location',
@@ -145,6 +152,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
+            initialValue: _details,
             decoration: const InputDecoration(
               icon: Icon(Icons.details),
               hintText: 'Enter details',
@@ -159,6 +167,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: DateTimeField(
+          initialValue: _date,
           decoration: const InputDecoration(
             icon: Icon(Icons.date_range),
             hintText: 'Enter the date',
@@ -228,6 +237,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
     return Container(
         padding: const EdgeInsets.all(DEFAULT_PADDING),
         child: TextFormField(
+            initialValue: _price.toString(),
             decoration: const InputDecoration(
               icon: Icon(Icons.price_change),
               hintText: 'Enter the price',
