@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
+import 'package:keep_playing_frontend/app_coach/coach_login_page.dart';
 
 import 'app_organiser/organiser_home_page.dart';
 import 'constants.dart';
@@ -68,7 +68,7 @@ class _EnterAsCoachButton extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CoachHomePage()),
+                MaterialPageRoute(builder: (context) => const CoachLoginPage()),
               );
             },
             child: const Text('Enter as coach')));

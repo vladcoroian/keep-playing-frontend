@@ -39,7 +39,7 @@ dependencies:
   http:  0.13.4
 
   # intl package:
-  intl: 0.17.0
+  intl: ^0.17.0
 
   # Date Time Picker package:
   datetime_picker_formfield: ^2.0.0
@@ -47,8 +47,14 @@ dependencies:
   # Calendar package:
   table_calendar: ^3.0.6
 
+  # Intl Phone Number Package:
+  intl_phone_number_input: ^0.7.0+2
+
   # JSON files
   json_annotation: ^4.5.0
+
+  # Shared Preferences
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

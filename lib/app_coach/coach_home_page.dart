@@ -3,6 +3,8 @@ import 'package:keep_playing_frontend/constants.dart';
 
 import 'home_page/feed_page.dart';
 import 'home_page/upcoming_jobs_page.dart';
+import 'home_page/coach_profile_page.dart';
+
 
 class CoachHomePage extends StatefulWidget {
   const CoachHomePage({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class _CoachHomePageState extends State<CoachHomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     FeedPage(),
     UpcomingJobsPage(),
+    ProfilePage()
   ];
 
   void _onItemTapped(int index) {
@@ -36,7 +39,7 @@ class _CoachHomePageState extends State<CoachHomePage> {
         items: const <BottomNavigationBarItem>[
           _FeedPageNavigationButton(),
           _UpcomingJobsNavigationButton(),
-          // _accountNavigationButton(),
+          _ProfileNavigationButton(),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: BOTTOM_NAVIGATION_BAR_COLOR,
@@ -54,4 +57,9 @@ class _FeedPageNavigationButton extends BottomNavigationBarItem {
 class _UpcomingJobsNavigationButton extends BottomNavigationBarItem {
   const _UpcomingJobsNavigationButton()
       : super(icon: const Icon(Icons.business), label: 'Upcoming Jobs');
+}
+
+class _ProfileNavigationButton extends BottomNavigationBarItem {
+  const _ProfileNavigationButton()
+      : super(icon: const Icon(Icons.account_box), label: 'Profile');
 }
