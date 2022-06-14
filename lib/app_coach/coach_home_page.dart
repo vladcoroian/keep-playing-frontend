@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/constants.dart';
 
+import 'home_page/coach_profile_page.dart';
 import 'home_page/feed_page.dart';
 import 'home_page/upcoming_jobs_page.dart';
-import 'home_page/coach_profile_page.dart';
-
 
 class CoachHomePage extends StatefulWidget {
   const CoachHomePage({Key? key}) : super(key: key);

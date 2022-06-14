@@ -2,7 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/api_manager.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
@@ -186,7 +186,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
                   Navigator.pop(context);
                 },
                 onYesPressed: () {
-                  API.cancelEvent(event: widget.event);
+                  API.events.cancelEvent(event: widget.event);
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
@@ -209,7 +209,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
             price: _price,
             coach: _coach);
         final Future<Response> response =
-            API.changeEvent(event: widget.event, newEvent: newEvent);
+            API.events.changeEvent(event: widget.event, newEvent: newEvent);
         Navigator.of(context).pop(response);
       },
     );

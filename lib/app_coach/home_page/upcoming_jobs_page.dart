@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
-import '../../api_manager.dart';
 import '../../models/event.dart';
 import '../../widgets/event_widgets.dart';
 
@@ -19,7 +19,7 @@ class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
   List<Event> upcomingJobs = [];
 
   _retrieveUpcomingJobs() async {
-    List<Event> events = await API.retrieveScheduledEvents();
+    List<Event> events = await API.events.retrieveScheduledEvents();
 
     setState(() {
       upcomingJobs = events;
@@ -69,7 +69,7 @@ class _UpcomingJobWidget extends StatelessWidget {
                   title: 'Are you sure that you want to cancel this job?',
                   onNoPressed: () => {Navigator.pop(context)},
                   onYesPressed: () {
-                    API.eventHasNoCoach(event: event);
+                    API.events.eventHasNoCoach(event: event);
                     Navigator.pop(context);
                   },
                 );

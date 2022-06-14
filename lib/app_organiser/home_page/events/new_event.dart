@@ -2,7 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/api_manager.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
@@ -167,7 +167,8 @@ class _NewEventPageState extends State<NewEventPage> {
             flexibleEndTime: _flexibleEndTime,
             price: _price,
             coach: false);
-        final Future<Response> response = API.addNewEvent(newEvent: newEvent);
+        final Future<Response> response =
+            API.events.addNewEvent(newEvent: newEvent);
         Navigator.of(context).pop(response);
       },
     );

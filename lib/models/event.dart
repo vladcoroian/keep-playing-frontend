@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -142,22 +140,20 @@ class NewEvent {
           coach: event.coach,
         );
 
-  String toJson() {
-    return jsonEncode(<String, String>{
-      "name": name,
-      'location': location,
-      'details': details,
-      'date': DateFormat('yyyy-MM-dd').format(date),
-      'start_time': const DefaultMaterialLocalizations()
-          .formatTimeOfDay(startTime, alwaysUse24HourFormat: true),
-      'end_time': const DefaultMaterialLocalizations()
-          .formatTimeOfDay(endTime, alwaysUse24HourFormat: true),
-      'flexible_start_time': const DefaultMaterialLocalizations()
-          .formatTimeOfDay(flexibleStartTime, alwaysUse24HourFormat: true),
-      'flexible_end_time': const DefaultMaterialLocalizations()
-          .formatTimeOfDay(flexibleEndTime, alwaysUse24HourFormat: true),
-      'price': price.toString(),
-      'coach': coach ? 'True' : 'False'
-    });
-  }
+  Map<String, dynamic> toJson() => {
+        "name": name,
+        'location': location,
+        'details': details,
+        'date': DateFormat('yyyy-MM-dd').format(date),
+        'start_time': const DefaultMaterialLocalizations()
+            .formatTimeOfDay(startTime, alwaysUse24HourFormat: true),
+        'end_time': const DefaultMaterialLocalizations()
+            .formatTimeOfDay(endTime, alwaysUse24HourFormat: true),
+        'flexible_start_time': const DefaultMaterialLocalizations()
+            .formatTimeOfDay(flexibleStartTime, alwaysUse24HourFormat: true),
+        'flexible_end_time': const DefaultMaterialLocalizations()
+            .formatTimeOfDay(flexibleEndTime, alwaysUse24HourFormat: true),
+        'price': price.toString(),
+        'coach': coach ? 'True' : 'False'
+      };
 }

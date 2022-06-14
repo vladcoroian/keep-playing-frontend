@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:keep_playing_frontend/api_manager.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -64,11 +64,13 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: () async {
-          UserLogin userLogin = UserLogin(username: _username, password: _password);
-          Response response = await API.login(userLogin: userLogin);
+          UserLogin userLogin =
+              UserLogin(username: _username, password: _password);
+          Response response = await API.users.login(userLogin: userLogin);
           if (response.statusCode == 200) {
             final body = jsonDecode(response.body);
-            String token = await _saveLoginTokenToSharedPreferences(body['token']);
+            String token =
+                await _saveLoginTokenToSharedPreferences(body['token']);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CoachHomePage()),
@@ -117,5 +119,3 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
     return prefs.getString('token') ?? '';
   }
 }
-
-

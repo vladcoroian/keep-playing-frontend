@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/api_manager.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
@@ -24,7 +24,7 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   List<Event> scheduledEvents = [];
 
   _retrieveScheduledEvents() async {
-    List<Event> events = await API.retrieveScheduledEvents();
+    List<Event> events = await API.events.retrieveScheduledEvents();
 
     setState(() {
       scheduledEvents = events;

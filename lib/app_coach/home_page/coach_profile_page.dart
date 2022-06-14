@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:keep_playing_frontend/api_manager.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -20,7 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _retrieveUserInformation() async {
-    User user = await API.getCurrentUser();
+    User user = await API.users.getCurrentUser();
 
     setState(() {
       currentUser = user;

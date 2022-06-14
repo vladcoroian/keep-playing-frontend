@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
-import '../../api_manager.dart';
 import '../../models/event.dart';
 import '../../widgets/event_widgets.dart';
 
@@ -20,7 +20,7 @@ class _FeedPageState extends State<FeedPage> {
   List<Event> feedEvents = [];
 
   _retrieveFeedEvents() async {
-    List<Event> events = await API.retrievePendingEvents();
+    List<Event> events = await API.events.retrievePendingEvents();
 
     setState(() {
       feedEvents = events;
@@ -158,7 +158,7 @@ class _AcceptJobDialog extends StatelessWidget {
                                 'Are you sure that you want to accept this job?',
                             onNoPressed: () => {Navigator.pop(context)},
                             onYesPressed: () {
-                              API.eventHasCoach(event: event);
+                              API.events.eventHasCoach(event: event);
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
