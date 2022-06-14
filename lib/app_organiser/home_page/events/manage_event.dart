@@ -20,8 +20,12 @@ class ManageEventPage extends StatefulWidget {
 
 class _ManageEventPageState extends State<ManageEventPage> {
   late String _name;
+
   late String _location;
   late String _details;
+  late String _sport;
+  late String _role;
+
   late DateTime _date;
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
@@ -31,6 +35,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
   late bool _coach;
   late User? _sessionCoach;
 
+  late String selectedSport;
+  late String selectedRole;
+
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
 
@@ -39,6 +46,8 @@ class _ManageEventPageState extends State<ManageEventPage> {
     _name = widget.event.name;
     _location = widget.event.location;
     _details = widget.event.details;
+    _sport = widget.event.sport;
+    _role = widget.event.role;
     _date = widget.event.date;
     _startTime = widget.event.startTime;
     _endTime = widget.event.endTime;
@@ -47,6 +56,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
     _price = widget.event.price;
     _coach = widget.event.coach;
     _retrieveCoachUser();
+
+    selectedSport = _sport;
+    selectedRole = _role;
 
     startTimeInput.text = const DefaultMaterialLocalizations()
         .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
@@ -95,6 +107,8 @@ class _ManageEventPageState extends State<ManageEventPage> {
           title: Text(coachName),
           subtitle: Text(coachEmail),
         ));
+
+    // Form Widgets
 
     final Widget nameForm = ListTile(
         title: TextFormField(
@@ -205,6 +219,40 @@ class _ManageEventPageState extends State<ManageEventPage> {
               _price = int.parse(text);
             }));
 
+    final Widget sportForm = DropdownButton<String>(
+        value: selectedSport,
+        items: SPORTS.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          _sport = newValue!;
+          setState(() {
+            selectedSport = _sport;
+          });
+        }
+    );
+
+    final Widget roleForm = DropdownButton<String>(
+        value: selectedRole,
+        items: ROLES.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          _role = newValue!;
+          setState(() {
+            selectedRole = _role;
+          });
+        }
+    );
+
+    // Submission Widgets
+
     final Widget cancelEventButton = _CancelEventButton(
       onPressed: () {
         showDialog(
@@ -231,6 +279,8 @@ class _ManageEventPageState extends State<ManageEventPage> {
             name: _name,
             location: _location,
             details: _details,
+            sport: _sport,
+            role: _role,
             date: _date,
             startTime: _startTime,
             endTime: _endTime,
@@ -255,11 +305,12 @@ class _ManageEventPageState extends State<ManageEventPage> {
           nameForm,
           locationForm,
           detailsForm,
-          detailsForm,
           dateForm,
           startTimeForm,
           endTimeForm,
           priceForm,
+          sportForm,
+          roleForm,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [cancelEventButton, saveEventButton],
