@@ -5,6 +5,7 @@ import 'package:http/http.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'models/event.dart';
+import 'models/user.dart';
 
 class API {
   static const String PREFIX = "https://keep-playing.herokuapp.com/";
@@ -22,6 +23,10 @@ class API {
 
   static Uri deleteEventLink(int pk) {
     return Uri.parse("$EVENTS$pk/");
+  }
+
+  static Uri loginLink() {
+    return Uri.parse('${PREFIX}login/');
   }
 
   static void updateEvent({required Event event, Object? body}) {
@@ -55,6 +60,10 @@ class API {
 
   static void cancelEvent({required Event event}) {
     client.delete(API.deleteEventLink(event.pk));
+  }
+
+  static Future<Response> login({required UserLogin userLogin}) {
+    return client.post(API.loginLink(), body: userLogin.toJson());
   }
 
   static Future<List<Event>> retrieveEvents() async {

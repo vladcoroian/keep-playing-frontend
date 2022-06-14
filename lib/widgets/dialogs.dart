@@ -19,7 +19,7 @@ class TwoOptionsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
+      contentPadding: const EdgeInsets.all(DIALOG_PADDING),
       title: Center(child: Text(title)),
       children: <Widget>[
         Container(padding: const EdgeInsets.all(10), child: Text(text)),

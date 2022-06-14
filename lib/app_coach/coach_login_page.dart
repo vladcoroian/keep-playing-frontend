@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:keep_playing_frontend/api_manager.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'coach_home_page.dart';
 
@@ -12,6 +18,9 @@ class CoachLoginPage extends StatefulWidget {
 
 class _CoachLoginPageState extends State<CoachLoginPage> {
   TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+
+  String _username = '';
+  String _password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +38,9 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
           hintText: "Username",
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+      onChanged: (text) {
+        _username = text;
+      },
     );
 
     final Widget passwordField = TextField(
@@ -39,6 +51,9 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
           hintText: "Password",
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+      onChanged: (text) {
+        _password = text;
+      },
     );
 
     final Widget loginButton = Material(
@@ -48,11 +63,17 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const CoachHomePage()),
-          );
+        onPressed: () async {
+          UserLogin userLogin = UserLogin(username: _username, password: _password);
+          Response response = await API.login(userLogin: userLogin);
+          if (response.statusCode == 200) {
+            final body = jsonDecode(response.body);
+            String token = await _saveLoginTokenToSharedPreferences(body['token']);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CoachHomePage()),
+            );
+          }
         },
         child: Text("Login",
             textAlign: TextAlign.center,
@@ -89,4 +110,12 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
       ),
     );
   }
+
+  Future<String> _saveLoginTokenToSharedPreferences(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('token', token);
+    return prefs.getString('token') ?? '';
+  }
 }
+
+
