@@ -24,7 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _showName(),
               _showEmail(),
               _showHomeBase(),
-              _showSportSelections(),
+              // _showSportSelections(),
               _showPhoneNumber(),
             ]
           ),
