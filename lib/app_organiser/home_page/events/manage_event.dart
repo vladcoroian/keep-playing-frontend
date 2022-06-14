@@ -20,7 +20,7 @@ class ManageEventPage extends StatefulWidget {
 class _ManageEventPageState extends State<ManageEventPage> {
   late String _name;
   late String _location;
-  late String _details = '';
+  late String _details;
   late DateTime _date;
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
@@ -126,7 +126,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
         title: TextField(
             controller: startTimeInput,
             decoration: const InputDecoration(
-                icon: Icon(Icons.access_time), labelText: "Enter Start Time"),
+                icon: Icon(Icons.access_time), labelText: "Start Time"),
             readOnly: true,
             onTap: () async {
               final TimeOfDay? newTime = await showTimePicker(
@@ -146,7 +146,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
         title: TextField(
             controller: endTimeInput,
             decoration: const InputDecoration(
-                icon: Icon(Icons.access_time), labelText: "Enter End Time"),
+                icon: Icon(Icons.access_time), labelText: "End Time"),
             readOnly: true,
             onTap: () async {
               final TimeOfDay? newTime = await showTimePicker(

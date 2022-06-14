@@ -72,17 +72,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final Widget locationForm = ListTile(
         title: TextFormField(
-      initialValue: "<homebase from DB>",
+      initialValue: currentUser.location,
       readOnly: false,
       decoration: const InputDecoration(
         icon: Icon(Icons.home),
-        hintText: 'Enter your base address',
-        labelText: 'Homebase Address',
+        hintText: 'Enter your location',
+        labelText: 'Location',
       ),
     ));
 
     final Widget phoneNumberForm = ListTile(
         title: InternationalPhoneNumberInput(
+            initialValue: PhoneNumber(isoCode: 'GB'),
             hintText: 'Phone Number',
             errorMessage: 'Invalid Phone Number',
             onInputChanged: (PhoneNumber number) {},

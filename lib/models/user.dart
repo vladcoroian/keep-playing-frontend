@@ -7,21 +7,22 @@ class User {
   final String email;
   final String firstName;
   final String lastName;
+  final String location;
 
-  User._({
-    required this.username,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-  });
+  User._(
+      {required this.username,
+      required this.email,
+      required this.firstName,
+      required this.lastName,
+      required this.location});
 
   User.fromModel({required UserModel userModel})
       : this._(
-          username: userModel.username,
-          email: userModel.email,
-          firstName: userModel.first_name,
-          lastName: userModel.last_name,
-        );
+            username: userModel.username,
+            email: userModel.email,
+            firstName: userModel.first_name,
+            lastName: userModel.last_name,
+            location: userModel.location);
 }
 
 @JsonSerializable()
