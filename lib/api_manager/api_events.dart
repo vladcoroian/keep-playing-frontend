@@ -8,6 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 class _ApiLinks {
   static const String PREFIX = "https://keep-playing.herokuapp.com/";
   static const String EVENTS = "${PREFIX}events/";
+  static const String COACH = "${PREFIX}coach/";
 
   static Uri eventsLink() {
     return Uri.parse(EVENTS);
@@ -26,11 +27,11 @@ class _ApiLinks {
   }
 
   static Uri takeJobLink(int pk) {
-    return Uri.parse("$EVENTS$pk/");
+    return Uri.parse("$COACH$pk/");
   }
 
   static Uri cancelJobLink(int pk) {
-    return Uri.parse("$EVENTS$pk/");
+    return Uri.parse("$COACH$pk/");
   }
 }
 
@@ -68,7 +69,7 @@ class ApiEvents {
     client.delete(_ApiLinks.deleteEventLink(event.pk));
   }
 
-  Future<Response> takeEvent({required Event event}) async {
+  Future<Response> takeJob({required Event event}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
 
@@ -77,19 +78,19 @@ class ApiEvents {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
         },
-        body: jsonEncode({"coach": "true"}));
+        body: jsonEncode(<String, dynamic>{"coach": true}));
   }
 
-  void cancelJob({required Event event}) async {
+  Future<Response> cancelJob({required Event event}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
 
-    client.patch(_ApiLinks.cancelJobLink(event.pk),
+    return client.patch(_ApiLinks.cancelJobLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
         },
-        body: jsonEncode({"coach": "false"}));
+        body: jsonEncode(<String, dynamic>{"coach": false}));
   }
 
   Future<List<Event>> retrieveEvents() async {

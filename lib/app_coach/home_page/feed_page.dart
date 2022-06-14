@@ -152,7 +152,7 @@ class _AcceptJobDialog extends StatelessWidget {
                       title: 'Are you sure that you want to accept this job?',
                       onNoPressed: () => {Navigator.pop(context)},
                       onYesPressed: () {
-                        API.events.takeEvent(event: event);
+                        API.events.takeJob(event: event);
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
