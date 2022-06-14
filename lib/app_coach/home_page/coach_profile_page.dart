@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
-import 'package:keep_playing_frontend/constants.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:keep_playing_frontend/api_manager.dart';
+import 'package:keep_playing_frontend/models/user.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,107 +11,99 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  late User currentUser;
+
+  @override
+  void initState() {
+    _retrieveUserInformation();
+    super.initState();
+  }
+
+  void _retrieveUserInformation() async {
+    User user = await API.getCurrentUser();
+
+    setState(() {
+      currentUser = user;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Profile'),
-      ),
-      body: Center(
-          child: ListView(
-            children: [
-              _showName(),
-              _showEmail(),
-              _showHomeBase(),
-              // _showSportSelections(),
-              _showPhoneNumber(),
-            ]
-          ),
-      ));
-  }
-
-  Widget _showName() {
-    return Container(
-      padding: const EdgeInsets.all(DEFAULT_PADDING),
-      child: Column(
-          children: [
-            TextFormField(
-            initialValue: "<name in DB>",
-            readOnly: false,
+    final Widget usernameForm = ListTile(
+        title: TextFormField(
+            initialValue: currentUser.username,
+            readOnly: true,
             decoration: const InputDecoration(
               icon: Icon(Icons.account_box),
               hintText: 'Enter your first name',
               labelText: 'First Name',
-              ),
-            ),
-            const SizedBox(
-              height: 20
-            ),
-            TextFormField(
-              initialValue: "<name in DB>",
-              readOnly: false,
-              decoration: const InputDecoration(
-                icon: Visibility(
-                    child: Icon(Icons.account_box),
-                    maintainSize: true,
-                    maintainState: true,
-                    maintainAnimation: true,
-                    visible: false,
-                ),
-                hintText: 'Enter your last name',
-                labelText: 'Last Name',
-              ),
-            ),
-          ]
+            )));
+
+    final Widget emailForm = ListTile(
+        title: TextFormField(
+      initialValue: currentUser.email,
+      readOnly: false,
+      decoration: const InputDecoration(
+        icon: Icon(Icons.email),
+        hintText: 'Enter your Email',
+        labelText: 'Email',
       ),
-    );
-  }
+    ));
 
-  Widget _showPhoneNumber() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: InternationalPhoneNumberInput(
-          hintText: 'Phone Number',
-          errorMessage: 'Invalid Phone Number',
-          onInputChanged: (PhoneNumber number) {
-            print('1111111');
-          },
-          maxLength: 15,
-          spaceBetweenSelectorAndTextField: 8,
-          autoValidateMode: AutovalidateMode.always,
-          keyboardType: TextInputType.number
-        )
-    );
-  }
+    final Widget firstNameForm = ListTile(
+        title: TextFormField(
+            initialValue: currentUser.firstName,
+            readOnly: true,
+            decoration: const InputDecoration(
+              icon: Icon(Icons.account_box),
+              hintText: 'Enter your first name',
+              labelText: 'First Name',
+            )));
 
-  Widget _showHomeBase() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
-          initialValue: "<homebase from DB>",
-          readOnly: false,
-          decoration: const InputDecoration(
-            icon: Icon(Icons.home),
-            hintText: 'Enter your base address',
-            labelText: 'Homebase Address',
-          ),
+    final Widget lastNameForm = ListTile(
+        title: TextFormField(
+            initialValue: currentUser.lastName,
+            readOnly: true,
+            decoration: const InputDecoration(
+              icon: Icon(Icons.account_box),
+              hintText: 'Enter your last name',
+              labelText: 'Last Name',
+            )));
+
+    final Widget locationForm = ListTile(
+        title: TextFormField(
+      initialValue: "<homebase from DB>",
+      readOnly: false,
+      decoration: const InputDecoration(
+        icon: Icon(Icons.home),
+        hintText: 'Enter your base address',
+        labelText: 'Homebase Address',
+      ),
+    ));
+
+    final Widget phoneNumberForm = ListTile(
+        title: InternationalPhoneNumberInput(
+            hintText: 'Phone Number',
+            errorMessage: 'Invalid Phone Number',
+            onInputChanged: (PhoneNumber number) {},
+            maxLength: 15,
+            spaceBetweenSelectorAndTextField: 8,
+            autoValidateMode: AutovalidateMode.always,
+            keyboardType: TextInputType.number));
+
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Your Profile'),
+        ),
+        body: Center(
+          child: ListView(children: [
+            usernameForm,
+            emailForm,
+            firstNameForm,
+            lastNameForm,
+            locationForm,
+            phoneNumberForm,
+          ]),
         ));
   }
-
-  Widget _showEmail() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
-          initialValue: "<email from DB>",
-          readOnly: false,
-          decoration: const InputDecoration(
-            icon: Icon(Icons.email),
-            hintText: 'Enter your Email',
-            labelText: 'Email',
-          ),
-        ));
-  }
-
 }
-

@@ -1,21 +1,54 @@
-class User {
-  String username;
-  String email;
-  String firstName;
-  String lastName;
-  String password;
+import 'package:json_annotation/json_annotation.dart';
 
-  User(
-      {required this.username,
-      required this.email,
-      required this.firstName,
-      required this.lastName,
-      required this.password});
+part 'user.g.dart';
+
+class User {
+  final String username;
+  final String email;
+  final String firstName;
+  final String lastName;
+
+  User._({
+    required this.username,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+  });
+
+  User.fromModel({required UserModel userModel})
+      : this._(
+          username: userModel.username,
+          email: userModel.email,
+          firstName: userModel.first_name,
+          lastName: userModel.last_name,
+        );
+}
+
+@JsonSerializable()
+class UserModel {
+  final String username;
+  final String email;
+  final String first_name;
+  final String last_name;
+  final String location;
+
+  UserModel({
+    required this.username,
+    required this.email,
+    required this.first_name,
+    required this.last_name,
+    required this.location,
+  });
+
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }
 
 class UserLogin {
-  String username;
-  String password;
+  final String username;
+  final String password;
 
   UserLogin({required this.username, required this.password});
 

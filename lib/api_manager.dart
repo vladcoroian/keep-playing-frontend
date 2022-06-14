@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'models/event.dart';
@@ -27,6 +28,10 @@ class API {
 
   static Uri loginLink() {
     return Uri.parse('${PREFIX}login/');
+  }
+
+  static Uri userInformationLink() {
+    return Uri.parse("${PREFIX}user/");
   }
 
   static void updateEvent({required Event event, Object? body}) {
@@ -64,6 +69,21 @@ class API {
 
   static Future<Response> login({required UserLogin userLogin}) {
     return client.post(API.loginLink(), body: userLogin.toJson());
+  }
+
+  static Future<Response> getInformationAboutCurrentUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? '';
+    return client.get(
+      API.userInformationLink(),
+      headers: <String, String>{'Authorization': 'Token $token'},
+    );
+  }
+
+  static Future<User> getCurrentUser() async {
+    Response response = await getInformationAboutCurrentUser();
+    final body = jsonDecode(response.body);
+    return User.fromModel(userModel: UserModel.fromJson(body));
   }
 
   static Future<List<Event>> retrieveEvents() async {
