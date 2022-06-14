@@ -54,6 +54,43 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final Widget calendarViewOfEvents = CalendarViewOfEvents(
+      events: pendingEvents,
+      onDaySelected: (DateTime day) {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PendingEventsForDayPage(day: day)));
+      },
+    );
+
+    final Widget listViewOfEvents = ListViewOfEvents(
+        events: pendingEvents,
+        eventWidgetBuilder: (Event event) => PendingEventWidget(
+              event: event,
+            ));
+
+    final Widget newJobButton = NewJobButton(
+      context: context,
+      onPressed: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const NewEventPage()),
+        ).then((value) => {
+              if (value != null)
+                {
+                  setState(() {
+                    final body = jsonDecode(value.body);
+                    body["price"] = int.parse(body["price"]);
+                    body["coach"] = body["coach"].toLowerCase() == 'true';
+                    pendingEvents
+                        .add(Event(eventModel: EventModel.fromJson(body)));
+                  })
+                }
+            })
+      },
+    );
+
     return RefreshIndicator(
         onRefresh: () async {
           _retrievePendingEvents();
@@ -64,41 +101,9 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
               actions: [_buttonOptions[_selectedIndex]]),
           body: Center(
               child: _selectedIndex == 0
-                  ? CalendarViewOfEvents(
-                      events: pendingEvents,
-                      onDaySelected: (DateTime day) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    PendingEventsForDayPage(day: day)));
-                      },
-                    )
-                  : ListViewOfEvents(
-                      events: pendingEvents,
-                      eventWidgetBuilder: (Event event) => PendingEventWidget(
-                            event: event,
-                          ))),
-          floatingActionButton: NewJobButton(
-            context: context,
-            onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const NewEventPage()),
-              ).then((value) => {
-                    if (value != null)
-                      {
-                        setState(() {
-                          final body = jsonDecode(value.body);
-                          body["price"] = int.parse(body["price"]);
-                          body["coach"] = body["coach"].toLowerCase() == 'true';
-                          pendingEvents.add(
-                              Event(eventModel: EventModel.fromJson(body)));
-                        })
-                      }
-                  })
-            },
-          ),
+                  ? calendarViewOfEvents
+                  : listViewOfEvents),
+          floatingActionButton: newJobButton,
         ));
   }
 }

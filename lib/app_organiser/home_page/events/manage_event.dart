@@ -66,83 +66,19 @@ class _ManageEventPageState extends State<ManageEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Edit Event')),
-        body: ListView(children: [
-          _showName(),
-          _writeLocationForm(),
-          _writeDetailsForm(),
-          _selectDateForm(),
-          _selectStartTimeForm(),
-          _selectEndTimeForm(),
-          _selectPriceForm(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _CancelEventButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ConfirmationDialog(
-                          title: 'Are you sure you want to cancel this event?',
-                          onNoPressed: () {
-                            Navigator.pop(context);
-                          },
-                          onYesPressed: () {
-                            API.cancelEvent(event: widget.event);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                        );
-                      });
-                },
-              ),
-              _SaveChangesButton(
-                onPressed: () {
-                  NewEvent newEvent = NewEvent(
-                      name: _name,
-                      location: _location,
-                      details: _details,
-                      date: _date,
-                      startTime: _startTime,
-                      endTime: _endTime,
-                      flexibleStartTime: _flexibleStartTime,
-                      flexibleEndTime: _flexibleEndTime,
-                      price: _price,
-                      coach: _coach);
-                  final Future<Response> response =
-                      API.changeEvent(event: widget.event, newEvent: newEvent);
-                  Navigator.of(context).pop(response);
-                },
-              )
-            ],
-          )
-        ]),
+    final Widget nameForm = ListTile(
+        title: TextFormField(
+      initialValue: _name,
+      readOnly: false,
+      decoration: const InputDecoration(
+        icon: Icon(Icons.sports_soccer),
+        hintText: 'Enter the name',
+        labelText: 'Name',
       ),
-    );
-  }
+    ));
 
-  Widget _showName() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
-          initialValue: _name,
-          readOnly: true,
-          decoration: const InputDecoration(
-            icon: Icon(Icons.sports_soccer),
-            hintText: 'Enter the name',
-            labelText: 'Name',
-          ),
-        ));
-  }
-
-  Widget _writeLocationForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
+    final Widget locationForm = ListTile(
+        title: TextFormField(
             initialValue: _location,
             decoration: const InputDecoration(
               icon: Icon(Icons.location_on),
@@ -152,12 +88,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
             onChanged: (text) {
               _location = text;
             }));
-  }
 
-  Widget _writeDetailsForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
+    final Widget detailsForm = ListTile(
+        title: TextFormField(
             initialValue: _details,
             decoration: const InputDecoration(
               icon: Icon(Icons.details),
@@ -167,36 +100,30 @@ class _ManageEventPageState extends State<ManageEventPage> {
             onChanged: (text) {
               _details = text;
             }));
-  }
 
-  Widget _selectDateForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: DateTimeField(
-          initialValue: _date,
-          decoration: const InputDecoration(
-            icon: Icon(Icons.date_range),
-            hintText: 'Enter the date',
-            labelText: 'Date',
-          ),
-          format: DateFormat("dd-MMMM-yyyy"),
-          onShowPicker: (context, currentValue) {
-            return showDatePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2100));
-          },
-          onChanged: (date) {
-            _date = date!;
-          },
-        ));
-  }
+    final Widget dateForm = ListTile(
+        title: DateTimeField(
+      initialValue: _date,
+      decoration: const InputDecoration(
+        icon: Icon(Icons.date_range),
+        hintText: 'Enter the date',
+        labelText: 'Date',
+      ),
+      format: DateFormat("dd-MMMM-yyyy"),
+      onShowPicker: (context, currentValue) {
+        return showDatePicker(
+            context: context,
+            firstDate: DateTime.now(),
+            initialDate: currentValue ?? DateTime.now(),
+            lastDate: DateTime(2100));
+      },
+      onChanged: (date) {
+        _date = date!;
+      },
+    ));
 
-  Widget _selectStartTimeForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextField(
+    final Widget startTimeForm = ListTile(
+        title: TextField(
             controller: startTimeInput,
             decoration: const InputDecoration(
                 icon: Icon(Icons.access_time), labelText: "Enter Start Time"),
@@ -214,12 +141,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
                 });
               }
             }));
-  }
 
-  Widget _selectEndTimeForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextField(
+    final Widget endTimeForm = ListTile(
+        title: TextField(
             controller: endTimeInput,
             decoration: const InputDecoration(
                 icon: Icon(Icons.access_time), labelText: "Enter End Time"),
@@ -237,12 +161,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
                 });
               }
             }));
-  }
 
-  Widget _selectPriceForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
+    final Widget priceForm = ListTile(
+        title: TextFormField(
             initialValue: _price.toString(),
             decoration: const InputDecoration(
               icon: Icon(Icons.price_change),
@@ -253,6 +174,66 @@ class _ManageEventPageState extends State<ManageEventPage> {
               // TODO: Remove this cast.
               _price = int.parse(text);
             }));
+
+    final Widget cancelEventButton = _CancelEventButton(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ConfirmationDialog(
+                title: 'Are you sure you want to cancel this event?',
+                onNoPressed: () {
+                  Navigator.pop(context);
+                },
+                onYesPressed: () {
+                  API.cancelEvent(event: widget.event);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              );
+            });
+      },
+    );
+
+    final Widget saveEventButton = _SaveChangesButton(
+      onPressed: () {
+        NewEvent newEvent = NewEvent(
+            name: _name,
+            location: _location,
+            details: _details,
+            date: _date,
+            startTime: _startTime,
+            endTime: _endTime,
+            flexibleStartTime: _flexibleStartTime,
+            flexibleEndTime: _flexibleEndTime,
+            price: _price,
+            coach: _coach);
+        final Future<Response> response =
+            API.changeEvent(event: widget.event, newEvent: newEvent);
+        Navigator.of(context).pop(response);
+      },
+    );
+
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Edit Event')),
+        body: ListView(children: [
+          nameForm,
+          locationForm,
+          detailsForm,
+          detailsForm,
+          dateForm,
+          startTimeForm,
+          endTimeForm,
+          priceForm,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [cancelEventButton, saveEventButton],
+          )
+        ]),
+      ),
+    );
   }
 }
 

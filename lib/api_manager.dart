@@ -8,11 +8,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'models/event.dart';
 import 'models/user.dart';
 
-class API {
+class _API_LINKS {
   static const String PREFIX = "https://keep-playing.herokuapp.com/";
   static const String EVENTS = "${PREFIX}events/";
-
-  static Client client = http.Client();
 
   static Uri addEventLink() {
     return Uri.parse(EVENTS);
@@ -26,6 +24,10 @@ class API {
     return Uri.parse("$EVENTS$pk/");
   }
 
+  static Uri getEventsLink() {
+    return Uri.parse(EVENTS);
+  }
+
   static Uri loginLink() {
     return Uri.parse('${PREFIX}login/');
   }
@@ -33,9 +35,13 @@ class API {
   static Uri userInformationLink() {
     return Uri.parse("${PREFIX}user/");
   }
+}
+
+class API {
+  static Client client = http.Client();
 
   static void updateEvent({required Event event, Object? body}) {
-    client.patch(API.updateEventLink(event.pk), body: body);
+    client.patch(_API_LINKS.updateEventLink(event.pk), body: body);
   }
 
   static void eventHasCoach({required Event event}) {
@@ -47,7 +53,7 @@ class API {
   }
 
   static Future<Response> addNewEvent({required NewEvent newEvent}) {
-    return client.post(API.addEventLink(),
+    return client.post(_API_LINKS.addEventLink(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -56,7 +62,7 @@ class API {
 
   static Future<Response> changeEvent(
       {required Event event, required NewEvent newEvent}) {
-    return client.patch(API.updateEventLink(event.pk),
+    return client.patch(_API_LINKS.updateEventLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -64,18 +70,18 @@ class API {
   }
 
   static void cancelEvent({required Event event}) {
-    client.delete(API.deleteEventLink(event.pk));
+    client.delete(_API_LINKS.deleteEventLink(event.pk));
   }
 
   static Future<Response> login({required UserLogin userLogin}) {
-    return client.post(API.loginLink(), body: userLogin.toJson());
+    return client.post(_API_LINKS.loginLink(), body: userLogin.toJson());
   }
 
   static Future<Response> getInformationAboutCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
     return client.get(
-      API.userInformationLink(),
+      _API_LINKS.userInformationLink(),
       headers: <String, String>{'Authorization': 'Token $token'},
     );
   }
@@ -88,7 +94,8 @@ class API {
 
   static Future<List<Event>> retrieveEvents() async {
     List<Event> events = [];
-    List response = json.decode((await client.get(Uri.parse(API.EVENTS))).body);
+    List response =
+        json.decode((await client.get(_API_LINKS.getEventsLink())).body);
     for (var element in response) {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }

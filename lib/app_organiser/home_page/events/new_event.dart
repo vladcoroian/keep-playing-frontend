@@ -49,45 +49,8 @@ class _NewEventPageState extends State<NewEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        appBar: AppBar(title: const Text('New Event')),
-        body: ListView(children: [
-          _writeNameForm(),
-          _writeLocationForm(),
-          _writeDetailsForm(),
-          _selectDateForm(),
-          _selectStartTimeForm(),
-          _selectEndTimeForm(),
-          _selectPriceForm(),
-          Center(child: _SubmitButton(
-            onPressed: () {
-              NewEvent newEvent = NewEvent(
-                  name: _name,
-                  location: _location,
-                  details: _details,
-                  date: _date,
-                  startTime: _startTime,
-                  endTime: _endTime,
-                  flexibleStartTime: _flexibleStartTime,
-                  flexibleEndTime: _flexibleEndTime,
-                  price: _price,
-                  coach: false);
-              final Future<Response> response =
-                  API.addNewEvent(newEvent: newEvent);
-              Navigator.of(context).pop(response);
-            },
-          )),
-        ]),
-      ),
-    );
-  }
-
-  Widget _writeNameForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
+    final Widget nameForm = ListTile(
+        title: TextFormField(
             decoration: const InputDecoration(
               icon: Icon(Icons.sports_soccer),
               hintText: 'Enter the name',
@@ -96,12 +59,9 @@ class _NewEventPageState extends State<NewEventPage> {
             onChanged: (text) {
               _name = text;
             }));
-  }
 
-  Widget _writeLocationForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
+    final Widget locationForm = ListTile(
+        title: TextFormField(
             decoration: const InputDecoration(
               icon: Icon(Icons.location_on),
               hintText: 'Enter the location',
@@ -110,12 +70,9 @@ class _NewEventPageState extends State<NewEventPage> {
             onChanged: (text) {
               _location = text;
             }));
-  }
 
-  Widget _writeDetailsForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
+    final Widget detailsForm = ListTile(
+        title: TextFormField(
             decoration: const InputDecoration(
               icon: Icon(Icons.details),
               hintText: 'Enter details',
@@ -124,35 +81,29 @@ class _NewEventPageState extends State<NewEventPage> {
             onChanged: (text) {
               _details = text;
             }));
-  }
 
-  Widget _selectDateForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: DateTimeField(
-          decoration: const InputDecoration(
-            icon: Icon(Icons.date_range),
-            hintText: 'Enter the date',
-            labelText: 'Date',
-          ),
-          format: DateFormat("dd-MMMM-yyyy"),
-          onShowPicker: (context, currentValue) {
-            return showDatePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                initialDate: currentValue ?? DateTime.now(),
-                lastDate: DateTime(2100));
-          },
-          onChanged: (date) {
-            _date = date!;
-          },
-        ));
-  }
+    final Widget dateForm = ListTile(
+        title: DateTimeField(
+      decoration: const InputDecoration(
+        icon: Icon(Icons.date_range),
+        hintText: 'Enter the date',
+        labelText: 'Date',
+      ),
+      format: DateFormat("dd-MMMM-yyyy"),
+      onShowPicker: (context, currentValue) {
+        return showDatePicker(
+            context: context,
+            firstDate: DateTime.now(),
+            initialDate: currentValue ?? DateTime.now(),
+            lastDate: DateTime(2100));
+      },
+      onChanged: (date) {
+        _date = date!;
+      },
+    ));
 
-  Widget _selectStartTimeForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextField(
+    final Widget startTimeForm = ListTile(
+        title: TextField(
             controller: startTimeInput,
             decoration: const InputDecoration(
                 icon: Icon(Icons.access_time), labelText: "Enter Start Time"),
@@ -170,12 +121,9 @@ class _NewEventPageState extends State<NewEventPage> {
                 });
               }
             }));
-  }
 
-  Widget _selectEndTimeForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextField(
+    final Widget endTimeForm = ListTile(
+        title: TextField(
             controller: endTimeInput,
             decoration: const InputDecoration(
                 icon: Icon(Icons.access_time), labelText: "Enter End Time"),
@@ -193,12 +141,9 @@ class _NewEventPageState extends State<NewEventPage> {
                 });
               }
             }));
-  }
 
-  Widget _selectPriceForm() {
-    return Container(
-        padding: const EdgeInsets.all(DEFAULT_PADDING),
-        child: TextFormField(
+    final Widget priceForm = ListTile(
+        title: TextFormField(
             decoration: const InputDecoration(
               icon: Icon(Icons.price_change),
               hintText: 'Enter the price',
@@ -208,6 +153,41 @@ class _NewEventPageState extends State<NewEventPage> {
               // TODO: Remove this cast.
               _price = int.parse(text);
             }));
+
+    final Widget submitButton = _SubmitButton(
+      onPressed: () {
+        NewEvent newEvent = NewEvent(
+            name: _name,
+            location: _location,
+            details: _details,
+            date: _date,
+            startTime: _startTime,
+            endTime: _endTime,
+            flexibleStartTime: _flexibleStartTime,
+            flexibleEndTime: _flexibleEndTime,
+            price: _price,
+            coach: false);
+        final Future<Response> response = API.addNewEvent(newEvent: newEvent);
+        Navigator.of(context).pop(response);
+      },
+    );
+
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(title: const Text('New Event')),
+        body: ListView(children: [
+          nameForm,
+          locationForm,
+          detailsForm,
+          dateForm,
+          startTimeForm,
+          endTimeForm,
+          priceForm,
+          Center(child: submitButton),
+        ]),
+      ),
+    );
   }
 }
 

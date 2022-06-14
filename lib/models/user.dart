@@ -54,13 +54,3 @@ class UserLogin {
 
   Map<String, dynamic> toJson() => {"username": username, "password": password};
 }
-
-class Token {
-  String token;
-
-  Token({required this.token});
-
-  factory Token.fromJson(Map<String, dynamic> json) {
-    return Token(token: json['token']);
-  }
-}
