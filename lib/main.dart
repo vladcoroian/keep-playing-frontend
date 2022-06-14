@@ -68,7 +68,7 @@ class _EnterAsCoachButton extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginDemo()),
+                MaterialPageRoute(builder: (context) => const CoachLoginPage()),
               );
             },
             child: const Text('Enter as coach')));

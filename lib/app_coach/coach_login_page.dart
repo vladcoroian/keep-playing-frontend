@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/constants.dart';
 
-class LoginDemo extends StatefulWidget {
-  const LoginDemo({Key? key}) : super(key: key);
+import 'coach_home_page.dart';
+
+class CoachLoginPage extends StatefulWidget {
+  const CoachLoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginDemo> createState() => _LoginDemoState();
+  State<CoachLoginPage> createState() => _CoachLoginPageState();
 }
 
-class _LoginDemoState extends State<LoginDemo> {
+class _CoachLoginPageState extends State<CoachLoginPage> {
   TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   @override
@@ -19,12 +21,12 @@ class _LoginDemoState extends State<LoginDemo> {
             textAlign: TextAlign.center,
             style: TextStyle(color: APP_COLOR, fontSize: 400.0)));
 
-    final Widget emailField = TextField(
+    final Widget usernameField = TextField(
       obscureText: false,
       style: style,
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Email",
+          hintText: "Username",
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
@@ -46,7 +48,12 @@ class _LoginDemoState extends State<LoginDemo> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const CoachHomePage()),
+          );
+        },
         child: Text("Login",
             textAlign: TextAlign.center,
             style: style.copyWith(
@@ -65,7 +72,7 @@ class _LoginDemoState extends State<LoginDemo> {
               children: <Widget>[
                 appTitle,
                 const SizedBox(height: 45.0),
-                emailField,
+                usernameField,
                 const SizedBox(height: 25.0),
                 passwordField,
                 const SizedBox(
