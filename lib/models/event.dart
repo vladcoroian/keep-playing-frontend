@@ -19,6 +19,8 @@ class Event {
   final int price;
   final bool coach;
 
+  final int? coachPK;
+
   Event._(
       {required this.pk,
       required this.name,
@@ -30,23 +32,26 @@ class Event {
       required this.flexibleStartTime,
       required this.flexibleEndTime,
       required this.price,
-      required this.coach});
+      required this.coach,
+      this.coachPK});
 
   Event({required EventModel eventModel})
       : this._(
-            pk: eventModel.pk,
-            name: eventModel.name,
-            location: eventModel.location,
-            details: eventModel.details,
-            date: eventModel.getDate(),
-            startTime: eventModel.getTimeOfDayFromString(eventModel.start_time),
-            endTime: eventModel.getTimeOfDayFromString(eventModel.end_time),
-            flexibleStartTime: eventModel
-                .getTimeOfDayFromString(eventModel.flexible_start_time),
-            flexibleEndTime: eventModel
-                .getTimeOfDayFromString(eventModel.flexible_start_time),
-            price: eventModel.price,
-            coach: eventModel.coach);
+          pk: eventModel.pk,
+          name: eventModel.name,
+          location: eventModel.location,
+          details: eventModel.details,
+          date: eventModel.getDate(),
+          startTime: eventModel.getTimeOfDayFromString(eventModel.start_time),
+          endTime: eventModel.getTimeOfDayFromString(eventModel.end_time),
+          flexibleStartTime:
+              eventModel.getTimeOfDayFromString(eventModel.flexible_start_time),
+          flexibleEndTime:
+              eventModel.getTimeOfDayFromString(eventModel.flexible_start_time),
+          price: eventModel.price,
+          coach: eventModel.coach,
+          coachPK: eventModel.coach_user,
+        );
 
   String getPriceInPounds() {
     return NumberFormat.simpleCurrency(name: "GBP").format(price);
@@ -55,19 +60,21 @@ class Event {
 
 @JsonSerializable()
 class EventModel {
-  int pk;
-  String name;
-  String location;
-  String details;
+  final int pk;
+  final String name;
+  final String location;
+  final String details;
 
-  String date;
-  String start_time;
-  String end_time;
-  String flexible_start_time;
-  String flexible_end_time;
+  final String date;
+  final String start_time;
+  final String end_time;
+  final String flexible_start_time;
+  final String flexible_end_time;
 
-  int price;
-  bool coach;
+  final int price;
+  final bool coach;
+
+  final int? coach_user;
 
   EventModel(
       {required this.pk,
@@ -80,7 +87,8 @@ class EventModel {
       required this.flexible_start_time,
       required this.flexible_end_time,
       required this.price,
-      required this.coach});
+      required this.coach,
+      this.coach_user});
 
   DateTime getDate() {
     final splitDate = date.split('-');
@@ -114,17 +122,18 @@ class NewEvent {
   final int price;
   final bool coach;
 
-  NewEvent(
-      {required this.name,
-      required this.location,
-      required this.details,
-      required this.date,
-      required this.startTime,
-      required this.endTime,
-      required this.flexibleStartTime,
-      required this.flexibleEndTime,
-      required this.price,
-      required this.coach});
+  NewEvent({
+    required this.name,
+    required this.location,
+    required this.details,
+    required this.date,
+    required this.startTime,
+    required this.endTime,
+    required this.flexibleStartTime,
+    required this.flexibleEndTime,
+    required this.price,
+    required this.coach,
+  });
 
   NewEvent.fromEvent(Event event)
       : this(

@@ -27,10 +27,14 @@ class _ApiLinks {
   }
 
   static Uri takeJobLink(int pk) {
-    return Uri.parse("$COACH$pk/");
+    return Uri.parse("$EVENTS$pk/coach");
   }
 
   static Uri cancelJobLink(int pk) {
+    return Uri.parse("$EVENTS$pk/coach");
+  }
+
+  static Uri retrieveCoachLink(int pk) {
     return Uri.parse("$COACH$pk/");
   }
 }

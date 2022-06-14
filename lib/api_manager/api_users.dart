@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class _ApiLinks {
   static const String PREFIX = "https://keep-playing.herokuapp.com/";
+  static const String COACH = "${PREFIX}coach/";
 
   static Uri loginLink() {
     return Uri.parse('${PREFIX}login/');
@@ -13,6 +14,10 @@ class _ApiLinks {
 
   static Uri userInformationLink() {
     return Uri.parse("${PREFIX}user/");
+  }
+
+  static Uri coachInformationLink({required int pk}) {
+    return Uri.parse("${COACH}$pk");
   }
 }
 
@@ -33,6 +38,14 @@ class ApiUsers {
       _ApiLinks.userInformationLink(),
       headers: <String, String>{'Authorization': 'Token $token'},
     );
+    final body = jsonDecode(response.body);
+
+    return User.fromModel(userModel: UserModel.fromJson(body));
+  }
+
+  Future<User> getUser(int pk) async {
+    Response response =
+        await client.get(_ApiLinks.coachInformationLink(pk: pk));
     final body = jsonDecode(response.body);
 
     return User.fromModel(userModel: UserModel.fromJson(body));
