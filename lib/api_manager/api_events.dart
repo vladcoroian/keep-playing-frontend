@@ -39,18 +39,6 @@ class ApiEvents {
 
   ApiEvents({required this.client});
 
-  void _updateEvent({required Event event, Object? body}) {
-    client.patch(_ApiLinks.updateEventLink(event.pk), body: body);
-  }
-
-  void eventHasCoach({required Event event}) {
-    _updateEvent(event: event, body: {"coach": "true"});
-  }
-
-  void eventHasNoCoach({required Event event}) {
-    _updateEvent(event: event, body: {"coach": "false"});
-  }
-
   Future<Response> addNewEvent({required NewEvent newEvent}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
