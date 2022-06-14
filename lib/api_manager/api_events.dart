@@ -8,8 +8,9 @@ import 'package:table_calendar/table_calendar.dart';
 class _ApiLinks {
   static const String PREFIX = "https://keep-playing.herokuapp.com/";
   static const String EVENTS = "${PREFIX}events/";
+  static const String COACH = "${PREFIX}coach/";
 
-  static Uri getEventsLink() {
+  static Uri eventsLink() {
     return Uri.parse(EVENTS);
   }
 
@@ -24,24 +25,24 @@ class _ApiLinks {
   static Uri deleteEventLink(int pk) {
     return Uri.parse("$EVENTS$pk/");
   }
+
+  static Uri takeJobLink(int pk) {
+    return Uri.parse("$EVENTS$pk/coach");
+  }
+
+  static Uri cancelJobLink(int pk) {
+    return Uri.parse("$EVENTS$pk/coach");
+  }
+
+  static Uri retrieveCoachLink(int pk) {
+    return Uri.parse("$COACH$pk/");
+  }
 }
 
 class ApiEvents {
   final Client client;
 
   ApiEvents({required this.client});
-
-  void _updateEvent({required Event event, Object? body}) {
-    client.patch(_ApiLinks.updateEventLink(event.pk), body: body);
-  }
-
-  void eventHasCoach({required Event event}) {
-    _updateEvent(event: event, body: {"coach": "true"});
-  }
-
-  void eventHasNoCoach({required Event event}) {
-    _updateEvent(event: event, body: {"coach": "false"});
-  }
 
   Future<Response> addNewEvent({required NewEvent newEvent}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -72,10 +73,34 @@ class ApiEvents {
     client.delete(_ApiLinks.deleteEventLink(event.pk));
   }
 
+  Future<Response> takeJob({required Event event}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? '';
+
+    return client.patch(_ApiLinks.takeJobLink(event.pk),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token',
+        },
+        body: jsonEncode(<String, dynamic>{"coach": true}));
+  }
+
+  Future<Response> cancelJob({required Event event}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? '';
+
+    return client.patch(_ApiLinks.cancelJobLink(event.pk),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token',
+        },
+        body: jsonEncode(<String, dynamic>{"coach": false}));
+  }
+
   Future<List<Event>> retrieveEvents() async {
     List<Event> events = [];
     List response =
-        json.decode((await client.get(_ApiLinks.getEventsLink())).body);
+        json.decode((await client.get(_ApiLinks.eventsLink())).body);
     for (var element in response) {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }

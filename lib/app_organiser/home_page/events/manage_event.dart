@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
+import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
@@ -28,6 +29,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
   late TimeOfDay _flexibleEndTime;
   late int _price;
   late bool _coach;
+  late User? _sessionCoach;
 
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
@@ -44,6 +46,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
     _flexibleEndTime = widget.event.flexibleEndTime;
     _price = widget.event.price;
     _coach = widget.event.coach;
+    _retrieveCoachUser();
 
     startTimeInput.text = const DefaultMaterialLocalizations()
         .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
@@ -51,6 +54,16 @@ class _ManageEventPageState extends State<ManageEventPage> {
         .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
 
     super.initState();
+  }
+
+  _retrieveCoachUser() async {
+    User? coach = widget.event.coachPK == null
+        ? null
+        : await API.users.getUser(widget.event.coachPK!);
+
+    setState(() {
+      _sessionCoach = coach;
+    });
   }
 
   Future<bool> _onWillPop() async {
@@ -66,6 +79,23 @@ class _ManageEventPageState extends State<ManageEventPage> {
 
   @override
   Widget build(BuildContext context) {
+    final String coachName = _sessionCoach == null
+        ? ''
+        : "${_sessionCoach!.firstName} ${_sessionCoach!.lastName}";
+    final String coachEmail = _sessionCoach == null ? '' : _sessionCoach!.email;
+
+    final Widget coachInformation = Card(
+        margin: const EdgeInsets.all(DEFAULT_PADDING),
+        child: ListTile(
+          leading: const Text(
+            "Coach\nInformation",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: APP_COLOR),
+          ),
+          title: Text(coachName),
+          subtitle: Text(coachEmail),
+        ));
+
     final Widget nameForm = ListTile(
         title: TextFormField(
       initialValue: _name,
@@ -219,6 +249,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Edit Event')),
         body: ListView(children: [
+          _sessionCoach == null
+              ? const SizedBox(height: 0, width: 0)
+              : coachInformation,
           nameForm,
           locationForm,
           detailsForm,

@@ -143,29 +143,33 @@ class _AcceptJobDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Widget acceptButton = _AcceptButton(
+        onPressed: () => {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ConfirmationDialog(
+                      title: 'Are you sure that you want to accept this job?',
+                      onNoPressed: () => {Navigator.pop(context)},
+                      onYesPressed: () {
+                        API.events.takeJob(event: event);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    );
+                  })
+            });
+
+    final Widget cancelButton =
+        _CancelButton(onPressed: () => {Navigator.pop(context)});
+
     return _DetailsAndAcceptJobsDialogBuilder(
       event: event,
       lastWidget: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _AcceptButton(
-              onPressed: () => {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return ConfirmationDialog(
-                            title:
-                                'Are you sure that you want to accept this job?',
-                            onNoPressed: () => {Navigator.pop(context)},
-                            onYesPressed: () {
-                              API.events.eventHasCoach(event: event);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          );
-                        })
-                  }),
-          _CancelButton(onPressed: () => {Navigator.pop(context)}),
+          acceptButton,
+          cancelButton,
         ],
       ),
     );
@@ -175,8 +179,6 @@ class _AcceptJobDialog extends StatelessWidget {
 class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
   final Event event;
   final Widget lastWidget;
-
-  static const double SPACE_BETWEEN_ROWS = 10;
 
   const _DetailsAndAcceptJobsDialogBuilder(
       {required this.event, required this.lastWidget});

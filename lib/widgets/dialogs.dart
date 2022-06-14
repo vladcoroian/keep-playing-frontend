@@ -3,6 +3,33 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'buttons.dart';
 
+class OneOptionDialog extends StatelessWidget {
+  final String title;
+  final String text;
+  final Widget button;
+
+  const OneOptionDialog(
+      {super.key,
+        required this.title,
+        required this.text,
+        required this.button});
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialog(
+      contentPadding: const EdgeInsets.all(DIALOG_PADDING),
+      title: Center(child: Text(title)),
+      children: <Widget>[
+        Container(padding: const EdgeInsets.all(10), child: Text(text)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [button],
+        ),
+      ],
+    );
+  }
+}
+
 class TwoOptionsDialog extends StatelessWidget {
   final String title;
   final String text;
