@@ -47,6 +47,9 @@ dependencies:
   # Calendar package:
   table_calendar: ^3.0.6
 
+  # Intl Phone Number Package:
+  intl_phone_number_input: ^0.7.0+2
+
   # JSON files
   json_annotation: ^4.5.0
 
