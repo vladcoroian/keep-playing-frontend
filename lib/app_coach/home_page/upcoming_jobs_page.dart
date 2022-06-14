@@ -69,7 +69,7 @@ class _UpcomingJobWidget extends StatelessWidget {
                   title: 'Are you sure that you want to cancel this job?',
                   onNoPressed: () => {Navigator.pop(context)},
                   onYesPressed: () {
-                    API.events.eventHasNoCoach(event: event);
+                    API.events.cancelJob(event: event);
                     Navigator.pop(context);
                   },
                 );
