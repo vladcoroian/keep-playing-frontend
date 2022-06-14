@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/event.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class _ApiLinks {
@@ -30,33 +31,41 @@ class ApiEvents {
 
   ApiEvents({required this.client});
 
-  void updateEvent({required Event event, Object? body}) {
+  void _updateEvent({required Event event, Object? body}) {
     client.patch(_ApiLinks.updateEventLink(event.pk), body: body);
   }
 
   void eventHasCoach({required Event event}) {
-    updateEvent(event: event, body: {"coach": "true"});
+    _updateEvent(event: event, body: {"coach": "true"});
   }
 
   void eventHasNoCoach({required Event event}) {
-    updateEvent(event: event, body: {"coach": "false"});
+    _updateEvent(event: event, body: {"coach": "false"});
   }
 
-  Future<Response> addNewEvent({required NewEvent newEvent}) {
+  Future<Response> addNewEvent({required NewEvent newEvent}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? '';
+
     return client.post(_ApiLinks.addEventLink(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token',
         },
-        body: newEvent.toJson());
+        body: jsonEncode(newEvent.toJson()));
   }
 
   Future<Response> changeEvent(
-      {required Event event, required NewEvent newEvent}) {
+      {required Event event, required NewEvent newEvent}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token') ?? '';
+
     return client.patch(_ApiLinks.updateEventLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token',
         },
-        body: newEvent.toJson());
+        body: jsonEncode(newEvent.toJson()));
   }
 
   void cancelEvent({required Event event}) {

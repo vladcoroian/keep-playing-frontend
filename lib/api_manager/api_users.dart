@@ -25,18 +25,16 @@ class ApiUsers {
     return client.post(_ApiLinks.loginLink(), body: userLogin.toJson());
   }
 
-  Future<Response> getInformationAboutCurrentUser() async {
+  Future<User> getCurrentUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
-    return client.get(
+
+    Response response = await client.get(
       _ApiLinks.userInformationLink(),
       headers: <String, String>{'Authorization': 'Token $token'},
     );
-  }
-
-  Future<User> getCurrentUser() async {
-    Response response = await getInformationAboutCurrentUser();
     final body = jsonDecode(response.body);
+
     return User.fromModel(userModel: UserModel.fromJson(body));
   }
 }

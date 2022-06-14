@@ -140,7 +140,7 @@ class NewEvent {
           coach: event.coach,
         );
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => <String, dynamic>{
         "name": name,
         'location': location,
         'details': details,

@@ -169,7 +169,7 @@ class _NewEventPageState extends State<NewEventPage> {
             coach: false);
         final Future<Response> response =
             API.events.addNewEvent(newEvent: newEvent);
-        Navigator.of(context).pop(response);
+        //Navigator.of(context).pop(response);
       },
     );
 
