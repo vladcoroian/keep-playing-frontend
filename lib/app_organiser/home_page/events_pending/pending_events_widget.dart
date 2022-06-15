@@ -56,6 +56,7 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
                     onPressed: () {
                       API.events.acceptCoach(
                           event: widget.event, coach: offers[index]);
+                      Navigator.pop(context);
                     },
                   ),
                 ));
@@ -65,6 +66,7 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
     return EventWidget(
         event: widget.event,
         leftButton: _OffersButton(
+          numberOfOffers: offers.length,
           onPressed: () {
             showDialog(
                 context: context,
@@ -94,11 +96,16 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
 }
 
 class _OffersButton extends ColoredButton {
-  const _OffersButton({Key? key, required super.onPressed})
+  final int numberOfOffers;
+
+  const _OffersButton(
+      {Key? key, required this.numberOfOffers, required super.onPressed})
       : super(
           key: key,
-          text: 'Offers',
-          color: BUTTON_GRAY_COLOR,
+          text: numberOfOffers == 0 ? 'No Offers' : 'Offers ($numberOfOffers)',
+          color: numberOfOffers == 0
+              ? NO_OFFERS_BUTTON_COLOR
+              : AT_LEAST_ONE_OFFER_BUTTON_COLOR,
         );
 }
 

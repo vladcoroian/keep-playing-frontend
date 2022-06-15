@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class _ApiLinks {
-  static const String PREFIX = "https://keep-playing-staging.herokuapp.com/";
+  static const String PREFIX = "https://keep-playing.herokuapp.com/";
   static const String EVENTS = "${PREFIX}events/";
 
   static Uri eventsLink() {
@@ -27,7 +27,7 @@ class _ApiLinks {
   }
 
   static Uri applyToJobLink(int pk) {
-    return Uri.parse("$EVENTS$pk/apply");
+    return Uri.parse("$EVENTS$pk/apply/");
   }
 
   static Uri cancelJobLink(int pk) {
@@ -78,12 +78,14 @@ class ApiEvents {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
 
+    print(_ApiLinks.applyToJobLink(event.pk));
+
     return client.patch(_ApiLinks.applyToJobLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
         },
-        body: jsonEncode(<String, dynamic>{"coach": true}));
+        body: jsonEncode(<String, dynamic>{}));
   }
 
   Future<Response> cancelJob({required Event event}) async {

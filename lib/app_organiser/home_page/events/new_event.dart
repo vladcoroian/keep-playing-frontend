@@ -28,8 +28,8 @@ class _NewEventPageState extends State<NewEventPage> {
   TimeOfDay _flexibleEndTime = const TimeOfDay(hour: 0, minute: 0);
   int _price = 0;
 
-  String? selectedSport = null;
-  String? selectedRole = null;
+  String? selectedSport;
+  String? selectedRole;
 
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
@@ -54,17 +54,51 @@ class _NewEventPageState extends State<NewEventPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Form Widgets
-
     final Widget nameForm = ListTile(
         title: TextFormField(
             decoration: const InputDecoration(
-              icon: Icon(Icons.sports_soccer),
+              icon: Icon(Icons.title),
               hintText: 'Enter the name',
               labelText: 'Name',
             ),
             onChanged: (text) {
               _name = text;
+            }));
+
+    final Widget sportForm = ListTile(
+        leading: const Icon(Icons.sports_soccer),
+        title: DropdownButton<String>(
+            value: selectedSport,
+            items: SPORTS.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            hint: const Text('Enter sport'),
+            onChanged: (String? newValue) {
+              _sport = newValue!;
+              setState(() {
+                selectedSport = _sport;
+              });
+            }));
+
+    final Widget roleForm = ListTile(
+        leading: const Icon(Icons.sports),
+        title: DropdownButton<String>(
+            value: selectedRole,
+            items: ROLES.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            hint: const Text('Enter role'),
+            onChanged: (String? newValue) {
+              _role = newValue!;
+              setState(() {
+                selectedRole = _role;
+              });
             }));
 
     final Widget locationForm = ListTile(
@@ -161,40 +195,6 @@ class _NewEventPageState extends State<NewEventPage> {
               _price = int.parse(text);
             }));
 
-    final Widget sportForm = DropdownButton<String>(
-        value: selectedSport,
-        items: SPORTS.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        hint: Text('Enter sport'),
-        onChanged: (String? newValue) {
-          _sport = newValue!;
-          setState(() {
-            selectedSport = _sport;
-          });
-        });
-
-    final Widget roleForm = DropdownButton<String>(
-        value: selectedRole,
-        items: ROLES.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        hint: Text('Enter role'),
-        onChanged: (String? newValue) {
-          _role = newValue!;
-          setState(() {
-            selectedRole = _role;
-          });
-        });
-
-    // Form Submission Widget
-
     final Widget submitButton = _SubmitButton(
       onPressed: () {
         NewEvent newEvent = NewEvent(
@@ -222,14 +222,14 @@ class _NewEventPageState extends State<NewEventPage> {
         appBar: AppBar(title: const Text('New Event')),
         body: ListView(children: [
           nameForm,
+          sportForm,
+          roleForm,
           locationForm,
           detailsForm,
           dateForm,
           startTimeForm,
           endTimeForm,
           priceForm,
-          sportForm,
-          roleForm,
           Center(child: submitButton),
         ]),
       ),

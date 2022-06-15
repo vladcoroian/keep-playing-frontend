@@ -18,6 +18,7 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   List<Event> feedEvents = [];
+  int coachPK = 0;
 
   _retrieveFeedEvents() async {
     List<Event> events = await API.events.retrieveEvents(pending: true);
@@ -27,9 +28,18 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
+  _retrieveCoachPK() async {
+    int pk = (await API.users.getCurrentUser()).pk;
+
+    setState(() {
+      coachPK = pk;
+    });
+  }
+
   @override
   void initState() {
     _retrieveFeedEvents();
+    _retrieveCoachPK();
     super.initState();
   }
 
@@ -48,6 +58,7 @@ class _FeedPageState extends State<FeedPage> {
                   events: feedEvents,
                   eventWidgetBuilder: (Event event) => _FeedEventWidget(
                         event: event,
+                        coachPK: coachPK,
                       ))),
         ));
   }
@@ -55,31 +66,41 @@ class _FeedPageState extends State<FeedPage> {
 
 class _FeedEventWidget extends StatelessWidget {
   final Event event;
+  final int coachPK;
 
-  const _FeedEventWidget({required this.event});
+  const _FeedEventWidget({required this.event, required this.coachPK});
 
   @override
   Widget build(BuildContext context) {
+    final Widget detailsButton = _DetailsButton(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return _EventDetailsDialog(event: event);
+            });
+      },
+    );
+
+    final Widget applyButton = _ApplyButton(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return _AcceptJobDialog(event: event);
+            });
+      },
+    );
+
+    final Widget appliedButton = _AppliedButton(
+      onPressed: () {},
+    );
+
     return EventWidget(
-        event: event,
-        leftButton: _DetailsButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _EventDetailsDialog(event: event);
-                });
-          },
-        ),
-        rightButton: _ApplyButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _AcceptJobDialog(event: event);
-                });
-          },
-        ));
+      event: event,
+      leftButton: detailsButton,
+      rightButton: event.offers.contains(coachPK) ? appliedButton : applyButton,
+    );
   }
 }
 
@@ -101,13 +122,13 @@ class _ApplyButton extends ColoredButton {
         );
 }
 
-class _UnApplyButton extends ColoredButton {
-  const _UnApplyButton({Key? key, required super.onPressed})
+class _AppliedButton extends ColoredButton {
+  const _AppliedButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'UnApply',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Applied',
+          color: APPLIED_BUTTON_COLOR,
+        );
 }
 
 class _CancelButton extends ColoredButton {
@@ -152,7 +173,7 @@ class _AcceptJobDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget acceptButton = _SendOfferButton(
+    final Widget sendOffer = _SendOfferButton(
         onPressed: () => {
               showDialog(
                   context: context,
@@ -177,7 +198,7 @@ class _AcceptJobDialog extends StatelessWidget {
       lastWidget: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          acceptButton,
+          sendOffer,
           cancelButton,
         ],
       ),
@@ -225,18 +246,6 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
             title: const Text('End Time', style: _textStyleForTitle),
             subtitle: Text(const DefaultMaterialLocalizations()
                 .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true))),
-        ListTile(
-            leading: const Icon(Icons.timer_outlined),
-            title: const Text('Flexible Start Time', style: _textStyleForTitle),
-            subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                event.flexibleStartTime,
-                alwaysUse24HourFormat: true))),
-        ListTile(
-            leading: const Icon(Icons.timer_outlined),
-            title: const Text('Flexible End Time', style: _textStyleForTitle),
-            subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                event.flexibleEndTime,
-                alwaysUse24HourFormat: true))),
         const Divider(),
         ListTile(
             leading: const Icon(Icons.details),
