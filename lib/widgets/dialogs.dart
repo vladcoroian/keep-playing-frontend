@@ -5,13 +5,13 @@ import 'buttons.dart';
 
 class OneOptionDialog extends StatelessWidget {
   final String title;
-  final Widget body;
+  final List<Widget> children;
   final Widget button;
 
   const OneOptionDialog(
       {super.key,
       required this.title,
-      required this.body,
+      required this.children,
       required this.button});
 
   @override
@@ -19,13 +19,13 @@ class OneOptionDialog extends StatelessWidget {
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(DIALOG_PADDING),
       title: Center(child: Text(title)),
-      children: <Widget>[
-        body,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [button],
-        ),
-      ],
+      children: children +
+          [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [button],
+            ),
+          ],
     );
   }
 }

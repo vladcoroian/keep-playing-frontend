@@ -13,7 +13,7 @@ class ScheduledEventWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EventWidget(
+    return EventCard(
         event: event,
         leftButton: const SizedBox(width: 0, height: 0),
         rightButton: _ManageButton(

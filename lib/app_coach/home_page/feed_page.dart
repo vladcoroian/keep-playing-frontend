@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
@@ -77,7 +76,7 @@ class _FeedEventWidget extends StatelessWidget {
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return _EventDetailsDialog(event: event);
+              return _DetailsDialog(event: event);
             });
       },
     );
@@ -96,7 +95,7 @@ class _FeedEventWidget extends StatelessWidget {
       onPressed: () {},
     );
 
-    return EventWidget(
+    return EventCard(
       event: event,
       leftButton: detailsButton,
       rightButton: event.offers.contains(coachPK) ? appliedButton : applyButton,
@@ -149,19 +148,21 @@ class _SendOfferButton extends ColoredButton {
         );
 }
 
-class _EventDetailsDialog extends StatelessWidget {
+class _DetailsDialog extends StatelessWidget {
   final Event event;
 
-  const _EventDetailsDialog({Key? key, required this.event}) : super(key: key);
+  const _DetailsDialog({Key? key, required this.event}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return _DetailsAndAcceptJobsDialogBuilder(
+    return EventDetailsDialog(
       event: event,
-      lastWidget: Align(
-        alignment: Alignment.center,
-        child: _CancelButton(onPressed: () => {Navigator.pop(context)}),
-      ),
+      widgetsAtTheEnd: [
+        Align(
+          alignment: Alignment.center,
+          child: _CancelButton(onPressed: () => {Navigator.pop(context)}),
+        ),
+      ],
     );
   }
 }
@@ -193,67 +194,14 @@ class _AcceptJobDialog extends StatelessWidget {
     final Widget cancelButton =
         _CancelButton(onPressed: () => {Navigator.pop(context)});
 
-    return _DetailsAndAcceptJobsDialogBuilder(
-      event: event,
-      lastWidget: Row(
+    return EventDetailsDialog(event: event, widgetsAtTheEnd: [
+      Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           sendOffer,
           cancelButton,
         ],
       ),
-    );
-  }
-}
-
-class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
-  final Event event;
-  final Widget lastWidget;
-
-  static const TextStyle _textStyleForTitle =
-      TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: APP_COLOR);
-
-  const _DetailsAndAcceptJobsDialogBuilder(
-      {required this.event, required this.lastWidget});
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
-      title: Center(
-          child: Text(
-        event.name,
-        style: _textStyleForTitle,
-        textScaleFactor: 1.5,
-      )),
-      children: <Widget>[
-        ListTile(
-            leading: const Icon(Icons.location_on),
-            title: const Text('Location', style: _textStyleForTitle),
-            subtitle: Text(event.location)),
-        ListTile(
-            leading: const Icon(Icons.date_range),
-            title: const Text('Date', style: _textStyleForTitle),
-            subtitle: Text(DateFormat("MMMM dd").format(event.date))),
-        ListTile(
-            leading: const Icon(Icons.timer),
-            title: const Text('Start Time', style: _textStyleForTitle),
-            subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                event.startTime,
-                alwaysUse24HourFormat: true))),
-        ListTile(
-            leading: const Icon(Icons.timer),
-            title: const Text('End Time', style: _textStyleForTitle),
-            subtitle: Text(const DefaultMaterialLocalizations()
-                .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true))),
-        const Divider(),
-        ListTile(
-            leading: const Icon(Icons.details),
-            title: const Text('Details', style: _textStyleForTitle),
-            subtitle: Text(event.details)),
-        const Divider(),
-        lastWidget,
-      ],
-    );
+    ]);
   }
 }
