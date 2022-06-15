@@ -138,7 +138,7 @@ class ApiEvents {
     return result;
   }
 
-  Future<List<Event>> retrieveEvents(
+  Future<List<Event>> retrieveFutureEventsWith(
       {bool? pending, bool? sameDay, DateTime? day}) async {
     List<Event> events = [];
     List response =
@@ -147,7 +147,21 @@ class ApiEvents {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }
     events.retainWhere((event) => _checkEvent(
-        event: event, pending: pending, sameDay: sameDay, day: day));
+        event: event, pending: pending, sameDay: sameDay, day: day)
+        && event.date.isAfter(DateTime.now().subtract(Duration(days: 1))));
+    return events;
+  }
+
+  Future<List<Event>> retrieveEventsBefore(
+      {DateTime? day}) async {
+    List<Event> events = [];
+    List response =
+    json.decode((await client.get(_ApiLinks.eventsLink())).body);
+    for (var element in response) {
+      events.add(Event(eventModel: EventModel.fromJson(element)));
+    }
+    events.retainWhere((event) =>
+      event.coach && event.date.isBefore(day ??= DateTime.now()));
     return events;
   }
 }
