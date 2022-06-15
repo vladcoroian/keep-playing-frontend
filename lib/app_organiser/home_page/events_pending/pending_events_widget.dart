@@ -76,16 +76,25 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
     List<Widget> offersList = [];
     for (User offer in offers) {
       offersList.add(Card(
-          margin: const EdgeInsets.all(DEFAULT_PADDING),
-          child: ListTile(
-            title: Text("${offer.firstName} ${offer.lastName}"),
-            trailing: _AcceptCoachButton(
-              onPressed: () {
-                API.events.acceptCoach(event: widget.event, coach: offer);
-                Navigator.pop(context);
-              },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: Text("${offer.firstName} ${offer.lastName}"),
+              subtitle: Text(offer.email),
             ),
-          )));
+            Center(
+              child: _AcceptCoachButton(
+                onPressed: () {
+                  API.events.acceptCoach(event: widget.event, coach: offer);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          ],
+        ), // children: [Text("${offer.firstName} ${offer.lastName}")],
+      ));
     }
     return offersList;
   }
