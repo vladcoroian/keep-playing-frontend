@@ -8,8 +8,7 @@ class NewJobButton extends FloatingActionButton {
       {Key? key, required this.context, required super.onPressed})
       : super.extended(
           key: key,
-          extendedTextStyle:
-              const TextStyle(fontSize: BUTTON_FONT_SIZE),
+          extendedTextStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
           tooltip: 'Increment',
           icon: const Icon(Icons.add),
           label: const Text("New Job"),

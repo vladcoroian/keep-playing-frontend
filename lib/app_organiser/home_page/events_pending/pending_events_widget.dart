@@ -41,29 +41,7 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget listOfCoaches = Container(
-        height: 300.0, // Change as per your requirement
-        width: 300.0,
-        child: ListView.builder(
-          itemCount: widget.event.offers.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Card(
-                margin: const EdgeInsets.all(DEFAULT_PADDING),
-                child: ListTile(
-                  title: Text(
-                      "${offers[index].firstName} ${offers[index].lastName}"),
-                  trailing: _AcceptCoachButton(
-                    onPressed: () {
-                      API.events.acceptCoach(
-                          event: widget.event, coach: offers[index]);
-                      Navigator.pop(context);
-                    },
-                  ),
-                ));
-          },
-        ));
-
-    return EventWidget(
+    return EventCard(
         event: widget.event,
         leftButton: _OffersButton(
           numberOfOffers: offers.length,
@@ -73,12 +51,12 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
                 builder: (BuildContext context) {
                   return _OffersDialog(
                     event: widget.event,
-                    body: listOfCoaches,
                     button: _CancelButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
+                    children: _getOffersList(),
                   );
                 });
           },
@@ -92,6 +70,33 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
             );
           },
         ));
+  }
+
+  List<Widget> _getOffersList() {
+    List<Widget> offersList = [];
+    for (User offer in offers) {
+      offersList.add(Card(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: Text("${offer.firstName} ${offer.lastName}"),
+              subtitle: Text(offer.email),
+            ),
+            Center(
+              child: _AcceptCoachButton(
+                onPressed: () {
+                  API.events.acceptCoach(event: widget.event, coach: offer);
+                  Navigator.pop(context);
+                },
+              ),
+            )
+          ],
+        ), // children: [Text("${offer.firstName} ${offer.lastName}")],
+      ));
+    }
+    return offersList;
   }
 }
 
@@ -124,7 +129,7 @@ class _OffersDialog extends OneOptionDialog {
   const _OffersDialog(
       {Key? key,
       required this.event,
-      required super.body,
+      required super.children,
       required super.button})
       : super(
           key: key,

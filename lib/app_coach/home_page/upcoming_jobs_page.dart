@@ -59,7 +59,7 @@ class _UpcomingJobWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EventWidget(
+    return EventCard(
         event: event,
         leftButton: _CancelButton(onPressed: () {
           showDialog(
@@ -75,8 +75,21 @@ class _UpcomingJobWidget extends StatelessWidget {
                 );
               });
         }),
-        rightButton: _MessageButton(
-          onPressed: () {},
+        rightButton: _DetailsButton(
+          onPressed: () {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return EventDetailsDialog(
+                    event: event,
+                    widgetsAtTheEnd: [
+                      _CancelButton(onPressed: () {
+                        Navigator.pop(context);
+                      })
+                    ],
+                  );
+                });
+          },
         ));
   }
 }
@@ -90,11 +103,11 @@ class _CancelButton extends ColoredButton {
         );
 }
 
-class _MessageButton extends ColoredButton {
-  const _MessageButton({Key? key, required super.onPressed})
+class _DetailsButton extends ColoredButton {
+  const _DetailsButton({Key? key, required super.onPressed})
       : super(
           key: key,
-          text: 'Message',
-          color: APP_COLOR,
+          text: 'Details',
+          color: BUTTON_GRAY_COLOR,
         );
 }
