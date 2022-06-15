@@ -83,8 +83,8 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
                     final body = jsonDecode(value.body);
                     body["price"] = int.parse(body["price"]);
                     body["coach"] = body["coach"].toLowerCase() == 'true';
-                    scheduledEvents
-                        .add(Event(eventModel: EventModel.fromJson(body)));
+                    // scheduledEvents
+                    //     .add(Event(eventModel: EventModel.fromJson(body)));
                   })
                 }
             })
