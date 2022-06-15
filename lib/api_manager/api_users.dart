@@ -17,7 +17,7 @@ class _ApiLinks {
   }
 
   static Uri coachInformationLink({required int pk}) {
-    return Uri.parse("${COACH}$pk");
+    return Uri.parse("$COACH$pk/");
   }
 }
 

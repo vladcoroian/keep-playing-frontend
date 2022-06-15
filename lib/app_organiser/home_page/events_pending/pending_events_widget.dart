@@ -1,31 +1,85 @@
 import 'package:flutter/material.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
+import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
 import '../events/manage_event.dart';
 
-class PendingEventWidget extends StatelessWidget {
+class PendingEventWidget extends StatefulWidget {
   final Event event;
 
   const PendingEventWidget({super.key, required this.event});
 
   @override
+  State<PendingEventWidget> createState() => _PendingEventWidgetState();
+}
+
+class _PendingEventWidgetState extends State<PendingEventWidget> {
+  List<User> offers = [];
+
+  @override
+  void initState() {
+    _retrieveOffers();
+    super.initState();
+  }
+
+  void _retrieveOffers() async {
+    List<User> users = [];
+    for (var offer in widget.event.offers) {
+      User user = await API.users.getUser(offer);
+      users.add(user);
+    }
+
+    setState(() {
+      offers = users;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final Widget listOfCoaches = Container(
+        height: 300.0, // Change as per your requirement
+        width: 300.0,
+        child: ListView.builder(
+          itemCount: widget.event.offers.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+                margin: const EdgeInsets.all(DEFAULT_PADDING),
+                child: ListTile(
+                  title: Text(
+                      "${offers[index].firstName} ${offers[index].lastName}"),
+                  trailing: _AcceptCoachButton(
+                    onPressed: () {
+                      API.events.acceptCoach(
+                          event: widget.event, coach: offers[index]);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ));
+          },
+        ));
+
     return EventWidget(
-        event: event,
+        event: widget.event,
         leftButton: _OffersButton(
+          numberOfOffers: offers.length,
           onPressed: () {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return _OffersDialog(button: _CancelButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ));
+                  return _OffersDialog(
+                    event: widget.event,
+                    body: listOfCoaches,
+                    button: _CancelButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  );
                 });
           },
         ),
@@ -34,7 +88,7 @@ class PendingEventWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ManageEventPage(event: event)),
+                  builder: (context) => ManageEventPage(event: widget.event)),
             );
           },
         ));
@@ -42,11 +96,16 @@ class PendingEventWidget extends StatelessWidget {
 }
 
 class _OffersButton extends ColoredButton {
-  const _OffersButton({Key? key, required super.onPressed})
+  final int numberOfOffers;
+
+  const _OffersButton(
+      {Key? key, required this.numberOfOffers, required super.onPressed})
       : super(
           key: key,
-          text: 'Offers',
-          color: DEFAULT_BUTTON_GRAY_COLOR,
+          text: numberOfOffers == 0 ? 'No Offers' : 'Offers ($numberOfOffers)',
+          color: numberOfOffers == 0
+              ? NO_OFFERS_BUTTON_COLOR
+              : AT_LEAST_ONE_OFFER_BUTTON_COLOR,
         );
 }
 
@@ -60,11 +119,16 @@ class _ManageButton extends ColoredButton {
 }
 
 class _OffersDialog extends OneOptionDialog {
-  const _OffersDialog({Key? key, required super.button})
+  final Event event;
+
+  const _OffersDialog(
+      {Key? key,
+      required this.event,
+      required super.body,
+      required super.button})
       : super(
           key: key,
           title: 'Current Offers',
-          text: '',
         );
 }
 
@@ -74,5 +138,14 @@ class _CancelButton extends ColoredButton {
           key: key,
           text: 'Cancel',
           color: CANCEL_BUTTON_COLOR,
+        );
+}
+
+class _AcceptCoachButton extends ColoredButton {
+  const _AcceptCoachButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Accept',
+          color: APP_COLOR,
         );
 }

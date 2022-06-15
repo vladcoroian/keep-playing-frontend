@@ -18,6 +18,7 @@ class FeedPage extends StatefulWidget {
 
 class _FeedPageState extends State<FeedPage> {
   List<Event> feedEvents = [];
+  int coachPK = 0;
 
   _retrieveFeedEvents() async {
     List<Event> events = await API.events.retrieveEvents(pending: true);
@@ -27,9 +28,18 @@ class _FeedPageState extends State<FeedPage> {
     });
   }
 
+  _retrieveCoachPK() async {
+    int pk = (await API.users.getCurrentUser()).pk;
+
+    setState(() {
+      coachPK = pk;
+    });
+  }
+
   @override
   void initState() {
     _retrieveFeedEvents();
+    _retrieveCoachPK();
     super.initState();
   }
 
@@ -48,6 +58,7 @@ class _FeedPageState extends State<FeedPage> {
                   events: feedEvents,
                   eventWidgetBuilder: (Event event) => _FeedEventWidget(
                         event: event,
+                        coachPK: coachPK,
                       ))),
         ));
   }
@@ -55,31 +66,41 @@ class _FeedPageState extends State<FeedPage> {
 
 class _FeedEventWidget extends StatelessWidget {
   final Event event;
+  final int coachPK;
 
-  const _FeedEventWidget({required this.event});
+  const _FeedEventWidget({required this.event, required this.coachPK});
 
   @override
   Widget build(BuildContext context) {
+    final Widget detailsButton = _DetailsButton(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return _EventDetailsDialog(event: event);
+            });
+      },
+    );
+
+    final Widget applyButton = _ApplyButton(
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return _AcceptJobDialog(event: event);
+            });
+      },
+    );
+
+    final Widget appliedButton = _AppliedButton(
+      onPressed: () {},
+    );
+
     return EventWidget(
-        event: event,
-        leftButton: _DetailsButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _EventDetailsDialog(event: event);
-                });
-          },
-        ),
-        rightButton: _TakeJobButton(
-          onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _AcceptJobDialog(event: event);
-                });
-          },
-        ));
+      event: event,
+      leftButton: detailsButton,
+      rightButton: event.offers.contains(coachPK) ? appliedButton : applyButton,
+    );
   }
 }
 
@@ -88,16 +109,25 @@ class _DetailsButton extends ColoredButton {
       : super(
           key: key,
           text: 'Details',
+          color: BUTTON_GRAY_COLOR,
+        );
+}
+
+class _ApplyButton extends ColoredButton {
+  const _ApplyButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Apply',
           color: APP_COLOR,
         );
 }
 
-class _TakeJobButton extends ColoredButton {
-  const _TakeJobButton({Key? key, required super.onPressed})
+class _AppliedButton extends ColoredButton {
+  const _AppliedButton({Key? key, required super.onPressed})
       : super(
           key: key,
-          text: 'Take Job',
-          color: APP_COLOR,
+          text: 'Applied',
+          color: APPLIED_BUTTON_COLOR,
         );
 }
 
@@ -110,11 +140,11 @@ class _CancelButton extends ColoredButton {
         );
 }
 
-class _AcceptButton extends ColoredButton {
-  const _AcceptButton({Key? key, required super.onPressed})
+class _SendOfferButton extends ColoredButton {
+  const _SendOfferButton({Key? key, required super.onPressed})
       : super(
           key: key,
-          text: 'Accept',
+          text: 'Send Offer',
           color: APP_COLOR,
         );
 }
@@ -143,7 +173,7 @@ class _AcceptJobDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget acceptButton = _AcceptButton(
+    final Widget sendOffer = _SendOfferButton(
         onPressed: () => {
               showDialog(
                   context: context,
@@ -152,7 +182,7 @@ class _AcceptJobDialog extends StatelessWidget {
                       title: 'Are you sure that you want to accept this job?',
                       onNoPressed: () => {Navigator.pop(context)},
                       onYesPressed: () {
-                        API.events.takeJob(event: event);
+                        API.events.applyToJob(event: event);
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
@@ -168,7 +198,7 @@ class _AcceptJobDialog extends StatelessWidget {
       lastWidget: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          acceptButton,
+          sendOffer,
           cancelButton,
         ],
       ),
@@ -179,6 +209,9 @@ class _AcceptJobDialog extends StatelessWidget {
 class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
   final Event event;
   final Widget lastWidget;
+
+  static const TextStyle _textStyleForTitle =
+      TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: APP_COLOR);
 
   const _DetailsAndAcceptJobsDialogBuilder(
       {required this.event, required this.lastWidget});
@@ -213,18 +246,6 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
             title: const Text('End Time', style: _textStyleForTitle),
             subtitle: Text(const DefaultMaterialLocalizations()
                 .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true))),
-        ListTile(
-            leading: const Icon(Icons.timer_outlined),
-            title: const Text('Flexible Start Time', style: _textStyleForTitle),
-            subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                event.flexibleStartTime,
-                alwaysUse24HourFormat: true))),
-        ListTile(
-            leading: const Icon(Icons.timer_outlined),
-            title: const Text('Flexible End Time', style: _textStyleForTitle),
-            subtitle: Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                event.flexibleEndTime,
-                alwaysUse24HourFormat: true))),
         const Divider(),
         ListTile(
             leading: const Icon(Icons.details),
@@ -235,7 +256,4 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
       ],
     );
   }
-
-  static const TextStyle _textStyleForTitle =
-      TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: APP_COLOR);
 }

@@ -5,13 +5,13 @@ import 'buttons.dart';
 
 class OneOptionDialog extends StatelessWidget {
   final String title;
-  final String text;
+  final Widget body;
   final Widget button;
 
   const OneOptionDialog(
       {super.key,
       required this.title,
-      required this.text,
+      required this.body,
       required this.button});
 
   @override
@@ -20,7 +20,7 @@ class OneOptionDialog extends StatelessWidget {
       contentPadding: const EdgeInsets.all(DIALOG_PADDING),
       title: Center(child: Text(title)),
       children: <Widget>[
-        Container(padding: const EdgeInsets.all(10), child: Text(text)),
+        body,
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [button],
@@ -97,7 +97,7 @@ class _NoButton extends ColoredButton {
       : super(
           key: key,
           text: 'No',
-          color: DEFAULT_BUTTON_GRAY_COLOR,
+          color: BUTTON_GRAY_COLOR,
         );
 }
 

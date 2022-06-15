@@ -3,30 +3,36 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user.g.dart';
 
 class User {
+  final int pk;
   final String username;
   final String email;
   final String firstName;
   final String lastName;
   final String location;
 
-  User._(
-      {required this.username,
-      required this.email,
-      required this.firstName,
-      required this.lastName,
-      required this.location});
+  User._({
+    required this.pk,
+    required this.username,
+    required this.email,
+    required this.firstName,
+    required this.lastName,
+    required this.location,
+  });
 
   User.fromModel({required UserModel userModel})
       : this._(
-            username: userModel.username,
-            email: userModel.email,
-            firstName: userModel.first_name,
-            lastName: userModel.last_name,
-            location: userModel.location);
+          pk: userModel.pk,
+          username: userModel.username,
+          email: userModel.email,
+          firstName: userModel.first_name,
+          lastName: userModel.last_name,
+          location: userModel.location,
+        );
 }
 
 @JsonSerializable()
 class UserModel {
+  final int pk;
   final String username;
   final String email;
   final String first_name;
@@ -34,6 +40,7 @@ class UserModel {
   final String location;
 
   UserModel({
+    required this.pk,
     required this.username,
     required this.email,
     required this.first_name,

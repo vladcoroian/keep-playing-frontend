@@ -70,7 +70,7 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
           if (response.statusCode == 200) {
             final body = jsonDecode(response.body);
             String token =
-                await _saveLoginTokenToSharedPreferences(body['token']);
+                await _saveLoginInfoToSharedPreferences(body['token']);
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const CoachHomePage()),
@@ -113,7 +113,7 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
     );
   }
 
-  Future<String> _saveLoginTokenToSharedPreferences(String token) async {
+  Future<String> _saveLoginInfoToSharedPreferences(String token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', token);
     return prefs.getString('token') ?? '';

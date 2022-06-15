@@ -21,6 +21,7 @@ EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
       price: json['price'] as int,
       coach: json['coach'] as bool,
       coach_user: json['coach_user'] as int?,
+      offers: (json['offers'] as List<dynamic>).map((e) => e as int).toList(),
     );
 
 Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
@@ -39,4 +40,5 @@ Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
       'price': instance.price,
       'coach': instance.coach,
       'coach_user': instance.coach_user,
+      'offers': instance.offers,
     };

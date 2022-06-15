@@ -108,18 +108,52 @@ class _ManageEventPageState extends State<ManageEventPage> {
           subtitle: Text(coachEmail),
         ));
 
-    // Form Widgets
-
     final Widget nameForm = ListTile(
         title: TextFormField(
-      initialValue: _name,
-      readOnly: false,
-      decoration: const InputDecoration(
-        icon: Icon(Icons.sports_soccer),
-        hintText: 'Enter the name',
-        labelText: 'Name',
-      ),
-    ));
+            initialValue: _name,
+            readOnly: false,
+            decoration: const InputDecoration(
+              icon: Icon(Icons.title),
+              hintText: 'Enter the name',
+              labelText: 'Name',
+            ),
+            onChanged: (text) {
+              _name = text;
+            }));
+
+    final Widget sportForm = ListTile(
+        leading: const Icon(Icons.sports_soccer),
+        title: DropdownButton<String>(
+            value: selectedSport,
+            items: SPORTS.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              _sport = newValue!;
+              setState(() {
+                selectedSport = _sport;
+              });
+            }));
+
+    final Widget roleForm = ListTile(
+        leading: const Icon(Icons.sports),
+        title: DropdownButton<String>(
+            value: selectedRole,
+            items: ROLES.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? newValue) {
+              _role = newValue!;
+              setState(() {
+                selectedRole = _role;
+              });
+            }));
 
     final Widget locationForm = ListTile(
         title: TextFormField(
@@ -219,38 +253,6 @@ class _ManageEventPageState extends State<ManageEventPage> {
               _price = int.parse(text);
             }));
 
-    final Widget sportForm = DropdownButton<String>(
-        value: selectedSport,
-        items: SPORTS.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (String? newValue) {
-          _sport = newValue!;
-          setState(() {
-            selectedSport = _sport;
-          });
-        });
-
-    final Widget roleForm = DropdownButton<String>(
-        value: selectedRole,
-        items: ROLES.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (String? newValue) {
-          _role = newValue!;
-          setState(() {
-            selectedRole = _role;
-          });
-        });
-
-    // Submission Widgets
-
     final Widget cancelEventButton = _CancelEventButton(
       onPressed: () {
         showDialog(
@@ -301,14 +303,14 @@ class _ManageEventPageState extends State<ManageEventPage> {
               ? const SizedBox(height: 0, width: 0)
               : coachInformation,
           nameForm,
+          sportForm,
+          roleForm,
           locationForm,
           detailsForm,
           dateForm,
           startTimeForm,
           endTimeForm,
           priceForm,
-          sportForm,
-          roleForm,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [cancelEventButton, saveEventButton],
