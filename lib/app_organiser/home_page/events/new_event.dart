@@ -19,12 +19,18 @@ class _NewEventPageState extends State<NewEventPage> {
   String _name = '';
   String _location = '';
   String _details = '';
+  String _sport = '';
+  String _role = '';
   DateTime _date = DateTime.now();
   TimeOfDay _startTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay _flexibleStartTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay _flexibleEndTime = const TimeOfDay(hour: 0, minute: 0);
   int _price = 0;
+
+  String? selectedSport = null;
+  String? selectedRole = null;
+
 
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
@@ -49,6 +55,9 @@ class _NewEventPageState extends State<NewEventPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // Form Widgets
+
     final Widget nameForm = ListTile(
         title: TextFormField(
             decoration: const InputDecoration(
@@ -154,12 +163,50 @@ class _NewEventPageState extends State<NewEventPage> {
               _price = int.parse(text);
             }));
 
+    final Widget sportForm = DropdownButton<String>(
+        value: selectedSport,
+        items: SPORTS.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+               value: value,
+                child: Text(value),
+             );
+        }).toList(),
+        hint: Text('Enter sport'),
+        onChanged: (String? newValue) {
+          _sport = newValue!;
+          setState(() {
+             selectedSport = _sport;
+          });
+        }
+    );
+
+    final Widget roleForm = DropdownButton<String>(
+        value: selectedRole,
+        items: ROLES.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        hint: Text('Enter role'),
+        onChanged: (String? newValue) {
+          _role = newValue!;
+          setState(() {
+            selectedRole = _role;
+          });
+        }
+    );
+
+    // Form Submission Widget
+
     final Widget submitButton = _SubmitButton(
       onPressed: () {
         NewEvent newEvent = NewEvent(
             name: _name,
             location: _location,
             details: _details,
+            sport: _sport,
+            role: _role,
             date: _date,
             startTime: _startTime,
             endTime: _endTime,
@@ -185,6 +232,8 @@ class _NewEventPageState extends State<NewEventPage> {
           startTimeForm,
           endTimeForm,
           priceForm,
+          sportForm,
+          roleForm,
           Center(child: submitButton),
         ]),
       ),

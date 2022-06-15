@@ -35,8 +35,8 @@ class _ProfilePageState extends State<ProfilePage> {
             readOnly: true,
             decoration: const InputDecoration(
               icon: Icon(Icons.account_box),
-              hintText: 'Enter your first name',
-              labelText: 'First Name',
+              hintText: 'Enter your username',
+              labelText: 'Username',
             )));
 
     final Widget emailForm = ListTile(
@@ -83,7 +83,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final Widget phoneNumberForm = ListTile(
         title: InternationalPhoneNumberInput(
-            initialValue: PhoneNumber(isoCode: 'GB'),
+            initialValue: PhoneNumber(
+                isoCode: 'GB',
+                phoneNumber: '07951273003'
+            ),
             hintText: 'Phone Number',
             errorMessage: 'Invalid Phone Number',
             onInputChanged: (PhoneNumber number) {},

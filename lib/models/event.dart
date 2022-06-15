@@ -6,9 +6,12 @@ part 'event.g.dart';
 
 class Event {
   final int pk;
+
   final String name;
   final String location;
   final String details;
+  final String sport;
+  final String role;
 
   final DateTime date;
   final TimeOfDay startTime;
@@ -26,6 +29,8 @@ class Event {
       required this.name,
       required this.location,
       required this.details,
+      required this.sport,
+      required this.role,
       required this.date,
       required this.startTime,
       required this.endTime,
@@ -41,6 +46,8 @@ class Event {
           name: eventModel.name,
           location: eventModel.location,
           details: eventModel.details,
+          sport: eventModel.sport,
+          role: eventModel.role,
           date: eventModel.getDate(),
           startTime: eventModel.getTimeOfDayFromString(eventModel.start_time),
           endTime: eventModel.getTimeOfDayFromString(eventModel.end_time),
@@ -64,6 +71,8 @@ class EventModel {
   final String name;
   final String location;
   final String details;
+  final String sport;
+  final String role;
 
   final String date;
   final String start_time;
@@ -81,6 +90,8 @@ class EventModel {
       required this.name,
       required this.location,
       required this.details,
+      required this.sport,
+      required this.role,
       required this.date,
       required this.start_time,
       required this.end_time,
@@ -112,6 +123,8 @@ class NewEvent {
   final String name;
   final String location;
   final String details;
+  final String sport;
+  final String role;
 
   final DateTime date;
   final TimeOfDay startTime;
@@ -126,6 +139,8 @@ class NewEvent {
     required this.name,
     required this.location,
     required this.details,
+    required this.sport,
+    required this.role,
     required this.date,
     required this.startTime,
     required this.endTime,
@@ -140,6 +155,8 @@ class NewEvent {
           name: event.name,
           location: event.location,
           details: event.details,
+          sport: event.sport,
+          role: event.role,
           date: event.date,
           startTime: event.startTime,
           endTime: event.endTime,
@@ -153,6 +170,8 @@ class NewEvent {
         "name": name,
         'location': location,
         'details': details,
+        'sport': sport,
+        'role': role,
         'date': DateFormat('yyyy-MM-dd').format(date),
         'start_time': const DefaultMaterialLocalizations()
             .formatTimeOfDay(startTime, alwaysUse24HourFormat: true),
