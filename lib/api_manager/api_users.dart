@@ -5,7 +5,7 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _ApiLinks {
-  static const String PREFIX = "https://keep-playing.herokuapp.com/";
+  static const String PREFIX = "https://keep-playing-staging.herokuapp.com/";
   static const String COACH = "${PREFIX}coach/";
 
   static Uri loginLink() {
@@ -17,7 +17,7 @@ class _ApiLinks {
   }
 
   static Uri coachInformationLink({required int pk}) {
-    return Uri.parse("${COACH}$pk");
+    return Uri.parse("$COACH$pk");
   }
 }
 

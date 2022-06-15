@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/event.dart';
+import 'package:keep_playing_frontend/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class _ApiLinks {
-  static const String PREFIX = "https://keep-playing.herokuapp.com/";
+  static const String PREFIX = "https://keep-playing-staging.herokuapp.com/";
   static const String EVENTS = "${PREFIX}events/";
-  static const String COACH = "${PREFIX}coach/";
 
   static Uri eventsLink() {
     return Uri.parse(EVENTS);
@@ -26,16 +26,17 @@ class _ApiLinks {
     return Uri.parse("$EVENTS$pk/");
   }
 
-  static Uri takeJobLink(int pk) {
-    return Uri.parse("$EVENTS$pk/coach");
+  static Uri applyToJobLink(int pk) {
+    return Uri.parse("$EVENTS$pk/apply");
   }
 
   static Uri cancelJobLink(int pk) {
     return Uri.parse("$EVENTS$pk/coach");
   }
 
-  static Uri retrieveCoachLink(int pk) {
-    return Uri.parse("$COACH$pk/");
+  static Uri acceptOfferFromCoach(
+      {required int eventPK, required int coachPK}) {
+    return Uri.parse("$EVENTS$eventPK/accept/$coachPK/");
   }
 }
 
@@ -73,11 +74,11 @@ class ApiEvents {
     client.delete(_ApiLinks.deleteEventLink(event.pk));
   }
 
-  Future<Response> takeJob({required Event event}) async {
+  Future<Response> applyToJob({required Event event}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
 
-    return client.patch(_ApiLinks.takeJobLink(event.pk),
+    return client.patch(_ApiLinks.applyToJobLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
@@ -95,6 +96,16 @@ class ApiEvents {
           'Authorization': 'Token $token',
         },
         body: jsonEncode(<String, dynamic>{"coach": false}));
+  }
+
+  Future<Response> acceptCoach(
+      {required Event event, required User coach}) async {
+    return client.patch(
+        _ApiLinks.acceptOfferFromCoach(eventPK: event.pk, coachPK: coach.pk),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{"coach": true}));
   }
 
   bool _checkEvent(

@@ -24,21 +24,25 @@ class Event {
 
   final int? coachPK;
 
-  Event._(
-      {required this.pk,
-      required this.name,
-      required this.location,
-      required this.details,
-      required this.sport,
-      required this.role,
-      required this.date,
-      required this.startTime,
-      required this.endTime,
-      required this.flexibleStartTime,
-      required this.flexibleEndTime,
-      required this.price,
-      required this.coach,
-      this.coachPK});
+  final List<int> offers;
+
+  Event._({
+    required this.pk,
+    required this.name,
+    required this.location,
+    required this.details,
+    required this.sport,
+    required this.role,
+    required this.date,
+    required this.startTime,
+    required this.endTime,
+    required this.flexibleStartTime,
+    required this.flexibleEndTime,
+    required this.price,
+    required this.coach,
+    this.coachPK,
+    required this.offers,
+  });
 
   Event({required EventModel eventModel})
       : this._(
@@ -58,6 +62,7 @@ class Event {
           price: eventModel.price,
           coach: eventModel.coach,
           coachPK: eventModel.coach_user,
+          offers: eventModel.offers,
         );
 
   String getPriceInPounds() {
@@ -85,21 +90,25 @@ class EventModel {
 
   final int? coach_user;
 
-  EventModel(
-      {required this.pk,
-      required this.name,
-      required this.location,
-      required this.details,
-      required this.sport,
-      required this.role,
-      required this.date,
-      required this.start_time,
-      required this.end_time,
-      required this.flexible_start_time,
-      required this.flexible_end_time,
-      required this.price,
-      required this.coach,
-      this.coach_user});
+  final List<int> offers;
+
+  EventModel({
+    required this.pk,
+    required this.name,
+    required this.location,
+    required this.details,
+    required this.sport,
+    required this.role,
+    required this.date,
+    required this.start_time,
+    required this.end_time,
+    required this.flexible_start_time,
+    required this.flexible_end_time,
+    required this.price,
+    required this.coach,
+    this.coach_user,
+    required this.offers,
+  });
 
   DateTime getDate() {
     final splitDate = date.split('-');

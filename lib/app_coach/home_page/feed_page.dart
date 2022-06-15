@@ -71,7 +71,7 @@ class _FeedEventWidget extends StatelessWidget {
                 });
           },
         ),
-        rightButton: _TakeJobButton(
+        rightButton: _ApplyButton(
           onPressed: () {
             showDialog(
                 context: context,
@@ -88,17 +88,26 @@ class _DetailsButton extends ColoredButton {
       : super(
           key: key,
           text: 'Details',
+          color: BUTTON_GRAY_COLOR,
+        );
+}
+
+class _ApplyButton extends ColoredButton {
+  const _ApplyButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Apply',
           color: APP_COLOR,
         );
 }
 
-class _TakeJobButton extends ColoredButton {
-  const _TakeJobButton({Key? key, required super.onPressed})
+class _UnApplyButton extends ColoredButton {
+  const _UnApplyButton({Key? key, required super.onPressed})
       : super(
-          key: key,
-          text: 'Take Job',
-          color: APP_COLOR,
-        );
+    key: key,
+    text: 'UnApply',
+    color: APP_COLOR,
+  );
 }
 
 class _CancelButton extends ColoredButton {
@@ -110,11 +119,11 @@ class _CancelButton extends ColoredButton {
         );
 }
 
-class _AcceptButton extends ColoredButton {
-  const _AcceptButton({Key? key, required super.onPressed})
+class _SendOfferButton extends ColoredButton {
+  const _SendOfferButton({Key? key, required super.onPressed})
       : super(
           key: key,
-          text: 'Accept',
+          text: 'Send Offer',
           color: APP_COLOR,
         );
 }
@@ -143,7 +152,7 @@ class _AcceptJobDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget acceptButton = _AcceptButton(
+    final Widget acceptButton = _SendOfferButton(
         onPressed: () => {
               showDialog(
                   context: context,
@@ -152,7 +161,7 @@ class _AcceptJobDialog extends StatelessWidget {
                       title: 'Are you sure that you want to accept this job?',
                       onNoPressed: () => {Navigator.pop(context)},
                       onYesPressed: () {
-                        API.events.takeJob(event: event);
+                        API.events.applyToJob(event: event);
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
@@ -179,6 +188,9 @@ class _AcceptJobDialog extends StatelessWidget {
 class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
   final Event event;
   final Widget lastWidget;
+
+  static const TextStyle _textStyleForTitle =
+      TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: APP_COLOR);
 
   const _DetailsAndAcceptJobsDialogBuilder(
       {required this.event, required this.lastWidget});
@@ -235,7 +247,4 @@ class _DetailsAndAcceptJobsDialogBuilder extends StatelessWidget {
       ],
     );
   }
-
-  static const TextStyle _textStyleForTitle =
-      TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: APP_COLOR);
 }

@@ -16,11 +16,11 @@ class ColoredButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(DEFAULT_BUTTON_PADDING),
+        padding: const EdgeInsets.all(BUTTON_PADDING),
         child: ElevatedButton(
             style: ElevatedButton.styleFrom(
                 primary: color,
-                textStyle: const TextStyle(fontSize: DEFAULT_BUTTON_FONT_SIZE)),
+                textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
             onPressed: onPressed,
             child: Text(text)));
   }
