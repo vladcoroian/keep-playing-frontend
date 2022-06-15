@@ -10,9 +10,9 @@ class OneOptionDialog extends StatelessWidget {
 
   const OneOptionDialog(
       {super.key,
-        required this.title,
-        required this.text,
-        required this.button});
+      required this.title,
+      required this.text,
+      required this.button});
 
   @override
   Widget build(BuildContext context) {

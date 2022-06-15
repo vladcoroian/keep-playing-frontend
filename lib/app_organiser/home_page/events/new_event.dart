@@ -31,7 +31,6 @@ class _NewEventPageState extends State<NewEventPage> {
   String? selectedSport = null;
   String? selectedRole = null;
 
-
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
 
@@ -55,7 +54,6 @@ class _NewEventPageState extends State<NewEventPage> {
 
   @override
   Widget build(BuildContext context) {
-
     // Form Widgets
 
     final Widget nameForm = ListTile(
@@ -166,19 +164,18 @@ class _NewEventPageState extends State<NewEventPage> {
     final Widget sportForm = DropdownButton<String>(
         value: selectedSport,
         items: SPORTS.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-               value: value,
-                child: Text(value),
-             );
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
         }).toList(),
         hint: Text('Enter sport'),
         onChanged: (String? newValue) {
           _sport = newValue!;
           setState(() {
-             selectedSport = _sport;
+            selectedSport = _sport;
           });
-        }
-    );
+        });
 
     final Widget roleForm = DropdownButton<String>(
         value: selectedRole,
@@ -194,8 +191,7 @@ class _NewEventPageState extends State<NewEventPage> {
           setState(() {
             selectedRole = _role;
           });
-        }
-    );
+        });
 
     // Form Submission Widget
 

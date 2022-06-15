@@ -232,8 +232,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
           setState(() {
             selectedSport = _sport;
           });
-        }
-    );
+        });
 
     final Widget roleForm = DropdownButton<String>(
         value: selectedRole,
@@ -248,8 +247,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
           setState(() {
             selectedRole = _role;
           });
-        }
-    );
+        });
 
     // Submission Widgets
 

@@ -83,10 +83,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final Widget phoneNumberForm = ListTile(
         title: InternationalPhoneNumberInput(
-            initialValue: PhoneNumber(
-                isoCode: 'GB',
-                phoneNumber: '07951273003'
-            ),
+            initialValue:
+                PhoneNumber(isoCode: 'GB', phoneNumber: '07951273003'),
             hintText: 'Phone Number',
             errorMessage: 'Invalid Phone Number',
             onInputChanged: (PhoneNumber number) {},

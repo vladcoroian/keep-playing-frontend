@@ -97,37 +97,44 @@ class ApiEvents {
         body: jsonEncode(<String, dynamic>{"coach": false}));
   }
 
-  Future<List<Event>> retrieveEvents() async {
+  bool _checkEvent(
+      {required Event event, bool? pending, bool? sameDay, DateTime? day}) {
+    bool result = true;
+    switch (pending) {
+      case true:
+        {
+          result = result && !event.coach;
+        }
+        break;
+      case false:
+        {
+          result = result && event.coach;
+        }
+        break;
+      case null:
+    }
+    switch (sameDay) {
+      case true:
+        {
+          result = result && isSameDay(event.date, day);
+        }
+        break;
+      case false:
+      case null:
+    }
+    return result;
+  }
+
+  Future<List<Event>> retrieveEvents(
+      {bool? pending, bool? sameDay, DateTime? day}) async {
     List<Event> events = [];
     List response =
         json.decode((await client.get(_ApiLinks.eventsLink())).body);
     for (var element in response) {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }
-    return events;
-  }
-
-  Future<List<Event>> retrievePendingEvents() async {
-    List<Event> events = await retrieveEvents();
-    events.retainWhere((event) => !event.coach);
-    return events;
-  }
-
-  Future<List<Event>> retrievePendingEventsForThisDay(DateTime day) async {
-    List<Event> events = await retrieveEvents();
-    events.retainWhere((event) => !event.coach && isSameDay(event.date, day));
-    return events;
-  }
-
-  Future<List<Event>> retrieveScheduledEvents() async {
-    List<Event> events = await retrieveEvents();
-    events.retainWhere((event) => event.coach);
-    return events;
-  }
-
-  retrieveScheduledEventsForDay(DateTime day) async {
-    List<Event> events = await retrieveEvents();
-    events.retainWhere((event) => event.coach && isSameDay(event.date, day));
+    events.retainWhere((event) => _checkEvent(
+        event: event, pending: pending, sameDay: sameDay, day: day));
     return events;
   }
 }

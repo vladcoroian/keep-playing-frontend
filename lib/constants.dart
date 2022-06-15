@@ -16,13 +16,13 @@ const MaterialAccentColor BOTTOM_NAVIGATION_BAR_COLOR = Colors.lightBlueAccent;
 
 const MaterialColor CANCEL_BUTTON_COLOR = Colors.red;
 
-const List<String> SPORTS = ['Futsal',
-                            'Muay Thai',
-                            'Water Polo',
-                            'Basketball',
-                            'Cricket',
-                            'Football',
-                            'Swimming'];
-const List<String> ROLES = ['Coach',
-                            'Referee',
-                            'Sideline Referee'];
+const List<String> SPORTS = [
+  'Futsal',
+  'Muay Thai',
+  'Water Polo',
+  'Basketball',
+  'Cricket',
+  'Football',
+  'Swimming'
+];
+const List<String> ROLES = ['Coach', 'Referee', 'Sideline Referee'];

@@ -20,7 +20,7 @@ class _FeedPageState extends State<FeedPage> {
   List<Event> feedEvents = [];
 
   _retrieveFeedEvents() async {
-    List<Event> events = await API.events.retrievePendingEvents();
+    List<Event> events = await API.events.retrieveEvents(pending: true);
 
     setState(() {
       feedEvents = events;
