@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'buttons.dart';
 
+const double DIALOG_PADDING = 16;
+
 class OneOptionDialog extends StatelessWidget {
   final String title;
   final List<Widget> children;

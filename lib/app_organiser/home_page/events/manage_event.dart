@@ -8,6 +8,7 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/user_widgets.dart';
 
 class ManageEventPage extends StatefulWidget {
   final Event event;
@@ -99,14 +100,21 @@ class _ManageEventPageState extends State<ManageEventPage> {
     final Widget coachInformation = Card(
         margin: const EdgeInsets.all(DEFAULT_PADDING),
         child: ListTile(
-          leading: const Text(
-            "Coach\nInformation",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: APP_COLOR),
-          ),
-          title: Text(coachName),
-          subtitle: Text(coachEmail),
-        ));
+            leading: const Text(
+              "Coach\nInformation",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: APP_COLOR),
+            ),
+            title: Text(coachName),
+            subtitle: Text(coachEmail),
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => UserDetailsDialog(
+                        user: _sessionCoach!,
+                        widgetsAtTheEnd: [],
+                      ));
+            }));
 
     final Widget nameForm = ListTile(
         title: TextFormField(

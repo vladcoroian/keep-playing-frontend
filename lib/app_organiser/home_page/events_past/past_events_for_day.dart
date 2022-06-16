@@ -9,8 +9,7 @@ import 'past_events_widget.dart';
 class PastEventsForDayPage extends StatefulWidget {
   final DateTime day;
 
-  const PastEventsForDayPage({Key? key, required this.day})
-      : super(key: key);
+  const PastEventsForDayPage({Key? key, required this.day}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PastEventsForDayState();
@@ -26,14 +25,12 @@ class _PastEventsForDayState extends State<PastEventsForDayPage> {
   }
 
   _retrievePastEventsForThisDay() async {
-    List<Event> retrievedEvents = (await API.events
-        .retrieveEventsBefore());
+    List<Event> retrievedEvents = (await API.events.retrieveEventsBefore());
 
     retrievedEvents.retainWhere((element) =>
-      widget.day.day == element.date.day
-          && widget.day.year == element.date.year
-          && widget.day.month == element.date.month
-    );
+        widget.day.day == element.date.day &&
+        widget.day.year == element.date.year &&
+        widget.day.month == element.date.month);
 
     setState(() {
       pastEventsForDayPage = retrievedEvents;
@@ -44,8 +41,8 @@ class _PastEventsForDayState extends State<PastEventsForDayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-            'Past Events for ${DateFormat('dd MMMM').format(widget.day)}'),
+        title:
+            Text('Past Events for ${DateFormat('dd MMMM').format(widget.day)}'),
       ),
       body: RefreshIndicator(
           onRefresh: () async {

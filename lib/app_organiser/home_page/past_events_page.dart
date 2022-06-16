@@ -6,8 +6,8 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import 'events/new_event.dart';
-import 'events_past/past_events_widget.dart';
 import 'events_past/past_events_for_day.dart';
+import 'events_past/past_events_widget.dart';
 import 'new_job_button.dart';
 
 class PastEventsPage extends StatefulWidget {
@@ -36,16 +36,16 @@ class _PastEventsPageState extends State<PastEventsPage> {
     _buttonOptions = [
       ListViewButton(
           onTap: () => {
-            setState(() {
-              _selectedIndex = 1;
-            })
-          }),
+                setState(() {
+                  _selectedIndex = 1;
+                })
+              }),
       CalendarViewButton(
           onTap: () => {
-            setState(() {
-              _selectedIndex = 0;
-            })
-          }),
+                setState(() {
+                  _selectedIndex = 0;
+                })
+              }),
     ];
     _retrievePastEvents();
 
@@ -67,8 +67,8 @@ class _PastEventsPageState extends State<PastEventsPage> {
     final Widget listViewOfEvents = ListViewOfEvents(
         events: pastEvents,
         eventWidgetBuilder: (Event event) => PastEventWidget(
-          event: event,
-        ));
+              event: event,
+            ));
 
     final Widget newJobButton = NewJobButton(
       context: context,
@@ -77,17 +77,17 @@ class _PastEventsPageState extends State<PastEventsPage> {
           context,
           MaterialPageRoute(builder: (context) => const NewEventPage()),
         ).then((value) => {
-          if (value != null)
-            {
-              setState(() {
-                final body = jsonDecode(value.body);
-                body["price"] = int.parse(body["price"]);
-                body["coach"] = body["coach"].toLowerCase() == 'true';
-                // pastEvents
-                //     .add(Event(eventModel: EventModel.fromJson(body)));
-              })
-            }
-        })
+              if (value != null)
+                {
+                  setState(() {
+                    final body = jsonDecode(value.body);
+                    body["price"] = int.parse(body["price"]);
+                    body["coach"] = body["coach"].toLowerCase() == 'true';
+                    // pastEvents
+                    //     .add(Event(eventModel: EventModel.fromJson(body)));
+                  })
+                }
+            })
       },
     );
 

@@ -51,7 +51,7 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
                 builder: (BuildContext context) {
                   return _OffersDialog(
                     event: widget.event,
-                    button: _CancelButton(
+                    button: CancelButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -61,7 +61,7 @@ class _PendingEventWidgetState extends State<PendingEventWidget> {
                 });
           },
         ),
-        rightButton: _ManageButton(
+        rightButton: ManageButton(
           onPressed: () {
             Navigator.push(
               context,
@@ -114,15 +114,6 @@ class _OffersButton extends ColoredButton {
         );
 }
 
-class _ManageButton extends ColoredButton {
-  const _ManageButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Manage',
-          color: APP_COLOR,
-        );
-}
-
 class _OffersDialog extends OneOptionDialog {
   final Event event;
 
@@ -134,15 +125,6 @@ class _OffersDialog extends OneOptionDialog {
       : super(
           key: key,
           title: 'Current Offers',
-        );
-}
-
-class _CancelButton extends ColoredButton {
-  const _CancelButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel',
-          color: CANCEL_BUTTON_COLOR,
         );
 }
 
