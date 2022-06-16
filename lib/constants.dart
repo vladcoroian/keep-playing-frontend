@@ -17,4 +17,8 @@ const List<String> SPORTS = [
   'Football',
   'Swimming'
 ];
-const List<String> ROLES = ['Coach', 'Referee', 'Sideline Referee'];
+const List<String> ROLES = [
+  'Coach',
+  'Referee',
+  'Sideline Referee',
+];
