@@ -4,8 +4,6 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
-import '../events/manage_event.dart';
-
 class PastEventWidget extends StatelessWidget {
   final Event event;
 
@@ -16,23 +14,39 @@ class PastEventWidget extends StatelessWidget {
     return EventCard(
         event: event,
         leftButton: const SizedBox(width: 0, height: 0),
-        rightButton: _ManageButton(
+        rightButton: _DetailsButton(
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ManageEventPage(event: event)),
+                  builder: (context) => EventDetailsDialog(
+                        event: event,
+                        widgetsAtTheEnd: [
+                          _CancelButton(onPressed: () {
+                            Navigator.pop(context);
+                          })
+                        ],
+                      )),
             );
           },
         ));
   }
 }
 
-class _ManageButton extends ColoredButton {
-  const _ManageButton({Key? key, required super.onPressed})
+class _DetailsButton extends ColoredButton {
+  const _DetailsButton({Key? key, required super.onPressed})
       : super(
-    key: key,
-    text: 'Manage',
-    color: APP_COLOR,
-  );
+          key: key,
+          text: 'Details',
+          color: DETAILS_BUTTON_COLOR,
+        );
+}
+
+class _CancelButton extends ColoredButton {
+  const _CancelButton({Key? key, required super.onPressed})
+      : super(
+          key: key,
+          text: 'Cancel',
+          color: CANCEL_BUTTON_COLOR,
+        );
 }

@@ -108,6 +108,6 @@ class _DetailsButton extends ColoredButton {
       : super(
           key: key,
           text: 'Details',
-          color: BUTTON_GRAY_COLOR,
+          color: DETAILS_BUTTON_COLOR,
         );
 }

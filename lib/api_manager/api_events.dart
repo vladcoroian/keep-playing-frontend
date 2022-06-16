@@ -6,9 +6,10 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'api.dart';
+
 class _ApiLinks {
-  static const String PREFIX = "https://keep-playing.herokuapp.com/";
-  static const String EVENTS = "${PREFIX}events/";
+  static const String EVENTS = "${API.PREFIX}events/";
 
   static Uri eventsLink() {
     return Uri.parse(EVENTS);
@@ -45,27 +46,19 @@ class ApiEvents {
 
   ApiEvents({required this.client});
 
-  Future<Response> addNewEvent({required NewEvent newEvent}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token') ?? '';
-
+  Future<Response> addNewEvent({required NewEvent newEvent}) {
     return client.post(_ApiLinks.addEventLink(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Token $token',
         },
         body: jsonEncode(newEvent.toJson()));
   }
 
   Future<Response> changeEvent(
-      {required Event event, required NewEvent newEvent}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token') ?? '';
-
+      {required Event event, required NewEvent newEvent}) {
     return client.patch(_ApiLinks.updateEventLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Token $token',
         },
         body: jsonEncode(newEvent.toJson()));
   }
@@ -74,11 +67,18 @@ class ApiEvents {
     client.delete(_ApiLinks.deleteEventLink(event.pk));
   }
 
+  Future<Response> acceptCoach({required Event event, required User coach}) {
+    return client.patch(
+        _ApiLinks.acceptOfferFromCoach(eventPK: event.pk, coachPK: coach.pk),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{"coach": true}));
+  }
+
   Future<Response> applyToJob({required Event event}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
-
-    print(_ApiLinks.applyToJobLink(event.pk));
 
     return client.patch(_ApiLinks.applyToJobLink(event.pk),
         headers: <String, String>{
@@ -98,16 +98,6 @@ class ApiEvents {
           'Authorization': 'Token $token',
         },
         body: jsonEncode(<String, dynamic>{"coach": false}));
-  }
-
-  Future<Response> acceptCoach(
-      {required Event event, required User coach}) async {
-    return client.patch(
-        _ApiLinks.acceptOfferFromCoach(eventPK: event.pk, coachPK: coach.pk),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, dynamic>{"coach": true}));
   }
 
   bool _checkEvent(
@@ -146,22 +136,22 @@ class ApiEvents {
     for (var element in response) {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }
-    events.retainWhere((event) => _checkEvent(
-        event: event, pending: pending, sameDay: sameDay, day: day)
-        && event.date.isAfter(DateTime.now().subtract(Duration(days: 1))));
+    events.retainWhere((event) =>
+        _checkEvent(
+            event: event, pending: pending, sameDay: sameDay, day: day) &&
+        event.date.isAfter(DateTime.now().subtract(const Duration(days: 1))));
     return events;
   }
 
-  Future<List<Event>> retrieveEventsBefore(
-      {DateTime? day}) async {
+  Future<List<Event>> retrieveEventsBefore({DateTime? day}) async {
     List<Event> events = [];
     List response =
-    json.decode((await client.get(_ApiLinks.eventsLink())).body);
+        json.decode((await client.get(_ApiLinks.eventsLink())).body);
     for (var element in response) {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }
-    events.retainWhere((event) =>
-      event.coach && event.date.isBefore(day ??= DateTime.now()));
+    events.retainWhere(
+        (event) => event.coach && event.date.isBefore(day ??= DateTime.now()));
     return events;
   }
 }
