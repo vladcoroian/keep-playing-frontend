@@ -4,16 +4,17 @@ import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'api.dart';
+
 class _ApiLinks {
-  static const String PREFIX = "https://keep-playing.herokuapp.com/";
-  static const String COACH = "${PREFIX}coach/";
+  static const String COACH = "${API.PREFIX}coach/";
 
   static Uri loginLink() {
-    return Uri.parse('${PREFIX}login/');
+    return Uri.parse('${API.PREFIX}login/');
   }
 
   static Uri userInformationLink() {
-    return Uri.parse("${PREFIX}user/");
+    return Uri.parse("${API.PREFIX}user/");
   }
 
   static Uri coachInformationLink({required int pk}) {

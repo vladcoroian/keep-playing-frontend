@@ -27,7 +27,7 @@ class _ScheduledEventsForDayState extends State<ScheduledEventsForDayPage> {
 
   _retrievePendingEventsForThisDay() async {
     List<Event> retrievedEvents = await API.events
-        .retrieveEvents(pending: false, sameDay: true, day: widget.day);
+        .retrieveFutureEventsWith(pending: false, sameDay: true, day: widget.day);
 
     setState(() {
       scheduledEventsForDayPage = retrievedEvents;

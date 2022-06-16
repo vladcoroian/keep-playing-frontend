@@ -24,7 +24,7 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   List<Event> scheduledEvents = [];
 
   _retrieveScheduledEvents() async {
-    List<Event> events = await API.events.retrieveEvents(pending: false);
+    List<Event> events = await API.events.retrieveFutureEventsWith(pending: false);
 
     setState(() {
       scheduledEvents = events;

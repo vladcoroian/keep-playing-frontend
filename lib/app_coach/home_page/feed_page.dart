@@ -20,7 +20,7 @@ class _FeedPageState extends State<FeedPage> {
   int coachPK = 0;
 
   _retrieveFeedEvents() async {
-    List<Event> events = await API.events.retrieveEvents(pending: true);
+    List<Event> events = await API.events.retrieveFutureEventsWith(pending: true);
 
     setState(() {
       feedEvents = events;
@@ -108,7 +108,7 @@ class _DetailsButton extends ColoredButton {
       : super(
           key: key,
           text: 'Details',
-          color: BUTTON_GRAY_COLOR,
+          color: DETAILS_BUTTON_COLOR,
         );
 }
 
