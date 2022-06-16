@@ -153,12 +153,18 @@ class _NewEventPageState extends State<NewEventPage> {
               final TimeOfDay? newTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay.now(),
+                initialEntryMode: TimePickerEntryMode.input,
               );
               if (newTime != null) {
                 setState(() {
                   _startTime = newTime;
                   startTimeInput.text = const DefaultMaterialLocalizations()
                       .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
+                  if (endTimeInput.text == '') {
+                    _endTime = newTime;
+                    endTimeInput.text = const DefaultMaterialLocalizations()
+                        .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
+                  }
                 });
               }
             }));
@@ -173,6 +179,7 @@ class _NewEventPageState extends State<NewEventPage> {
               final TimeOfDay? newTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay.now(),
+                initialEntryMode: TimePickerEntryMode.input,
               );
               if (newTime != null) {
                 setState(() {

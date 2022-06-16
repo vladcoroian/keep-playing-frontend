@@ -1,4 +1,5 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:add_2_calendar/add_2_calendar.dart' as add2calendar;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -10,9 +11,7 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'package:add_2_calendar/add_2_calendar.dart' as add2calendar;
 
 class ManageEventPage extends StatefulWidget {
   final sport_event.Event event;
@@ -118,7 +117,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
         launchEmail(
             toEmail: _sessionCoach!.email,
             subject:
-                '${widget.event.name}on: ${DateFormat.MMMEd().format(widget.event.date)}');
+                '${widget.event.name}, on: ${DateFormat.MMMEd().format(widget.event.date)}');
       },
       child: const Icon(Icons.email),
     );
@@ -132,8 +131,8 @@ class _ManageEventPageState extends State<ManageEventPage> {
           title: widget.event.name,
           description: widget.event.details,
           location: widget.event.location,
-          startDate: widget.event.date,
-          endDate: widget.event.date,
+          startDate: widget.event.getStartTimestamp(),
+          endDate: widget.event.getEndTimestamp(),
         );
         Add2Calendar.addEvent2Cal(event);
       },
@@ -261,6 +260,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
               final TimeOfDay? newTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay.now(),
+                initialEntryMode: TimePickerEntryMode.input,
               );
               if (newTime != null) {
                 setState(() {
@@ -281,6 +281,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
               final TimeOfDay? newTime = await showTimePicker(
                 context: context,
                 initialTime: TimeOfDay.now(),
+                initialEntryMode: TimePickerEntryMode.input,
               );
               if (newTime != null) {
                 setState(() {

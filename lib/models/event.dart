@@ -69,14 +69,28 @@ class Event {
     return NumberFormat.simpleCurrency(name: "GBP").format(price);
   }
 
-  bool isInThePast() {
+  DateTime getStartTimestamp() {
     return DateTime(
       date.year,
       date.month,
       date.day,
       startTime.hour,
       startTime.minute,
-    ).isBefore(DateTime.now());
+    );
+  }
+
+  DateTime getEndTimestamp() {
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      endTime.hour,
+      endTime.minute,
+    );
+  }
+
+  bool isInThePast() {
+    return getStartTimestamp().isBefore(DateTime.now());
   }
 
   bool hasCoach() {
