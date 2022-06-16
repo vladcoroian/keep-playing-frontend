@@ -122,22 +122,19 @@ class _ManageEventPageState extends State<ManageEventPage> {
       child: const Icon(Icons.email),
     );
 
-    final Widget addToCalendarButton = ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          primary: APP_COLOR,
-          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-      onPressed: () {
-        final add2calendar.Event event = add2calendar.Event(
-          title: widget.event.name,
-          description: widget.event.details,
-          location: widget.event.location,
-          startDate: widget.event.getStartTimestamp(),
-          endDate: widget.event.getEndTimestamp(),
-        );
-        Add2Calendar.addEvent2Cal(event);
-      },
-      child: const Text('Add to calendar'),
-    );
+    final Widget addToCalendarButton = ColoredButton(
+        text: 'Add to calendar',
+        color: APP_COLOR,
+        onPressed: () {
+          final add2calendar.Event event = add2calendar.Event(
+            title: widget.event.name,
+            description: widget.event.details,
+            location: widget.event.location,
+            startDate: widget.event.getStartTimestamp(),
+            endDate: widget.event.getEndTimestamp(),
+          );
+          Add2Calendar.addEvent2Cal(event);
+        });
 
     final Widget coachInformation = Card(
         margin: const EdgeInsets.all(DEFAULT_PADDING),
