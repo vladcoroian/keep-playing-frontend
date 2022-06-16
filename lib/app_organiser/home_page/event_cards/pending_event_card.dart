@@ -9,16 +9,16 @@ import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
 import '../events/manage_event.dart';
 
-class PendingEventWidget extends StatefulWidget {
+class PendingEventCard extends StatefulWidget {
   final Event event;
 
-  const PendingEventWidget({super.key, required this.event});
+  const PendingEventCard({super.key, required this.event});
 
   @override
-  State<PendingEventWidget> createState() => _PendingEventWidgetState();
+  State<PendingEventCard> createState() => _PendingEventCardState();
 }
 
-class _PendingEventWidgetState extends State<PendingEventWidget> {
+class _PendingEventCardState extends State<PendingEventCard> {
   List<User> offers = [];
 
   @override

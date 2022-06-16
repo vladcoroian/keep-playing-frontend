@@ -68,6 +68,20 @@ class Event {
   String getPriceInPounds() {
     return NumberFormat.simpleCurrency(name: "GBP").format(price);
   }
+
+  bool isInThePast() {
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      startTime.hour,
+      startTime.minute,
+    ).isBefore(DateTime.now());
+  }
+
+  bool hasCoach() {
+    return coach;
+  }
 }
 
 @JsonSerializable()

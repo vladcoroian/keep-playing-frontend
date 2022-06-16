@@ -21,7 +21,7 @@ class _FeedPageState extends State<FeedPage> {
 
   _retrieveFeedEvents() async {
     List<Event> events =
-        await API.events.retrieveFutureEventsWith(pending: true);
+        await API.events.retrieveEvents(past: false, pending: true);
 
     setState(() {
       feedEvents = events;

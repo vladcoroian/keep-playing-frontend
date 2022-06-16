@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:keep_playing_frontend/main.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/pending_events_page.dart';
+import 'package:keep_playing_frontend/app_organiser/home_page/events_pending_page.dart';
 
 void main() {
   testWidgets('Landing Page shows two buttons ', (WidgetTester tester) async {

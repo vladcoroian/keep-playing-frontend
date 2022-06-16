@@ -101,35 +101,37 @@ class ApiEvents {
   }
 
   bool _checkEvent(
-      {required Event event, bool? pending, bool? sameDay, DateTime? day}) {
+      {required Event event, bool? past, bool? pending, DateTime? onDay}) {
     bool result = true;
-    switch (pending) {
+    switch (past) {
       case true:
-        {
-          result = result && !event.coach;
-        }
+        result = result && event.isInThePast();
         break;
       case false:
-        {
-          result = result && event.coach;
-        }
+        result = result && !event.isInThePast();
         break;
       case null:
     }
-    switch (sameDay) {
+    switch (pending) {
       case true:
-        {
-          result = result && isSameDay(event.date, day);
-        }
+        result = result && !event.hasCoach();
         break;
       case false:
+        result = result && event.hasCoach();
+        break;
       case null:
+    }
+    switch (onDay) {
+      case null:
+        break;
+      default:
+        result = result && isSameDay(event.date, onDay!);
     }
     return result;
   }
 
-  Future<List<Event>> retrieveFutureEventsWith(
-      {bool? pending, bool? sameDay, DateTime? day}) async {
+  Future<List<Event>> retrieveEvents(
+      {bool? past, bool? pending, DateTime? onDay}) async {
     List<Event> events = [];
     List response =
         json.decode((await client.get(_ApiLinks.eventsLink())).body);
@@ -137,21 +139,7 @@ class ApiEvents {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }
     events.retainWhere((event) =>
-        _checkEvent(
-            event: event, pending: pending, sameDay: sameDay, day: day) &&
-        event.date.isAfter(DateTime.now().subtract(const Duration(days: 1))));
-    return events;
-  }
-
-  Future<List<Event>> retrieveEventsBefore({DateTime? day}) async {
-    List<Event> events = [];
-    List response =
-        json.decode((await client.get(_ApiLinks.eventsLink())).body);
-    for (var element in response) {
-      events.add(Event(eventModel: EventModel.fromJson(element)));
-    }
-    events.retainWhere(
-        (event) => event.coach && event.date.isBefore(day ??= DateTime.now()));
+        _checkEvent(event: event, past: past, pending: pending, onDay: onDay));
     return events;
   }
 }

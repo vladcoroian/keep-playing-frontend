@@ -19,7 +19,7 @@ class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
 
   _retrieveUpcomingJobs() async {
     List<Event> events =
-        await API.events.retrieveFutureEventsWith(pending: false);
+        await API.events.retrieveEvents(past: false, pending: false);
 
     setState(() {
       upcomingJobs = events;

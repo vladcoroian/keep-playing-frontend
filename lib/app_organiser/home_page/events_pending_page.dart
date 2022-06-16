@@ -6,9 +6,9 @@ import 'package:keep_playing_frontend/app_organiser/home_page/new_job_button.dar
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
+import 'event_cards/pending_event_card.dart';
 import 'events/new_event.dart';
-import 'events_pending/pending_events_for_day.dart';
-import 'events_pending/pending_events_widget.dart';
+import 'events_for_a_day/pending_events_for_day.dart';
 
 class PendingEventsPage extends StatefulWidget {
   const PendingEventsPage({Key? key}) : super(key: key);
@@ -19,13 +19,12 @@ class PendingEventsPage extends StatefulWidget {
 
 class _PendingEventsPageState extends State<PendingEventsPage> {
   int _selectedIndex = 0;
-  List<Widget> _buttonOptions = [];
 
   List<Event> pendingEvents = [];
 
   _retrievePendingEvents() async {
     List<Event> events =
-        await API.events.retrieveFutureEventsWith(pending: true);
+        await API.events.retrieveEvents(past: false, pending: true);
 
     setState(() {
       pendingEvents = events;
@@ -34,20 +33,6 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
 
   @override
   void initState() {
-    _buttonOptions = [
-      ListViewButton(
-          onTap: () => {
-                setState(() {
-                  _selectedIndex = 1;
-                })
-              }),
-      CalendarViewButton(
-          onTap: () => {
-                setState(() {
-                  _selectedIndex = 0;
-                })
-              }),
-    ];
     _retrievePendingEvents();
 
     super.initState();
@@ -55,21 +40,35 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget calendarViewOfEvents = CalendarViewOfEvents(
-      events: pendingEvents,
-      onDaySelected: (DateTime day) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PendingEventsForDayPage(day: day)));
-      },
-    );
+    final Widget appBarButton = _selectedIndex == 0
+        ? ListViewButton(
+            onTap: () => {
+                  setState(() {
+                    _selectedIndex = 1;
+                  })
+                })
+        : CalendarViewButton(
+            onTap: () => {
+                  setState(() {
+                    _selectedIndex = 0;
+                  })
+                });
 
-    final Widget listViewOfEvents = ListViewOfEvents(
-        events: pendingEvents,
-        eventWidgetBuilder: (Event event) => PendingEventWidget(
-              event: event,
-            ));
+    final Widget viewOfEvents = _selectedIndex == 0
+        ? CalendarViewOfEvents(
+            events: pendingEvents,
+            onDaySelected: (DateTime day) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PendingEventsForDayPage(day: day)));
+            },
+          )
+        : ListViewOfEvents(
+            events: pendingEvents,
+            eventWidgetBuilder: (Event event) => PendingEventCard(
+                  event: event,
+                ));
 
     final Widget newJobButton = NewJobButton(
       context: context,
@@ -98,12 +97,10 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
         },
         child: Scaffold(
           appBar: AppBar(
-              title: const Text('Pending Events'),
-              actions: [_buttonOptions[_selectedIndex]]),
+              title: const Text('Pending Events'), actions: [appBarButton]),
           body: Center(
-              child: _selectedIndex == 0
-                  ? calendarViewOfEvents
-                  : listViewOfEvents),
+            child: viewOfEvents,
+          ),
           floatingActionButton: newJobButton,
         ));
   }

@@ -4,20 +4,20 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
-import 'scheduled_event_widget.dart';
+import '../event_cards/pending_event_card.dart';
 
-class ScheduledEventsForDayPage extends StatefulWidget {
+class PendingEventsForDayPage extends StatefulWidget {
   final DateTime day;
 
-  const ScheduledEventsForDayPage({Key? key, required this.day})
+  const PendingEventsForDayPage({Key? key, required this.day})
       : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _ScheduledEventsForDayState();
+  State<StatefulWidget> createState() => _PendingEventsForDayState();
 }
 
-class _ScheduledEventsForDayState extends State<ScheduledEventsForDayPage> {
-  List<Event> scheduledEventsForDayPage = [];
+class _PendingEventsForDayState extends State<PendingEventsForDayPage> {
+  List<Event> pendingEventsForDay = [];
 
   @override
   void initState() {
@@ -26,11 +26,11 @@ class _ScheduledEventsForDayState extends State<ScheduledEventsForDayPage> {
   }
 
   _retrievePendingEventsForThisDay() async {
-    List<Event> retrievedEvents = await API.events.retrieveFutureEventsWith(
-        pending: false, sameDay: true, day: widget.day);
+    List<Event> retrievedEvents =
+        await API.events.retrieveEvents(pending: true, onDay: widget.day);
 
     setState(() {
-      scheduledEventsForDayPage = retrievedEvents;
+      pendingEventsForDay = retrievedEvents;
     });
   }
 
@@ -39,16 +39,16 @@ class _ScheduledEventsForDayState extends State<ScheduledEventsForDayPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-            'Scheduled Events for ${DateFormat('dd MMMM').format(widget.day)}'),
+            'Pending Events on ${DateFormat('dd MMMM').format(widget.day)}'),
       ),
       body: RefreshIndicator(
           onRefresh: () async {
             _retrievePendingEventsForThisDay();
           },
           child: ListViewOfEvents(
-            events: scheduledEventsForDayPage,
+            events: pendingEventsForDay,
             eventWidgetBuilder: (Event event) {
-              return ScheduledEventWidget(event: event);
+              return PendingEventCard(event: event);
             },
           )),
     );

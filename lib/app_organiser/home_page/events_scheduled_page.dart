@@ -5,9 +5,9 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
+import 'event_cards/scheduled_event_card.dart';
 import 'events/new_event.dart';
-import 'events_scheduled/scheduled_event_widget.dart';
-import 'events_scheduled/scheduled_events_for_day.dart';
+import 'events_for_a_day/scheduled_events_for_day.dart';
 import 'new_job_button.dart';
 
 class ScheduledEventsPage extends StatefulWidget {
@@ -19,13 +19,12 @@ class ScheduledEventsPage extends StatefulWidget {
 
 class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
   int _selectedIndex = 0;
-  List<Widget> _buttonOptions = [];
 
   List<Event> scheduledEvents = [];
 
   _retrieveScheduledEvents() async {
     List<Event> events =
-        await API.events.retrieveFutureEventsWith(pending: false);
+        await API.events.retrieveEvents(past: false, pending: false);
 
     setState(() {
       scheduledEvents = events;
@@ -34,20 +33,6 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
 
   @override
   void initState() {
-    _buttonOptions = [
-      ListViewButton(
-          onTap: () => {
-                setState(() {
-                  _selectedIndex = 1;
-                })
-              }),
-      CalendarViewButton(
-          onTap: () => {
-                setState(() {
-                  _selectedIndex = 0;
-                })
-              }),
-    ];
     _retrieveScheduledEvents();
 
     super.initState();
@@ -55,21 +40,36 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Widget calendarViewOfEvents = CalendarViewOfEvents(
-      events: scheduledEvents,
-      onDaySelected: (DateTime day) {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ScheduledEventsForDayPage(day: day)));
-      },
-    );
+    final Widget appBarButton = _selectedIndex == 0
+        ? ListViewButton(
+            onTap: () => {
+                  setState(() {
+                    _selectedIndex = 1;
+                  })
+                })
+        : CalendarViewButton(
+            onTap: () => {
+                  setState(() {
+                    _selectedIndex = 0;
+                  })
+                });
 
-    final Widget listViewOfEvents = ListViewOfEvents(
-        events: scheduledEvents,
-        eventWidgetBuilder: (Event event) => ScheduledEventWidget(
-              event: event,
-            ));
+    final Widget viewOfEvents = _selectedIndex == 0
+        ? CalendarViewOfEvents(
+            events: scheduledEvents,
+            onDaySelected: (DateTime day) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ScheduledEventsForDayPage(day: day)));
+            },
+          )
+        : ListViewOfEvents(
+            events: scheduledEvents,
+            eventWidgetBuilder: (Event event) => ScheduledEventCard(
+                  event: event,
+                ));
 
     final Widget newJobButton = NewJobButton(
       context: context,
@@ -98,12 +98,10 @@ class _ScheduledEventsPageState extends State<ScheduledEventsPage> {
         },
         child: Scaffold(
             appBar: AppBar(
-                title: const Text('Scheduled Events'),
-                actions: [_buttonOptions[_selectedIndex]]),
+                title: const Text('Scheduled Events'), actions: [appBarButton]),
             body: Center(
-                child: _selectedIndex == 0
-                    ? calendarViewOfEvents
-                    : listViewOfEvents),
+              child: viewOfEvents,
+            ),
             floatingActionButton: newJobButton));
   }
 }

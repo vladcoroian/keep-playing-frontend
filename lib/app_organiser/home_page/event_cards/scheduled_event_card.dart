@@ -5,10 +5,10 @@ import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
 import '../events/manage_event.dart';
 
-class ScheduledEventWidget extends StatelessWidget {
+class ScheduledEventCard extends StatelessWidget {
   final Event event;
 
-  const ScheduledEventWidget({super.key, required this.event});
+  const ScheduledEventCard({super.key, required this.event});
 
   @override
   Widget build(BuildContext context) {

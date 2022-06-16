@@ -54,8 +54,6 @@ class CalendarViewOfEvents extends StatefulWidget {
 }
 
 class _CalendarViewOfEventsState extends State<CalendarViewOfEvents> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 
@@ -79,14 +77,8 @@ class _CalendarViewOfEventsState extends State<CalendarViewOfEvents> {
           }
           widget.onDaySelected(selectedDay);
         },
-        calendarFormat: _calendarFormat,
-        onFormatChanged: (format) {
-          if (_calendarFormat != format) {
-            setState(() {
-              _calendarFormat = format;
-            });
-          }
-        },
+        calendarFormat: CalendarFormat.month,
+        availableCalendarFormats: const {CalendarFormat.month: 'Month'},
         onPageChanged: (focusedDay) {
           _focusedDay = focusedDay;
         },
