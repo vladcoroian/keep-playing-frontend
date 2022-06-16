@@ -1,17 +1,21 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
-import 'package:keep_playing_frontend/models/event.dart';
+import 'package:keep_playing_frontend/models/event.dart' as sport_event;
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'package:add_2_calendar/add_2_calendar.dart' as add2calendar;
 
 class ManageEventPage extends StatefulWidget {
-  final Event event;
+  final sport_event.Event event;
 
   const ManageEventPage({super.key, required this.event});
 
@@ -90,6 +94,16 @@ class _ManageEventPageState extends State<ManageEventPage> {
         false;
   }
 
+  Future launchEmail({
+    required String toEmail,
+    required String subject,
+  }) async {
+    final url = 'mailto:$toEmail?subject=${Uri.encodeFull(subject)}&body=';
+    if (await canLaunchUrlString(url)) {
+      await launchUrlString(url);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final String coachName = _sessionCoach == null
@@ -100,8 +114,30 @@ class _ManageEventPageState extends State<ManageEventPage> {
       style: ElevatedButton.styleFrom(
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-      onPressed: () {},
+      onPressed: () {
+        launchEmail(
+            toEmail: _sessionCoach!.email,
+            subject:
+                '${widget.event.name}on: ${DateFormat.MMMEd().format(widget.event.date)}');
+      },
       child: const Icon(Icons.email),
+    );
+
+    final Widget addToCalendarButton = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+      onPressed: () {
+        final add2calendar.Event event = add2calendar.Event(
+          title: widget.event.name,
+          description: widget.event.details,
+          location: widget.event.location,
+          startDate: widget.event.date,
+          endDate: widget.event.date,
+        );
+        Add2Calendar.addEvent2Cal(event);
+      },
+      child: const Text('Add to calendar'),
     );
 
     final Widget coachInformation = Card(
@@ -290,7 +326,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
 
     final Widget saveEventButton = _SaveChangesButton(
       onPressed: () {
-        NewEvent newEvent = NewEvent(
+        sport_event.NewEvent newEvent = sport_event.NewEvent(
             name: _name,
             location: _location,
             details: _details,
@@ -317,6 +353,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
           _sessionCoach == null
               ? const SizedBox(height: 0, width: 0)
               : coachInformation,
+          addToCalendarButton,
           nameForm,
           sportForm,
           roleForm,
