@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
@@ -14,7 +13,7 @@ class PastEventWidget extends StatelessWidget {
     return EventCard(
         event: event,
         leftButton: const SizedBox(width: 0, height: 0),
-        rightButton: _DetailsButton(
+        rightButton: DetailsButton(
           onPressed: () {
             Navigator.push(
               context,
@@ -22,7 +21,7 @@ class PastEventWidget extends StatelessWidget {
                   builder: (context) => EventDetailsDialog(
                         event: event,
                         widgetsAtTheEnd: [
-                          _CancelButton(onPressed: () {
+                          CancelButton(onPressed: () {
                             Navigator.pop(context);
                           })
                         ],
@@ -31,22 +30,4 @@ class PastEventWidget extends StatelessWidget {
           },
         ));
   }
-}
-
-class _DetailsButton extends ColoredButton {
-  const _DetailsButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Details',
-          color: DETAILS_BUTTON_COLOR,
-        );
-}
-
-class _CancelButton extends ColoredButton {
-  const _CancelButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel',
-          color: CANCEL_BUTTON_COLOR,
-        );
 }

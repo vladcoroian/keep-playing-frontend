@@ -20,7 +20,8 @@ class _FeedPageState extends State<FeedPage> {
   int coachPK = 0;
 
   _retrieveFeedEvents() async {
-    List<Event> events = await API.events.retrieveFutureEventsWith(pending: true);
+    List<Event> events =
+        await API.events.retrieveFutureEventsWith(pending: true);
 
     setState(() {
       feedEvents = events;
@@ -71,7 +72,7 @@ class _FeedEventWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget detailsButton = _DetailsButton(
+    final Widget detailsButton = DetailsButton(
       onPressed: () {
         showDialog(
             context: context,
@@ -103,15 +104,6 @@ class _FeedEventWidget extends StatelessWidget {
   }
 }
 
-class _DetailsButton extends ColoredButton {
-  const _DetailsButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Details',
-          color: DETAILS_BUTTON_COLOR,
-        );
-}
-
 class _ApplyButton extends ColoredButton {
   const _ApplyButton({Key? key, required super.onPressed})
       : super(
@@ -127,15 +119,6 @@ class _AppliedButton extends ColoredButton {
           key: key,
           text: 'Applied',
           color: APPLIED_BUTTON_COLOR,
-        );
-}
-
-class _CancelButton extends ColoredButton {
-  const _CancelButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel',
-          color: CANCEL_BUTTON_COLOR,
         );
 }
 
@@ -160,7 +143,7 @@ class _DetailsDialog extends StatelessWidget {
       widgetsAtTheEnd: [
         Align(
           alignment: Alignment.center,
-          child: _CancelButton(onPressed: () => {Navigator.pop(context)}),
+          child: CancelButton(onPressed: () => {Navigator.pop(context)}),
         ),
       ],
     );
@@ -192,7 +175,7 @@ class _AcceptJobDialog extends StatelessWidget {
             });
 
     final Widget cancelButton =
-        _CancelButton(onPressed: () => {Navigator.pop(context)});
+        CancelButton(onPressed: () => {Navigator.pop(context)});
 
     return EventDetailsDialog(event: event, widgetsAtTheEnd: [
       Row(

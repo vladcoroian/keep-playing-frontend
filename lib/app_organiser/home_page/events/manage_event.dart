@@ -8,6 +8,7 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/user_widgets.dart';
 
 class ManageEventPage extends StatefulWidget {
   final Event event;
@@ -94,19 +95,33 @@ class _ManageEventPageState extends State<ManageEventPage> {
     final String coachName = _sessionCoach == null
         ? ''
         : "${_sessionCoach!.firstName} ${_sessionCoach!.lastName}";
-    final String coachEmail = _sessionCoach == null ? '' : _sessionCoach!.email;
+
+    final Widget messageCoachButton = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+      onPressed: () {},
+      child: const Icon(Icons.email),
+    );
 
     final Widget coachInformation = Card(
         margin: const EdgeInsets.all(DEFAULT_PADDING),
         child: ListTile(
-          leading: const Text(
-            "Coach\nInformation",
-            textAlign: TextAlign.center,
-            style: TextStyle(color: APP_COLOR),
-          ),
-          title: Text(coachName),
-          subtitle: Text(coachEmail),
-        ));
+            leading: const Text(
+              "Coach\nInformation",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: APP_COLOR),
+            ),
+            title: Text(coachName),
+            trailing: messageCoachButton,
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) => UserDetailsDialog(
+                        user: _sessionCoach!,
+                        widgetsAtTheEnd: const [],
+                      ));
+            }));
 
     final Widget nameForm = ListTile(
         title: TextFormField(
@@ -297,7 +312,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Edit Event')),
+        appBar: AppBar(title: const Text('Manage Event')),
         body: ListView(children: [
           _sessionCoach == null
               ? const SizedBox(height: 0, width: 0)

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 
 class NewJobButton extends FloatingActionButton {
   final BuildContext context;

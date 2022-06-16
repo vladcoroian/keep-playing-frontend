@@ -24,7 +24,8 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
   List<Event> pendingEvents = [];
 
   _retrievePendingEvents() async {
-    List<Event> events = await API.events.retrieveFutureEventsWith(pending: true);
+    List<Event> events =
+        await API.events.retrieveFutureEventsWith(pending: true);
 
     setState(() {
       pendingEvents = events;

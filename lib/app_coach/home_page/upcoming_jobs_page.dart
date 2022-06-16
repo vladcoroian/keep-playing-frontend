@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
-import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
@@ -19,7 +18,8 @@ class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
   List<Event> upcomingJobs = [];
 
   _retrieveUpcomingJobs() async {
-    List<Event> events = await API.events.retrieveFutureEventsWith(pending: false);
+    List<Event> events =
+        await API.events.retrieveFutureEventsWith(pending: false);
 
     setState(() {
       upcomingJobs = events;
@@ -61,7 +61,7 @@ class _UpcomingJobWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return EventCard(
         event: event,
-        leftButton: _CancelButton(onPressed: () {
+        leftButton: CancelButton(onPressed: () {
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -75,7 +75,7 @@ class _UpcomingJobWidget extends StatelessWidget {
                 );
               });
         }),
-        rightButton: _DetailsButton(
+        rightButton: DetailsButton(
           onPressed: () {
             showDialog(
                 context: context,
@@ -83,7 +83,7 @@ class _UpcomingJobWidget extends StatelessWidget {
                   return EventDetailsDialog(
                     event: event,
                     widgetsAtTheEnd: [
-                      _CancelButton(onPressed: () {
+                      CancelButton(onPressed: () {
                         Navigator.pop(context);
                       })
                     ],
@@ -92,22 +92,4 @@ class _UpcomingJobWidget extends StatelessWidget {
           },
         ));
   }
-}
-
-class _CancelButton extends ColoredButton {
-  const _CancelButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel',
-          color: CANCEL_BUTTON_COLOR,
-        );
-}
-
-class _DetailsButton extends ColoredButton {
-  const _DetailsButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Details',
-          color: DETAILS_BUTTON_COLOR,
-        );
 }

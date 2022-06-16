@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
@@ -16,7 +15,7 @@ class ScheduledEventWidget extends StatelessWidget {
     return EventCard(
         event: event,
         leftButton: const SizedBox(width: 0, height: 0),
-        rightButton: _ManageButton(
+        rightButton: ManageButton(
           onPressed: () {
             Navigator.push(
               context,
@@ -26,13 +25,4 @@ class ScheduledEventWidget extends StatelessWidget {
           },
         ));
   }
-}
-
-class _ManageButton extends ColoredButton {
-  const _ManageButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Manage',
-          color: APP_COLOR,
-        );
 }

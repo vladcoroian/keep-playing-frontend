@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/constants.dart';
 
-import 'home_page/scheduled_events_page.dart';
-import 'home_page/pending_events_page.dart';
 import 'home_page/past_events_page.dart';
+import 'home_page/pending_events_page.dart';
+import 'home_page/scheduled_events_page.dart';
 
 class OrganiserHomePage extends StatefulWidget {
   const OrganiserHomePage({Key? key}) : super(key: key);
@@ -62,5 +62,6 @@ class _ScheduledEventsNavigationButton extends BottomNavigationBarItem {
 class _PastEventsNavigationButton extends BottomNavigationBarItem {
   const _PastEventsNavigationButton()
       : super(
-      icon: const Icon(Icons.edit_calendar_outlined), label: 'Past Events');
+            icon: const Icon(Icons.edit_calendar_outlined),
+            label: 'Past Events');
 }
