@@ -194,8 +194,8 @@ class _NewEventPageState extends State<NewEventPage> {
         title: TextFormField(
             decoration: const InputDecoration(
               icon: Icon(Icons.price_change),
-              hintText: 'Enter the price',
-              labelText: 'Price',
+              hintText: 'Enter the fee',
+              labelText: 'Fee',
             ),
             onChanged: (text) {
               // TODO: Remove this cast.

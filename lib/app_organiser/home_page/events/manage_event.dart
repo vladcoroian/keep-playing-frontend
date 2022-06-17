@@ -294,8 +294,8 @@ class _ManageEventPageState extends State<ManageEventPage> {
             initialValue: _price.toString(),
             decoration: const InputDecoration(
               icon: Icon(Icons.price_change),
-              hintText: 'Enter the price',
-              labelText: 'Price',
+              hintText: 'Enter the fee',
+              labelText: 'Fee',
             ),
             onChanged: (text) {
               // TODO: Remove this cast.
