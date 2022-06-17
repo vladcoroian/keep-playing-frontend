@@ -1,65 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
-import '../../models/event.dart';
-import '../../widgets/event_widgets.dart';
+import '../../../models/event.dart';
+import '../cubit/coach_cubit.dart';
+import '../cubit/feed_events_cubit.dart';
 
-class FeedPage extends StatefulWidget {
-  const FeedPage({Key? key}) : super(key: key);
-
-  @override
-  State<FeedPage> createState() => _FeedPageState();
-}
-
-class _FeedPageState extends State<FeedPage> {
-  List<Event> feedEvents = [];
-  int coachPK = 0;
-
-  _retrieveFeedEvents() async {
-    List<Event> events =
-        await API.events.retrieveEvents(past: false, pending: true);
-
-    setState(() {
-      feedEvents = events;
-    });
-  }
-
-  _retrieveCoachPK() async {
-    int pk = (await API.users.getCurrentUser()).pk;
-
-    setState(() {
-      coachPK = pk;
-    });
-  }
-
-  @override
-  void initState() {
-    _retrieveFeedEvents();
-    _retrieveCoachPK();
-    super.initState();
-  }
+class FeedView extends StatelessWidget {
+  const FeedView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-        onRefresh: () async {
-          _retrieveFeedEvents();
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Feed'),
-          ),
-          body: Center(
-              child: ListViewOfEvents(
-                  events: feedEvents,
-                  eventWidgetBuilder: (Event event) => _FeedEventWidget(
-                        event: event,
-                        coachPK: coachPK,
-                      ))),
+    final Widget viewOfEvents =
+        BlocBuilder<FeedEventsCubit, List<Event>>(builder: (context, state) {
+      return ListViewOfEvents(
+          events: state,
+          eventWidgetBuilder: (Event event) => _FeedEventWidget(
+                event: event,
+                coachPK: context.read<CurrentCoachUserCubit>().state.pk,
+              ));
+    });
+
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Feed'),
+        ),
+        body: RefreshIndicator(
+          onRefresh: () async {
+            context.read<FeedEventsCubit>().retrieveFeedEvents();
+          },
+          child: Center(child: viewOfEvents),
         ));
   }
 }
@@ -84,10 +60,15 @@ class _FeedEventWidget extends StatelessWidget {
 
     final Widget applyButton = _ApplyButton(
       onPressed: () {
+        final FeedEventsCubit feedEventsCubit = context.read<FeedEventsCubit>();
+
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return _AcceptJobDialog(event: event);
+              return BlocProvider<FeedEventsCubit>.value(
+                value: feedEventsCubit,
+                child: _AcceptJobDialog(event: event),
+              );
             });
       },
     );
@@ -156,26 +137,39 @@ class _AcceptJobDialog extends StatelessWidget {
   const _AcceptJobDialog({required this.event});
 
   @override
-  Widget build(BuildContext context) {
-    final Widget sendOffer = _SendOfferButton(
-        onPressed: () => {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return ConfirmationDialog(
-                      title: 'Are you sure that you want to accept this job?',
-                      onNoPressed: () => {Navigator.pop(context)},
-                      onYesPressed: () {
-                        API.events.applyToJob(event: event);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                    );
-                  })
-            });
+  Widget build(BuildContext buildContext) {
+    final Widget sendOffer = _SendOfferButton(onPressed: () {
+      final FeedEventsCubit feedEventsCubit =
+          buildContext.read<FeedEventsCubit>();
+      showDialog(
+          context: buildContext,
+          builder: (BuildContext context) {
+            return BlocProvider<FeedEventsCubit>.value(
+              value: feedEventsCubit,
+              child: ConfirmationDialog(
+                title: 'Are you sure that you want to accept this job?',
+                onNoPressed: () => {Navigator.pop(context)},
+                onYesPressed: () async {
+                  final NavigatorState navigator = Navigator.of(context);
+                  final FeedEventsCubit feedEventsCubit =
+                      buildContext.read<FeedEventsCubit>();
+                  final Response response =
+                      await API.events.applyToJob(event: event);
+                  if (response.statusCode == HTTP_202_ACCEPTED) {
+                    feedEventsCubit.retrieveFeedEvents();
+                  } else {
+                    // TODO
+                  }
+                  navigator.pop();
+                  navigator.pop();
+                },
+              ),
+            );
+          });
+    });
 
     final Widget cancelButton =
-        CancelButton(onPressed: () => {Navigator.pop(context)});
+        CancelButton(onPressed: () => {Navigator.pop(buildContext)});
 
     return EventDetailsDialog(event: event, widgetsAtTheEnd: [
       Row(

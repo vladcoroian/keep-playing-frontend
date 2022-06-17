@@ -1,34 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:keep_playing_frontend/api_manager/api.dart';
+import 'package:keep_playing_frontend/app_coach/cubit/coach_cubit.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
-
-  @override
-  State<ProfilePage> createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  late User currentUser;
-
-  @override
-  void initState() {
-    _retrieveUserInformation();
-    super.initState();
-  }
-
-  void _retrieveUserInformation() async {
-    User user = await API.users.getCurrentUser();
-
-    setState(() {
-      currentUser = user;
-    });
-  }
+class ProfileView extends StatelessWidget {
+  const ProfileView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final User currentUser = context.read<CurrentCoachUserCubit>().state;
+
     final Widget usernameForm = ListTile(
         title: TextFormField(
             initialValue: currentUser.username,
