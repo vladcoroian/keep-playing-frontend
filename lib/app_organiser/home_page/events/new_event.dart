@@ -22,8 +22,8 @@ class _NewEventPageState extends State<NewEventPage> {
   String _sport = '';
   String _role = '';
   DateTime _date = DateTime.now();
-  TimeOfDay _startTime = const TimeOfDay(hour: 0, minute: 0);
-  TimeOfDay _endTime = const TimeOfDay(hour: 0, minute: 0);
+  TimeOfDay _startTime = TimeOfDay.now();
+  TimeOfDay _endTime = TimeOfDay.now();
   TimeOfDay _flexibleStartTime = const TimeOfDay(hour: 0, minute: 0);
   TimeOfDay _flexibleEndTime = const TimeOfDay(hour: 0, minute: 0);
   int _price = 0;
@@ -133,6 +133,7 @@ class _NewEventPageState extends State<NewEventPage> {
       format: DateFormat("dd-MMMM-yyyy"),
       onShowPicker: (context, currentValue) {
         return showDatePicker(
+            
             context: context,
             firstDate: DateTime.now(),
             initialDate: currentValue ?? DateTime.now(),
@@ -152,7 +153,7 @@ class _NewEventPageState extends State<NewEventPage> {
             onTap: () async {
               final TimeOfDay? newTime = await showTimePicker(
                 context: context,
-                initialTime: TimeOfDay.now(),
+                initialTime: _startTime,
                 initialEntryMode: TimePickerEntryMode.input,
               );
               if (newTime != null) {
@@ -178,7 +179,7 @@ class _NewEventPageState extends State<NewEventPage> {
             onTap: () async {
               final TimeOfDay? newTime = await showTimePicker(
                 context: context,
-                initialTime: TimeOfDay.now(),
+                initialTime: _endTime,
                 initialEntryMode: TimePickerEntryMode.input,
               );
               if (newTime != null) {
