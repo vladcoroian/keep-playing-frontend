@@ -32,7 +32,7 @@ class _ApiLinks {
   }
 
   static Uri cancelJobLink(int pk) {
-    return Uri.parse("$EVENTS$pk/coach");
+    return Uri.parse("$EVENTS$pk/cancel/");
   }
 
   static Uri acceptOfferFromCoach(

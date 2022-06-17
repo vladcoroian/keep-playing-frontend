@@ -73,21 +73,21 @@ class _UpcomingJobWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return EventCard(
         event: event,
-        leftButton: const SizedBox(height: 0, width: 0),
-        // leftButton: CancelButton(onPressed: () {
-        //   showDialog(
-        //       context: context,
-        //       builder: (BuildContext context) {
-        //         return ConfirmationDialog(
-        //           title: 'Are you sure that you want to cancel this job?',
-        //           onNoPressed: () => {Navigator.pop(context)},
-        //           onYesPressed: () {
-        //             API.events.cancelJob(event: event);
-        //             Navigator.pop(context);
-        //           },
-        //         );
-        //       });
-        // }),
+        // leftButton: const SizedBox(height: 0, width: 0),
+        leftButton: CancelButton(onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return ConfirmationDialog(
+                  title: 'Are you sure that you want to cancel this job?',
+                  onNoPressed: () => {Navigator.pop(context)},
+                  onYesPressed: () {
+                    API.events.cancelJob(event: event);
+                    Navigator.pop(context);
+                  },
+                );
+              });
+        }),
         rightButton: DetailsButton(
           onPressed: () {
             showDialog(
