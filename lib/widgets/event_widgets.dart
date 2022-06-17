@@ -81,6 +81,14 @@ class _EventWidgets {
   static List<Widget> _getDetailsAboutEvent({required Event event}) {
     return <Widget>[
       ListTile(
+          leading: const Icon(Icons.sports_soccer),
+          title: const Text('Sport', style: _textStyleForTitle),
+          subtitle: Text(event.sport)),
+      ListTile(
+          leading: const Icon(Icons.sports),
+          title: const Text('Role', style: _textStyleForTitle),
+          subtitle: Text(event.role)),
+      ListTile(
           leading: const Icon(Icons.location_on),
           title: const Text('Location', style: _textStyleForTitle),
           subtitle: Text(event.location)),
@@ -89,12 +97,12 @@ class _EventWidgets {
           title: const Text('Date', style: _textStyleForTitle),
           subtitle: Text(DateFormat("MMMM dd").format(event.date))),
       ListTile(
-          leading: const Icon(Icons.timer),
+          leading: const Icon(Icons.access_time),
           title: const Text('Start Time', style: _textStyleForTitle),
           subtitle: Text(const DefaultMaterialLocalizations()
               .formatTimeOfDay(event.startTime, alwaysUse24HourFormat: true))),
       ListTile(
-          leading: const Icon(Icons.timer),
+          leading: const Icon(Icons.access_time),
           title: const Text('End Time', style: _textStyleForTitle),
           subtitle: Text(const DefaultMaterialLocalizations()
               .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true))),
