@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/models/user.dart';
 
+import 'cubit/coach_cubit.dart';
 import 'home_page/coach_profile_page.dart';
-import 'home_page/feed_page.dart';
 import 'home_page/upcoming_jobs_page.dart';
+import 'views/feed_page.dart';
 
 class CoachHomePage extends StatefulWidget {
   const CoachHomePage({Key? key}) : super(key: key);
@@ -13,6 +17,21 @@ class CoachHomePage extends StatefulWidget {
 }
 
 class _CoachHomePageState extends State<CoachHomePage> {
+  User? currentUser;
+
+  @override
+  void initState() {
+    _retrieveCurrentUserInformation();
+    super.initState();
+  }
+
+  void _retrieveCurrentUserInformation() async {
+    User user = await API.users.getCurrentUser();
+    setState(() {
+      currentUser = user;
+    });
+  }
+
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     FeedPage(),
@@ -30,8 +49,13 @@ class _CoachHomePageState extends State<CoachHomePage> {
   Widget build(BuildContext context) {
     Widget currentWidget = _widgetOptions.elementAt(_selectedIndex);
 
-    return Scaffold(
-      body: Center(
+    // TODO: loadingScreen
+    const Widget loadingScreen = Text('Loading');
+
+    final Widget homePage = Scaffold(
+      body: BlocProvider(
+        create: (BuildContext context) =>
+            CurrentCoachUserCubit(user: currentUser!),
         child: currentWidget,
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -45,6 +69,11 @@ class _CoachHomePageState extends State<CoachHomePage> {
         onTap: _onItemTapped,
       ),
     );
+
+    if (currentUser == null) {
+      return loadingScreen;
+    }
+    return homePage;
   }
 }
 

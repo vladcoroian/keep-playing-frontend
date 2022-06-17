@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
+import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
-import 'package:keep_playing_frontend/models/user.dart';
 
 import '../../models/event.dart';
 import '../../widgets/event_widgets.dart';
@@ -27,7 +27,6 @@ class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
       upcomingJobs = events;
     });
   }
-
 
   void _retrieveUserInformation() async {
     User user = await API.users.getCurrentUser();
