@@ -3,6 +3,7 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
+import 'package:keep_playing_frontend/models/user.dart';
 
 import '../../models/event.dart';
 import '../../widgets/event_widgets.dart';
@@ -15,19 +16,30 @@ class UpcomingJobsPage extends StatefulWidget {
 }
 
 class _UpcomingJobsPageState extends State<UpcomingJobsPage> {
+  late User currentUser;
   List<Event> upcomingJobs = [];
 
   _retrieveUpcomingJobs() async {
     List<Event> events =
         await API.events.retrieveEvents(past: false, pending: false);
-
+    events = events.where((e) => e.coachPK == currentUser.pk).toList();
     setState(() {
       upcomingJobs = events;
     });
   }
 
+
+  void _retrieveUserInformation() async {
+    User user = await API.users.getCurrentUser();
+
+    setState(() {
+      currentUser = user;
+    });
+  }
+
   @override
   void initState() {
+    _retrieveUserInformation();
     _retrieveUpcomingJobs();
     super.initState();
   }

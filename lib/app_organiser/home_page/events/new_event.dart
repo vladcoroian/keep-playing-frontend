@@ -133,7 +133,6 @@ class _NewEventPageState extends State<NewEventPage> {
       format: DateFormat("dd-MMMM-yyyy"),
       onShowPicker: (context, currentValue) {
         return showDatePicker(
-            
             context: context,
             firstDate: DateTime.now(),
             initialDate: currentValue ?? DateTime.now(),
