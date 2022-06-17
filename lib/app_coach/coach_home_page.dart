@@ -5,9 +5,9 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 
 import 'cubit/coach_cubit.dart';
-import 'home_page/upcoming_jobs_page.dart';
 import 'views/feed_page.dart';
 import 'views/profile_page.dart';
+import 'views/upcoming_jobs_page.dart';
 
 class CoachHomePage extends StatefulWidget {
   const CoachHomePage({Key? key}) : super(key: key);

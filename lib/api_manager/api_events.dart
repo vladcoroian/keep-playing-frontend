@@ -100,8 +100,13 @@ class ApiEvents {
         body: jsonEncode(<String, dynamic>{"coach": false}));
   }
 
-  bool _checkEvent(
-      {required Event event, bool? past, bool? pending, DateTime? onDay}) {
+  bool _checkEvent({
+    required Event event,
+    bool? past,
+    bool? pending,
+    DateTime? onDay,
+    User? withCoachUser,
+  }) {
     bool result = true;
     switch (past) {
       case true:
@@ -127,19 +132,34 @@ class ApiEvents {
       default:
         result = result && isSameDay(event.date, onDay!);
     }
+    switch (withCoachUser) {
+      case null:
+        break;
+      default:
+        result = result && event.coachPK == withCoachUser!.pk;
+    }
     return result;
   }
 
-  Future<List<Event>> retrieveEvents(
-      {bool? past, bool? pending, DateTime? onDay}) async {
+  Future<List<Event>> retrieveEvents({
+    bool? past,
+    bool? pending,
+    DateTime? onDay,
+    User? withCoachUser,
+  }) async {
     List<Event> events = [];
     List response =
         json.decode((await client.get(_ApiLinks.eventsLink())).body);
     for (var element in response) {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }
-    events.retainWhere((event) =>
-        _checkEvent(event: event, past: past, pending: pending, onDay: onDay));
+    events.retainWhere((event) => _checkEvent(
+          event: event,
+          past: past,
+          pending: pending,
+          onDay: onDay,
+          withCoachUser: withCoachUser,
+        ));
     return events;
   }
 }
