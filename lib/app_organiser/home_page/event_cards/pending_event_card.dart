@@ -46,19 +46,21 @@ class _PendingEventCardState extends State<PendingEventCard> {
         leftButton: _OffersButton(
           numberOfOffers: offers.length,
           onPressed: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return _OffersDialog(
-                    event: widget.event,
-                    button: CancelButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                    children: _getOffersList(),
-                  );
-                });
+            if (offers.isNotEmpty) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return _OffersDialog(
+                      event: widget.event,
+                      button: CancelButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      children: _getOffersList(),
+                    );
+                  });
+            }
           },
         ),
         rightButton: ManageButton(
