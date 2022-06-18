@@ -86,13 +86,17 @@ class _UpcomingJobWidget extends StatelessWidget {
         showDialog(
             context: context,
             builder: (BuildContext buildContext) {
+              final Widget cancelButton = ColoredButton(
+                text: 'Cancel',
+                color: CANCEL_BUTTON_COLOR,
+                onPressed: () async {
+                  Navigator.pop(buildContext);
+                },
+              );
+
               return EventDetailsDialog(
                 event: event,
-                widgetsAtTheEnd: [
-                  CancelButton(onPressed: () async {
-                    Navigator.pop(buildContext);
-                  })
-                ],
+                widgetsAtTheEnd: [cancelButton],
               );
             });
       },

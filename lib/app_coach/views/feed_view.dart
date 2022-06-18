@@ -99,12 +99,20 @@ class _DetailsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Widget cancelButton = ColoredButton(
+      text: 'Cancel',
+      color: CANCEL_BUTTON_COLOR,
+      onPressed: () => {
+        Navigator.pop(context),
+      },
+    );
+
     return EventDetailsDialog(
       event: event,
       widgetsAtTheEnd: [
         Align(
           alignment: Alignment.center,
-          child: CancelButton(onPressed: () => {Navigator.pop(context)}),
+          child: cancelButton,
         ),
       ],
     );

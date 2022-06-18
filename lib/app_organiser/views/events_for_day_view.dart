@@ -14,9 +14,20 @@ class EventsForDayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Event> eventsForDay =
-        BlocProvider.of<OrganiserEventsCubit>(context).state;
-    eventsForDay.retainWhere((event) => isSameDay(event.date, day));
+    final Widget viewOfEvents = BlocBuilder<OrganiserEventsCubit, List<Event>>(
+      builder: (context, state) {
+        List<Event> eventsForDay =
+            BlocProvider.of<OrganiserEventsCubit>(context).state;
+        eventsForDay.retainWhere((event) => isSameDay(event.date, day));
+
+        return ListViewOfEvents(
+          events: eventsForDay,
+          eventWidgetBuilder: (Event event) {
+            return OrganiserEventCards.getCardForEvent(event: event);
+          },
+        );
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -26,12 +37,7 @@ class EventsForDayView extends StatelessWidget {
         onRefresh: () async {
           BlocProvider.of<OrganiserEventsCubit>(context).retrieveEvents();
         },
-        child: ListViewOfEvents(
-          events: eventsForDay,
-          eventWidgetBuilder: (Event event) {
-            return OrganiserEventCards.getCardForEvent(event: event);
-          },
-        ),
+        child: viewOfEvents,
       ),
     );
   }

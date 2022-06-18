@@ -35,30 +35,3 @@ class ColoredButton extends StatelessWidget {
             child: Text(text)));
   }
 }
-
-class DetailsButton extends ColoredButton {
-  const DetailsButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Details',
-          color: DETAILS_BUTTON_COLOR,
-        );
-}
-
-class CancelButton extends ColoredButton {
-  const CancelButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel',
-          color: CANCEL_BUTTON_COLOR,
-        );
-}
-
-class ManageButton extends ColoredButton {
-  const ManageButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Manage',
-          color: APP_COLOR,
-        );
-}

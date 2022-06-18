@@ -53,18 +53,23 @@ class _PendingEventCardState extends State<PendingEventCard> {
       onPressed: () {
         if (widget.event.offers.isNotEmpty) {
           showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return _OffersDialog(
-                  event: widget.event,
-                  button: CancelButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  children: _getOffersList(),
-                );
-              });
+            context: context,
+            builder: (BuildContext context) {
+              final Widget cancelButton = ColoredButton(
+                text: 'Cancel',
+                color: CANCEL_BUTTON_COLOR,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              );
+
+              return _OffersDialog(
+                event: widget.event,
+                button: cancelButton,
+                children: _getOffersList(),
+              );
+            },
+          );
         }
       },
     );
@@ -95,6 +100,19 @@ class _PendingEventCardState extends State<PendingEventCard> {
   List<Widget> _getOffersList() {
     List<Widget> offersList = [];
     for (User offer in offers) {
+      final Widget acceptButton = ColoredButton(
+        text: 'Accept',
+        color: APP_COLOR,
+        onPressed: () async {
+          NavigatorState navigator = Navigator.of(context);
+          OrganiserEventsCubit organiserEventsCubit =
+              BlocProvider.of<OrganiserEventsCubit>(context);
+          await API.events.acceptCoach(event: widget.event, coach: offer);
+          organiserEventsCubit.retrieveEvents();
+          navigator.pop();
+        },
+      );
+
       offersList.add(
         Card(
           child: Column(
@@ -105,24 +123,13 @@ class _PendingEventCardState extends State<PendingEventCard> {
                 title: Text("${offer.firstName} ${offer.lastName}"),
                 subtitle: Text(offer.email),
               ),
-              Center(
-                child: _AcceptCoachButton(
-                  onPressed: () async {
-                    NavigatorState navigator = Navigator.of(context);
-                    OrganiserEventsCubit organiserEventsCubit =
-                        BlocProvider.of<OrganiserEventsCubit>(context);
-                    await API.events
-                        .acceptCoach(event: widget.event, coach: offer);
-                    organiserEventsCubit.retrieveEvents();
-                    navigator.pop();
-                  },
-                ),
-              ),
+              Center(child: acceptButton),
             ],
           ), // children: [Text("${offer.firstName} ${offer.lastName}")],
         ),
       );
     }
+
     return offersList;
   }
 }
@@ -138,14 +145,5 @@ class _OffersDialog extends OneOptionDialog {
       : super(
           key: key,
           title: 'Current Offers',
-        );
-}
-
-class _AcceptCoachButton extends ColoredButton {
-  const _AcceptCoachButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Accept',
-          color: APP_COLOR,
         );
 }
