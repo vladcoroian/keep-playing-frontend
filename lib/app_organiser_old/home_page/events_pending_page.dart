@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/new_job_button.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import 'event_cards/pending_event_card.dart';
 import 'events/new_event.dart';
 import 'events_for_a_day/pending_events_for_day.dart';
+import 'new_job_button.dart';
 
 class PendingEventsPage extends StatefulWidget {
   const PendingEventsPage({Key? key}) : super(key: key);

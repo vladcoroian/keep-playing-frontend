@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
-import 'package:keep_playing_frontend/app_organiser/home_page/new_job_button.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import '../organiser.dart';
 import 'events/new_event.dart';
 import 'events_for_a_day/all_events_for_day.dart';
+import 'new_job_button.dart';
 
 class AllEventsPage extends StatefulWidget {
   const AllEventsPage({Key? key}) : super(key: key);

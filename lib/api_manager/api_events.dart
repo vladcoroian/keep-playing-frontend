@@ -8,7 +8,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import 'api.dart';
 
-class _ApiLinks {
+class _ApiEventsLinks {
   static const String EVENTS = "${API.PREFIX}events/";
 
   static Uri eventsLink() {
@@ -47,7 +47,7 @@ class ApiEvents {
   ApiEvents({required this.client});
 
   Future<Response> addNewEvent({required NewEvent newEvent}) {
-    return client.post(_ApiLinks.addEventLink(),
+    return client.post(_ApiEventsLinks.addEventLink(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -56,7 +56,7 @@ class ApiEvents {
 
   Future<Response> changeEvent(
       {required Event event, required NewEvent newEvent}) {
-    return client.patch(_ApiLinks.updateEventLink(event.pk),
+    return client.patch(_ApiEventsLinks.updateEventLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -64,12 +64,13 @@ class ApiEvents {
   }
 
   void cancelEvent({required Event event}) {
-    client.delete(_ApiLinks.deleteEventLink(event.pk));
+    client.delete(_ApiEventsLinks.deleteEventLink(event.pk));
   }
 
   Future<Response> acceptCoach({required Event event, required User coach}) {
     return client.patch(
-        _ApiLinks.acceptOfferFromCoach(eventPK: event.pk, coachPK: coach.pk),
+        _ApiEventsLinks.acceptOfferFromCoach(
+            eventPK: event.pk, coachPK: coach.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -80,7 +81,7 @@ class ApiEvents {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
 
-    return client.patch(_ApiLinks.applyToJobLink(event.pk),
+    return client.patch(_ApiEventsLinks.applyToJobLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
@@ -92,12 +93,34 @@ class ApiEvents {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token') ?? '';
 
-    return client.patch(_ApiLinks.cancelJobLink(event.pk),
+    return client.patch(_ApiEventsLinks.cancelJobLink(event.pk),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
         },
         body: jsonEncode(<String, dynamic>{"coach": false}));
+  }
+
+  Future<List<Event>> retrieveEvents({
+    bool? past,
+    bool? pending,
+    DateTime? onDay,
+    User? withCoachUser,
+  }) async {
+    List<Event> events = [];
+    List response =
+        json.decode((await client.get(_ApiEventsLinks.eventsLink())).body);
+    for (var element in response) {
+      events.add(Event(eventModel: EventModel.fromJson(element)));
+    }
+    events.retainWhere((event) => _checkEvent(
+          event: event,
+          past: past,
+          pending: pending,
+          onDay: onDay,
+          withCoachUser: withCoachUser,
+        ));
+    return events;
   }
 
   bool _checkEvent({
@@ -139,27 +162,5 @@ class ApiEvents {
         result = result && event.coachPK == withCoachUser!.pk;
     }
     return result;
-  }
-
-  Future<List<Event>> retrieveEvents({
-    bool? past,
-    bool? pending,
-    DateTime? onDay,
-    User? withCoachUser,
-  }) async {
-    List<Event> events = [];
-    List response =
-        json.decode((await client.get(_ApiLinks.eventsLink())).body);
-    for (var element in response) {
-      events.add(Event(eventModel: EventModel.fromJson(element)));
-    }
-    events.retainWhere((event) => _checkEvent(
-          event: event,
-          past: past,
-          pending: pending,
-          onDay: onDay,
-          withCoachUser: withCoachUser,
-        ));
-    return events;
   }
 }
