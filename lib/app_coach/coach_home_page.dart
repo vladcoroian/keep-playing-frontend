@@ -54,8 +54,7 @@ class _CoachHomePageState extends State<CoachHomePage> {
 
     final Widget homePage = Scaffold(
       body: BlocProvider(
-        create: (BuildContext context) =>
-            CoachUserCubit(user: currentUser!),
+        create: (BuildContext context) => CoachUserCubit(user: currentUser!),
         child: currentWidget,
       ),
       bottomNavigationBar: BottomNavigationBar(

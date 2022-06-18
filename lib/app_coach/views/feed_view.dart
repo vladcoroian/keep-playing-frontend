@@ -23,8 +23,7 @@ class FeedView extends StatelessWidget {
           events: state,
           eventWidgetBuilder: (Event event) => _FeedEventWidget(
                 event: event,
-                coachPK:
-                    BlocProvider.of<CoachUserCubit>(context).state.pk,
+                coachPK: BlocProvider.of<CoachUserCubit>(context).state.pk,
               ));
     });
 

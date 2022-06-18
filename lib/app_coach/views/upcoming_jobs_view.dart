@@ -33,8 +33,7 @@ class UpcomingJobsView extends StatelessWidget {
         body: RefreshIndicator(
           onRefresh: () async {
             BlocProvider.of<UpcomingJobsCubit>(context).retrieveUpcomingJobs(
-              withCoachUser:
-                  BlocProvider.of<CoachUserCubit>(context).state,
+              withCoachUser: BlocProvider.of<CoachUserCubit>(context).state,
             );
           },
           child: Center(child: viewOfEvents),
