@@ -8,8 +8,6 @@ const double DEFAULT_PADDING = 16;
 const double APP_BAR_BUTTON_PADDING = 20;
 const double APP_BAR_BUTTON_SIZE = 26;
 
-const int HTTP_202_ACCEPTED = 202;
-
 const List<String> SPORTS = [
   'Futsal',
   'Muay Thai',

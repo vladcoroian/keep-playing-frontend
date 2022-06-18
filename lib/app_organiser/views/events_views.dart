@@ -4,6 +4,7 @@ import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
+import '../events/new_event.dart';
 import '../events/new_job_button.dart';
 import '../organiser.dart';
 
@@ -49,7 +50,16 @@ class _EventsViewState extends State<EventsView> {
 
     final Widget newJobButton = NewJobButton(
       context: context,
-      onPressed: () => {},
+      onPressed: () => {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: BlocProvider.of<OrganiserEventsCubit>(context),
+              child: const NewEventPage(),
+            ),
+          ),
+        ),
+      },
     );
 
     return Scaffold(

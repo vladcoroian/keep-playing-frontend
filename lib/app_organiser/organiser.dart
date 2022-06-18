@@ -5,7 +5,6 @@ import 'event_cards/past_event_card.dart';
 import 'event_cards/pending_event_card.dart';
 import 'event_cards/scheduled_event_card.dart';
 
-
 class Organiser {
   static Widget getCardForEvent({required Event event}) {
     if (event.isInThePast()) {

@@ -302,7 +302,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
               _price = int.parse(text);
             }));
 
-    final Widget cancelEventButton = _CancelEventButton(
+    final Widget cancelEventButton = ColoredButton(
+      text: 'Cancel Event',
+      color: CANCEL_BUTTON_COLOR,
       onPressed: () {
         showDialog(
             context: context,
@@ -322,21 +324,24 @@ class _ManageEventPageState extends State<ManageEventPage> {
       },
     );
 
-    final Widget saveEventButton = _SaveChangesButton(
+    final Widget saveChangesButton = ColoredButton(
+      text: 'Save Changes',
+      color: APP_COLOR,
       onPressed: () {
         sport_event.NewEvent newEvent = sport_event.NewEvent(
-            name: _name,
-            location: _location,
-            details: _details,
-            sport: _sport,
-            role: _role,
-            date: _date,
-            startTime: _startTime,
-            endTime: _endTime,
-            flexibleStartTime: _flexibleStartTime,
-            flexibleEndTime: _flexibleEndTime,
-            price: _price,
-            coach: _coach);
+          name: _name,
+          location: _location,
+          details: _details,
+          sport: _sport,
+          role: _role,
+          date: _date,
+          startTime: _startTime,
+          endTime: _endTime,
+          flexibleStartTime: _flexibleStartTime,
+          flexibleEndTime: _flexibleEndTime,
+          price: _price,
+          coach: _coach,
+        );
         final Future<Response> response =
             API.events.changeEvent(event: widget.event, newEvent: newEvent);
         Navigator.of(context).pop(response);
@@ -363,28 +368,10 @@ class _ManageEventPageState extends State<ManageEventPage> {
           priceForm,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [cancelEventButton, saveEventButton],
-          )
+            children: [cancelEventButton, saveChangesButton],
+          ),
         ]),
       ),
     );
   }
-}
-
-class _SaveChangesButton extends ColoredButton {
-  const _SaveChangesButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Save Changes',
-          color: APP_COLOR,
-        );
-}
-
-class _CancelEventButton extends ColoredButton {
-  const _CancelEventButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel Event',
-          color: CANCEL_BUTTON_COLOR,
-        );
 }

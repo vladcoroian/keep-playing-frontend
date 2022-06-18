@@ -123,186 +123,208 @@ class _ManageEventPageState extends State<ManageEventPage> {
     );
 
     final Widget addToCalendarButton = ColoredButton(
-        text: 'Add to calendar',
-        color: APP_COLOR,
-        onPressed: () {
-          final add2calendar.Event event = add2calendar.Event(
-            title: widget.event.name,
-            description: widget.event.details,
-            location: widget.event.location,
-            startDate: widget.event.getStartTimestamp(),
-            endDate: widget.event.getEndTimestamp(),
-          );
-          Add2Calendar.addEvent2Cal(event);
-        });
+      text: 'Add to calendar',
+      color: APP_COLOR,
+      onPressed: () {
+        final add2calendar.Event event = add2calendar.Event(
+          title: widget.event.name,
+          description: widget.event.details,
+          location: widget.event.location,
+          startDate: widget.event.getStartTimestamp(),
+          endDate: widget.event.getEndTimestamp(),
+        );
+        Add2Calendar.addEvent2Cal(event);
+      },
+    );
 
     final Widget coachInformation = Card(
-        margin: const EdgeInsets.all(DEFAULT_PADDING),
-        child: ListTile(
-            leading: const Text(
-              "Coach\nInformation",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: APP_COLOR),
-            ),
-            title: Text(coachName),
-            trailing: messageCoachButton,
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => UserDetailsDialog(
-                        user: _sessionCoach!,
-                        widgetsAtTheEnd: const [],
-                      ));
-            }));
+      margin: const EdgeInsets.all(DEFAULT_PADDING),
+      child: ListTile(
+        leading: const Text(
+          "Coach\nInformation",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: APP_COLOR),
+        ),
+        title: Text(coachName),
+        trailing: messageCoachButton,
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (context) => UserDetailsDialog(
+                    user: _sessionCoach!,
+                    widgetsAtTheEnd: const [],
+                  ));
+        },
+      ),
+    );
 
     final Widget nameForm = ListTile(
-        title: TextFormField(
-            initialValue: _name,
-            readOnly: false,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.title),
-              hintText: 'Enter the name',
-              labelText: 'Name',
-            ),
-            onChanged: (text) {
-              _name = text;
-            }));
+      title: TextFormField(
+        initialValue: _name,
+        readOnly: false,
+        decoration: const InputDecoration(
+          icon: Icon(Icons.title),
+          hintText: 'Enter the name',
+          labelText: 'Name',
+        ),
+        onChanged: (text) {
+          _name = text;
+        },
+      ),
+    );
 
     final Widget sportForm = ListTile(
-        leading: const Icon(Icons.sports_soccer),
-        title: DropdownButton<String>(
-            value: selectedSport,
-            items: SPORTS.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              _sport = newValue!;
-              setState(() {
-                selectedSport = _sport;
-              });
-            }));
+      leading: const Icon(Icons.sports_soccer),
+      title: DropdownButton<String>(
+        value: selectedSport,
+        items: SPORTS.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          _sport = newValue!;
+          setState(() {
+            selectedSport = _sport;
+          });
+        },
+      ),
+    );
 
     final Widget roleForm = ListTile(
-        leading: const Icon(Icons.sports),
-        title: DropdownButton<String>(
-            value: selectedRole,
-            items: ROLES.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              _role = newValue!;
-              setState(() {
-                selectedRole = _role;
-              });
-            }));
+      leading: const Icon(Icons.sports),
+      title: DropdownButton<String>(
+        value: selectedRole,
+        items: ROLES.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          _role = newValue!;
+          setState(() {
+            selectedRole = _role;
+          });
+        },
+      ),
+    );
 
     final Widget locationForm = ListTile(
-        title: TextFormField(
-            initialValue: _location,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.location_on),
-              hintText: 'Enter the location',
-              labelText: 'Location',
-            ),
-            onChanged: (text) {
-              _location = text;
-            }));
+      title: TextFormField(
+        initialValue: _location,
+        decoration: const InputDecoration(
+          icon: Icon(Icons.location_on),
+          hintText: 'Enter the location',
+          labelText: 'Location',
+        ),
+        onChanged: (text) {
+          _location = text;
+        },
+      ),
+    );
 
     final Widget detailsForm = ListTile(
-        title: TextFormField(
-            initialValue: _details,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.details),
-              hintText: 'Enter details',
-              labelText: 'Details',
-            ),
-            onChanged: (text) {
-              _details = text;
-            }));
+      title: TextFormField(
+        initialValue: _details,
+        decoration: const InputDecoration(
+          icon: Icon(Icons.details),
+          hintText: 'Enter details',
+          labelText: 'Details',
+        ),
+        onChanged: (text) {
+          _details = text;
+        },
+      ),
+    );
 
     final Widget dateForm = ListTile(
-        title: DateTimeField(
-      initialValue: _date,
-      decoration: const InputDecoration(
-        icon: Icon(Icons.date_range),
-        hintText: 'Enter the date',
-        labelText: 'Date',
+      title: DateTimeField(
+        initialValue: _date,
+        decoration: const InputDecoration(
+          icon: Icon(Icons.date_range),
+          hintText: 'Enter the date',
+          labelText: 'Date',
+        ),
+        format: DateFormat("dd-MMMM-yyyy"),
+        onShowPicker: (context, currentValue) {
+          return showDatePicker(
+              context: context,
+              firstDate: DateTime.now(),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+        },
+        onChanged: (date) {
+          _date = date!;
+        },
       ),
-      format: DateFormat("dd-MMMM-yyyy"),
-      onShowPicker: (context, currentValue) {
-        return showDatePicker(
-            context: context,
-            firstDate: DateTime.now(),
-            initialDate: currentValue ?? DateTime.now(),
-            lastDate: DateTime(2100));
-      },
-      onChanged: (date) {
-        _date = date!;
-      },
-    ));
+    );
 
     final Widget startTimeForm = ListTile(
-        title: TextField(
-            controller: startTimeInput,
-            decoration: const InputDecoration(
-                icon: Icon(Icons.access_time), labelText: "Start Time"),
-            readOnly: true,
-            onTap: () async {
-              final TimeOfDay? newTime = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-                initialEntryMode: TimePickerEntryMode.input,
-              );
-              if (newTime != null) {
-                setState(() {
-                  _startTime = newTime;
-                  startTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
-                });
-              }
-            }));
+      title: TextField(
+        controller: startTimeInput,
+        decoration: const InputDecoration(
+            icon: Icon(Icons.access_time), labelText: "Start Time"),
+        readOnly: true,
+        onTap: () async {
+          final TimeOfDay? newTime = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay.now(),
+            initialEntryMode: TimePickerEntryMode.input,
+          );
+          if (newTime != null) {
+            setState(() {
+              _startTime = newTime;
+              startTimeInput.text = const DefaultMaterialLocalizations()
+                  .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
+            });
+          }
+        },
+      ),
+    );
 
     final Widget endTimeForm = ListTile(
-        title: TextField(
-            controller: endTimeInput,
-            decoration: const InputDecoration(
-                icon: Icon(Icons.access_time), labelText: "End Time"),
-            readOnly: true,
-            onTap: () async {
-              final TimeOfDay? newTime = await showTimePicker(
-                context: context,
-                initialTime: TimeOfDay.now(),
-                initialEntryMode: TimePickerEntryMode.input,
-              );
-              if (newTime != null) {
-                setState(() {
-                  _endTime = newTime;
-                  endTimeInput.text = const DefaultMaterialLocalizations()
-                      .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
-                });
-              }
-            }));
+      title: TextField(
+        controller: endTimeInput,
+        decoration: const InputDecoration(
+            icon: Icon(Icons.access_time), labelText: "End Time"),
+        readOnly: true,
+        onTap: () async {
+          final TimeOfDay? newTime = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay.now(),
+            initialEntryMode: TimePickerEntryMode.input,
+          );
+          if (newTime != null) {
+            setState(() {
+              _endTime = newTime;
+              endTimeInput.text = const DefaultMaterialLocalizations()
+                  .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
+            });
+          }
+        },
+      ),
+    );
 
     final Widget priceForm = ListTile(
-        title: TextFormField(
-            initialValue: _price.toString(),
-            decoration: const InputDecoration(
-              icon: Icon(Icons.price_change),
-              hintText: 'Enter the fee',
-              labelText: 'Fee',
-            ),
-            onChanged: (text) {
-              // TODO: Remove this cast.
-              _price = int.parse(text);
-            }));
+      title: TextFormField(
+        initialValue: _price.toString(),
+        decoration: const InputDecoration(
+          icon: Icon(Icons.price_change),
+          hintText: 'Enter the fee',
+          labelText: 'Fee',
+        ),
+        onChanged: (text) {
+          // TODO: Remove this cast.
+          _price = int.parse(text);
+        },
+      ),
+    );
 
-    final Widget cancelEventButton = _CancelEventButton(
+    final Widget cancelEventButton = ColoredButton(
+      text: 'Cancel Event',
+      color: CANCEL_BUTTON_COLOR,
       onPressed: () {
         showDialog(
             context: context,
@@ -322,7 +344,9 @@ class _ManageEventPageState extends State<ManageEventPage> {
       },
     );
 
-    final Widget saveEventButton = _SaveChangesButton(
+    final Widget saveChangesButton = ColoredButton(
+      text: 'Save Changes',
+      color: APP_COLOR,
       onPressed: () {
         sport_event.NewEvent newEvent = sport_event.NewEvent(
             name: _name,
@@ -347,44 +371,28 @@ class _ManageEventPageState extends State<ManageEventPage> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(title: const Text('Manage Event')),
-        body: ListView(children: [
-          _sessionCoach == null
-              ? const SizedBox(height: 0, width: 0)
-              : coachInformation,
-          addToCalendarButton,
-          nameForm,
-          sportForm,
-          roleForm,
-          locationForm,
-          detailsForm,
-          dateForm,
-          startTimeForm,
-          endTimeForm,
-          priceForm,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [cancelEventButton, saveEventButton],
-          )
-        ]),
+        body: ListView(
+          children: [
+            _sessionCoach == null
+                ? const SizedBox(height: 0, width: 0)
+                : coachInformation,
+            addToCalendarButton,
+            nameForm,
+            sportForm,
+            roleForm,
+            locationForm,
+            detailsForm,
+            dateForm,
+            startTimeForm,
+            endTimeForm,
+            priceForm,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [cancelEventButton, saveChangesButton],
+            )
+          ],
+        ),
       ),
     );
   }
-}
-
-class _SaveChangesButton extends ColoredButton {
-  const _SaveChangesButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Save Changes',
-          color: APP_COLOR,
-        );
-}
-
-class _CancelEventButton extends ColoredButton {
-  const _CancelEventButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel Event',
-          color: CANCEL_BUTTON_COLOR,
-        );
 }

@@ -9,8 +9,8 @@ import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import '../../../models/event.dart';
-import '../cubit/coach_cubit.dart';
-import '../cubit/feed_events_cubit.dart';
+import '../cubits/coach_cubit.dart';
+import '../cubits/feed_events_cubit.dart';
 
 class FeedView extends StatelessWidget {
   const FeedView({Key? key}) : super(key: key);
@@ -130,7 +130,9 @@ class _AcceptJobDialog extends StatelessWidget {
                 value: feedEventsCubit,
                 child: ConfirmationDialog(
                   title: 'Are you sure that you want to accept this job?',
-                  onNoPressed: () => {Navigator.pop(context)},
+                  onNoPressed: () => {
+                    Navigator.pop(context),
+                  },
                   onYesPressed: () async {
                     final NavigatorState navigator = Navigator.of(context);
                     final FeedEventsCubit feedEventsCubit =

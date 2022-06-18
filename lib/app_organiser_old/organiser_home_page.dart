@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:keep_playing_frontend/constants.dart';
 
 import 'home_page/events_all_page.dart';

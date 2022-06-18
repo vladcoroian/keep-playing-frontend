@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keep_playing_frontend/app_coach/cubit/coach_cubit.dart';
-import 'package:keep_playing_frontend/app_coach/cubit/upcoming_jobs_cubit.dart';
+import 'package:keep_playing_frontend/app_coach/cubits/coach_cubit.dart';
+import 'package:keep_playing_frontend/app_coach/cubits/upcoming_jobs_cubit.dart';
 
 import 'upcoming_jobs_view.dart';
 

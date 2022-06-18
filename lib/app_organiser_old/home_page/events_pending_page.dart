@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
@@ -23,8 +22,8 @@ class _PendingEventsPageState extends State<PendingEventsPage> {
   List<Event> pendingEvents = [];
 
   _retrievePendingEvents() async {
-    List<Event> events =[];
-        // await API.events.retrieveEvents(past: false, pending: true);
+    List<Event> events = [];
+    // await API.events.retrieveEvents(past: false, pending: true);
 
     setState(() {
       pendingEvents = events;

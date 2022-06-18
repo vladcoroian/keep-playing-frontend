@@ -20,6 +20,6 @@ class OrganiserEventsCubit extends Cubit<List<Event>> {
       allowPendingEvents: allowPendingEvents,
       allowScheduledEvents: allowScheduledEvents,
     );
-    emit(retrievedEvents);
+    emit(List.of(retrievedEvents));
   }
 }

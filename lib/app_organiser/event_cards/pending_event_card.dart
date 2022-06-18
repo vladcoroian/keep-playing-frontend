@@ -9,7 +9,6 @@ import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
 import '../events/manage_event.dart';
 
-
 class PendingEventCard extends StatefulWidget {
   final Event event;
 

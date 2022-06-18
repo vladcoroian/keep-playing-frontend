@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
@@ -27,7 +26,7 @@ class _ScheduledEventsForDayState extends State<ScheduledEventsForDayPage> {
 
   _retrievePendingEventsForThisDay() async {
     List<Event> retrievedEvents = [];
-       // await API.events.retrieveEvents(pending: false, onDay: widget.day);
+    // await API.events.retrieveEvents(pending: false, onDay: widget.day);
 
     setState(() {
       scheduledEventsForDayPage = retrievedEvents;
