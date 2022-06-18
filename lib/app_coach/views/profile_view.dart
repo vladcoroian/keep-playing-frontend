@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:keep_playing_frontend/app_coach/cubit/coach_cubit.dart';
+import 'package:keep_playing_frontend/app_coach/cubits/coach_cubit.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 
 class ProfileView extends StatelessWidget {
@@ -9,7 +9,7 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User currentUser = context.read<CurrentCoachUserCubit>().state;
+    final User currentUser = BlocProvider.of<CoachUserCubit>(context).state;
 
     final Widget usernameForm = ListTile(
         title: TextFormField(

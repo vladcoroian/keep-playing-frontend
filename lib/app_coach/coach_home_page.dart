@@ -4,7 +4,7 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 
-import 'cubit/coach_cubit.dart';
+import 'cubits/coach_cubit.dart';
 import 'views/feed_page.dart';
 import 'views/profile_page.dart';
 import 'views/upcoming_jobs_page.dart';
@@ -54,8 +54,7 @@ class _CoachHomePageState extends State<CoachHomePage> {
 
     final Widget homePage = Scaffold(
       body: BlocProvider(
-        create: (BuildContext context) =>
-            CurrentCoachUserCubit(user: currentUser!),
+        create: (BuildContext context) => CoachUserCubit(user: currentUser!),
         child: currentWidget,
       ),
       bottomNavigationBar: BottomNavigationBar(

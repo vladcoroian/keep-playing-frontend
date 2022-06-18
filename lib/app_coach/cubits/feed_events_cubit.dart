@@ -6,8 +6,10 @@ class FeedEventsCubit extends Cubit<List<Event>> {
   FeedEventsCubit() : super([]);
 
   void retrieveFeedEvents() async {
-    List<Event> retrievedEvents =
-        await API.events.retrieveEvents(past: false, pending: true);
+    List<Event> retrievedEvents = await API.events.retrieveEvents(
+      allowPastEvents: false,
+      allowScheduledEvents: false,
+    );
     emit(retrievedEvents);
   }
 }

@@ -9,8 +9,8 @@ import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import '../../../models/event.dart';
-import '../cubit/coach_cubit.dart';
-import '../cubit/feed_events_cubit.dart';
+import '../cubits/coach_cubit.dart';
+import '../cubits/feed_events_cubit.dart';
 
 class FeedView extends StatelessWidget {
   const FeedView({Key? key}) : super(key: key);
@@ -23,7 +23,7 @@ class FeedView extends StatelessWidget {
           events: state,
           eventWidgetBuilder: (Event event) => _FeedEventWidget(
                 event: event,
-                coachPK: context.read<CurrentCoachUserCubit>().state.pk,
+                coachPK: BlocProvider.of<CoachUserCubit>(context).state.pk,
               ));
     });
 
@@ -33,7 +33,7 @@ class FeedView extends StatelessWidget {
         ),
         body: RefreshIndicator(
           onRefresh: () async {
-            context.read<FeedEventsCubit>().retrieveFeedEvents();
+            BlocProvider.of<FeedEventsCubit>(context).retrieveFeedEvents();
           },
           child: Center(child: viewOfEvents),
         ));
@@ -48,7 +48,9 @@ class _FeedEventWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget detailsButton = DetailsButton(
+    final Widget detailsButton = ColoredButton(
+      text: 'Details',
+      color: DETAILS_BUTTON_COLOR,
       onPressed: () {
         showDialog(
             context: context,
@@ -58,9 +60,12 @@ class _FeedEventWidget extends StatelessWidget {
       },
     );
 
-    final Widget applyButton = _ApplyButton(
+    final Widget applyButton = ColoredButton(
+      text: 'Apply',
+      color: APP_COLOR,
       onPressed: () {
-        final FeedEventsCubit feedEventsCubit = context.read<FeedEventsCubit>();
+        final FeedEventsCubit feedEventsCubit =
+            BlocProvider.of<FeedEventsCubit>(context);
 
         showDialog(
             context: context,
@@ -73,7 +78,9 @@ class _FeedEventWidget extends StatelessWidget {
       },
     );
 
-    final Widget appliedButton = _AppliedButton(
+    final Widget appliedButton = ColoredButton(
+      text: 'Applied',
+      color: APPLIED_BUTTON_COLOR,
       onPressed: () {},
     );
 
@@ -85,33 +92,6 @@ class _FeedEventWidget extends StatelessWidget {
   }
 }
 
-class _ApplyButton extends ColoredButton {
-  const _ApplyButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Apply',
-          color: APP_COLOR,
-        );
-}
-
-class _AppliedButton extends ColoredButton {
-  const _AppliedButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Applied',
-          color: APPLIED_BUTTON_COLOR,
-        );
-}
-
-class _SendOfferButton extends ColoredButton {
-  const _SendOfferButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Send Offer',
-          color: APP_COLOR,
-        );
-}
-
 class _DetailsDialog extends StatelessWidget {
   final Event event;
 
@@ -119,12 +99,20 @@ class _DetailsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Widget cancelButton = ColoredButton(
+      text: 'Cancel',
+      color: CANCEL_BUTTON_COLOR,
+      onPressed: () => {
+        Navigator.pop(context),
+      },
+    );
+
     return EventDetailsDialog(
       event: event,
       widgetsAtTheEnd: [
         Align(
           alignment: Alignment.center,
-          child: CancelButton(onPressed: () => {Navigator.pop(context)}),
+          child: cancelButton,
         ),
       ],
     );
@@ -137,45 +125,54 @@ class _AcceptJobDialog extends StatelessWidget {
   const _AcceptJobDialog({required this.event});
 
   @override
-  Widget build(BuildContext buildContext) {
-    final Widget sendOffer = _SendOfferButton(onPressed: () {
-      final FeedEventsCubit feedEventsCubit =
-          buildContext.read<FeedEventsCubit>();
-      showDialog(
-          context: buildContext,
-          builder: (BuildContext context) {
-            return BlocProvider<FeedEventsCubit>.value(
-              value: feedEventsCubit,
-              child: ConfirmationDialog(
-                title: 'Are you sure that you want to accept this job?',
-                onNoPressed: () => {Navigator.pop(context)},
-                onYesPressed: () async {
-                  final NavigatorState navigator = Navigator.of(context);
-                  final FeedEventsCubit feedEventsCubit =
-                      buildContext.read<FeedEventsCubit>();
-                  final Response response =
-                      await API.events.applyToJob(event: event);
-                  if (response.statusCode == HTTP_202_ACCEPTED) {
-                    feedEventsCubit.retrieveFeedEvents();
-                  } else {
-                    // TODO
-                  }
-                  navigator.pop();
-                  navigator.pop();
-                },
-              ),
-            );
-          });
-    });
+  Widget build(BuildContext context) {
+    final Widget sendOfferButton = ColoredButton(
+      text: 'Send Offer',
+      color: APP_COLOR,
+      onPressed: () {
+        final FeedEventsCubit feedEventsCubit =
+            BlocProvider.of<FeedEventsCubit>(context);
+        showDialog(
+            context: context,
+            builder: (BuildContext buildContext) {
+              return BlocProvider<FeedEventsCubit>.value(
+                value: feedEventsCubit,
+                child: ConfirmationDialog(
+                  title: 'Are you sure that you want to accept this job?',
+                  onNoPressed: () => {
+                    Navigator.pop(buildContext),
+                  },
+                  onYesPressed: () async {
+                    final NavigatorState navigator = Navigator.of(buildContext);
+                    final FeedEventsCubit feedEventsCubit =
+                        BlocProvider.of<FeedEventsCubit>(context);
+                    final Response response =
+                        await API.events.applyToJob(event: event);
+                    if (response.statusCode == HTTP_202_ACCEPTED) {
+                      feedEventsCubit.retrieveFeedEvents();
+                    } else {
+                      // TODO
+                    }
+                    navigator.pop();
+                    navigator.pop();
+                  },
+                ),
+              );
+            });
+      },
+    );
 
-    final Widget cancelButton =
-        CancelButton(onPressed: () => {Navigator.pop(buildContext)});
+    final Widget cancelButton = ColoredButton(
+      text: 'Cancel',
+      color: CANCEL_BUTTON_COLOR,
+      onPressed: () => {Navigator.pop(context)},
+    );
 
     return EventDetailsDialog(event: event, widgetsAtTheEnd: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          sendOffer,
+          sendOfferButton,
           cancelButton,
         ],
       ),

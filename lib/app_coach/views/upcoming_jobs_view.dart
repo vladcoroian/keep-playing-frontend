@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
-import 'package:keep_playing_frontend/app_coach/cubit/coach_cubit.dart';
-import 'package:keep_playing_frontend/app_coach/cubit/upcoming_jobs_cubit.dart';
-import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/app_coach/cubits/coach_cubit.dart';
+import 'package:keep_playing_frontend/app_coach/cubits/upcoming_jobs_cubit.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
@@ -21,7 +20,7 @@ class UpcomingJobsView extends StatelessWidget {
     final Widget viewOfEvents = BlocBuilder<UpcomingJobsCubit, List<Event>>(
       builder: (context, state) {
         return ListViewOfEvents(
-          events: context.read<UpcomingJobsCubit>().state,
+          events: BlocProvider.of<UpcomingJobsCubit>(context).state,
           eventWidgetBuilder: (Event event) => _UpcomingJobWidget(event: event),
         );
       },
@@ -33,9 +32,9 @@ class UpcomingJobsView extends StatelessWidget {
         ),
         body: RefreshIndicator(
           onRefresh: () async {
-            context.read<UpcomingJobsCubit>().retrieveUpcomingJobs(
-                  withCoachUser: context.read<CurrentCoachUserCubit>().state,
-                );
+            BlocProvider.of<UpcomingJobsCubit>(context).retrieveUpcomingJobs(
+              withCoachUser: BlocProvider.of<CoachUserCubit>(context).state,
+            );
           },
           child: Center(child: viewOfEvents),
         ));
@@ -48,50 +47,65 @@ class _UpcomingJobWidget extends StatelessWidget {
   const _UpcomingJobWidget({required this.event});
 
   @override
-  Widget build(BuildContext buildContext) {
+  Widget build(BuildContext context) {
+    final Widget cancelButton = ColoredButton(
+      text: 'Cancel',
+      color: CANCEL_BUTTON_COLOR,
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext buildContext) {
+              return ConfirmationDialog(
+                title: 'Are you sure that you want to cancel this job?',
+                onNoPressed: () => {Navigator.pop(buildContext)},
+                onYesPressed: () async {
+                  final NavigatorState navigator = Navigator.of(buildContext);
+                  final UpcomingJobsCubit upcomingJobsCubit =
+                      BlocProvider.of<UpcomingJobsCubit>(context);
+                  final User coachUser =
+                      BlocProvider.of<CoachUserCubit>(context).state;
+                  final Response response =
+                      await API.events.cancelJob(event: event);
+                  if (response.statusCode == HTTP_202_ACCEPTED) {
+                    upcomingJobsCubit.retrieveUpcomingJobs(
+                        withCoachUser: coachUser);
+                  } else {
+                    // TODO
+                  }
+                  navigator.pop();
+                },
+              );
+            });
+      },
+    );
+
+    final Widget detailsButton = ColoredButton(
+      text: 'Details',
+      color: DETAILS_BUTTON_COLOR,
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext buildContext) {
+              final Widget cancelButton = ColoredButton(
+                text: 'Cancel',
+                color: CANCEL_BUTTON_COLOR,
+                onPressed: () async {
+                  Navigator.pop(buildContext);
+                },
+              );
+
+              return EventDetailsDialog(
+                event: event,
+                widgetsAtTheEnd: [cancelButton],
+              );
+            });
+      },
+    );
+
     return EventCard(
-        event: event,
-        leftButton: CancelButton(onPressed: () {
-          showDialog(
-              context: buildContext,
-              builder: (BuildContext context) {
-                return ConfirmationDialog(
-                  title: 'Are you sure that you want to cancel this job?',
-                  onNoPressed: () => {Navigator.pop(context)},
-                  onYesPressed: () async {
-                    final NavigatorState navigator = Navigator.of(context);
-                    final UpcomingJobsCubit upcomingJobsCubit =
-                        buildContext.read<UpcomingJobsCubit>();
-                    final User coachUser =
-                        buildContext.read<CurrentCoachUserCubit>().state;
-                    final Response response =
-                        await API.events.cancelJob(event: event);
-                    if (response.statusCode == HTTP_202_ACCEPTED) {
-                      upcomingJobsCubit.retrieveUpcomingJobs(
-                          withCoachUser: coachUser);
-                    } else {
-                      // TODO
-                    }
-                    navigator.pop();
-                  },
-                );
-              });
-        }),
-        rightButton: DetailsButton(
-          onPressed: () {
-            showDialog(
-                context: buildContext,
-                builder: (BuildContext context) {
-                  return EventDetailsDialog(
-                    event: event,
-                    widgetsAtTheEnd: [
-                      CancelButton(onPressed: () async {
-                        Navigator.pop(context);
-                      })
-                    ],
-                  );
-                });
-          },
-        ));
+      event: event,
+      leftButton: cancelButton,
+      rightButton: detailsButton,
+    );
   }
 }

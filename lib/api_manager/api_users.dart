@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api.dart';
 
-class _ApiLinks {
+class _ApiUserLinks {
   static const String COACH = "${API.PREFIX}coach/";
 
   static Uri loginLink() {
@@ -28,7 +28,7 @@ class ApiUsers {
   ApiUsers({required this.client});
 
   Future<Response> login({required UserLogin userLogin}) {
-    return client.post(_ApiLinks.loginLink(), body: userLogin.toJson());
+    return client.post(_ApiUserLinks.loginLink(), body: userLogin.toJson());
   }
 
   Future<User> getCurrentUser() async {
@@ -36,7 +36,7 @@ class ApiUsers {
     String token = prefs.getString('token') ?? '';
 
     Response response = await client.get(
-      _ApiLinks.userInformationLink(),
+      _ApiUserLinks.userInformationLink(),
       headers: <String, String>{'Authorization': 'Token $token'},
     );
     final body = jsonDecode(response.body);
@@ -46,7 +46,7 @@ class ApiUsers {
 
   Future<User> getUser(int pk) async {
     Response response =
-        await client.get(_ApiLinks.coachInformationLink(pk: pk));
+        await client.get(_ApiUserLinks.coachInformationLink(pk: pk));
     final body = jsonDecode(response.body);
 
     return User.fromModel(userModel: UserModel.fromJson(body));

@@ -5,6 +5,7 @@ const double BUTTON_PADDING = 16;
 const double BUTTON_FONT_SIZE = 16;
 const Color BUTTON_GRAY_COLOR = Colors.black12;
 
+const Color MANAGE_BUTTON_COLOR = APP_COLOR;
 const Color DETAILS_BUTTON_COLOR = Colors.black12;
 const Color CANCEL_BUTTON_COLOR = Colors.red;
 const Color APPLIED_BUTTON_COLOR = Colors.red;
@@ -33,31 +34,4 @@ class ColoredButton extends StatelessWidget {
             onPressed: onPressed,
             child: Text(text)));
   }
-}
-
-class DetailsButton extends ColoredButton {
-  const DetailsButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Details',
-          color: DETAILS_BUTTON_COLOR,
-        );
-}
-
-class CancelButton extends ColoredButton {
-  const CancelButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Cancel',
-          color: CANCEL_BUTTON_COLOR,
-        );
-}
-
-class ManageButton extends ColoredButton {
-  const ManageButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Manage',
-          color: APP_COLOR,
-        );
 }
