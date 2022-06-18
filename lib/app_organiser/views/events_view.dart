@@ -53,9 +53,9 @@ class _EventsViewState extends State<EventsView> {
       onPressed: () => {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<OrganiserEventsCubit>(context),
-              child: const NewEventPage(),
+            builder: (_) => NewEventPage(
+              organiserEventsCubit:
+                  BlocProvider.of<OrganiserEventsCubit>(context),
             ),
           ),
         ),

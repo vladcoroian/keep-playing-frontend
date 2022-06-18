@@ -73,9 +73,10 @@ class _PendingEventCardState extends State<PendingEventCard> {
       onPressed: () => {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => BlocProvider.value(
-              value: BlocProvider.of<OrganiserEventsCubit>(context),
-              child: ManageEventPage(event: widget.event),
+            builder: (_) => ManageEventPage(
+              organiserEventsCubit:
+                  BlocProvider.of<OrganiserEventsCubit>(context),
+              event: widget.event,
             ),
           ),
         ),

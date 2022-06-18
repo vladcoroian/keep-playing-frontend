@@ -15,19 +15,21 @@ class ScheduledEventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EventCard(
-        event: event,
-        leftButton: const SizedBox(width: 0, height: 0),
-        rightButton: ManageButton(
-          onPressed: () => {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<OrganiserEventsCubit>(context),
-                  child: ManageEventPage(event: event),
-                ),
+      event: event,
+      leftButton: const SizedBox(width: 0, height: 0),
+      rightButton: ManageButton(
+        onPressed: () => {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => ManageEventPage(
+                organiserEventsCubit:
+                    BlocProvider.of<OrganiserEventsCubit>(context),
+                event: event,
               ),
             ),
-          },
-        ));
+          ),
+        },
+      ),
+    );
   }
 }
