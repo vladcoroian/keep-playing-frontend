@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit.dart';
 import 'package:keep_playing_frontend/models/event.dart';
@@ -12,10 +11,12 @@ class EventsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: ListViewOfEvents(
-            events: context.read<OrganiserEventsCubit>().state,
-            eventWidgetBuilder: (Event event) =>
-                Organiser.getCardForEvent(event: event)));
+    return Scaffold(body: BlocBuilder<OrganiserEventsCubit, List<Event>>(
+        builder: (context, state) {
+      return ListViewOfEvents(
+          events: context.read<OrganiserEventsCubit>().state,
+          eventWidgetBuilder: (Event event) =>
+              Organiser.getCardForEvent(event: event));
+    }));
   }
 }

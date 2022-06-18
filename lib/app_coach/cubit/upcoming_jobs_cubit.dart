@@ -8,8 +8,8 @@ class UpcomingJobsCubit extends Cubit<List<Event>> {
 
   void retrieveUpcomingJobs({required User withCoachUser}) async {
     List<Event> retrievedEvents = await API.events.retrieveEvents(
-      past: false,
-      pending: false,
+      allowPastEvents: false,
+      allowPendingEvents: false,
       withCoachUser: withCoachUser,
     );
     emit(retrievedEvents);

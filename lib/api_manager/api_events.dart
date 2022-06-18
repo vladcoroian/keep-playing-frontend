@@ -102,8 +102,10 @@ class ApiEvents {
   }
 
   Future<List<Event>> retrieveEvents({
-    bool? past,
-    bool? pending,
+    bool allowPastEvents = true,
+    bool allowFutureEvents = true,
+    bool allowPendingEvents = true,
+    bool allowScheduledEvents = true,
     DateTime? onDay,
     User? withCoachUser,
   }) async {
@@ -115,8 +117,10 @@ class ApiEvents {
     }
     events.retainWhere((event) => _checkEvent(
           event: event,
-          past: past,
-          pending: pending,
+          allowPastEvents: allowPastEvents,
+          allowFutureEvents: allowFutureEvents,
+          allowPendingEvents: allowPendingEvents,
+          allowScheduledEvents: allowScheduledEvents,
           onDay: onDay,
           withCoachUser: withCoachUser,
         ));
@@ -125,29 +129,25 @@ class ApiEvents {
 
   bool _checkEvent({
     required Event event,
-    bool? past,
-    bool? pending,
+    required bool allowPastEvents,
+    required bool allowFutureEvents,
+    required bool allowPendingEvents,
+    required bool allowScheduledEvents,
     DateTime? onDay,
     User? withCoachUser,
   }) {
     bool result = true;
-    switch (past) {
-      case true:
-        result = result && event.isInThePast();
-        break;
-      case false:
-        result = result && !event.isInThePast();
-        break;
-      case null:
+    if (!allowPastEvents) {
+      result = result && !event.isInThePast();
     }
-    switch (pending) {
-      case true:
-        result = result && !event.hasCoach();
-        break;
-      case false:
-        result = result && event.hasCoach();
-        break;
-      case null:
+    if (!allowFutureEvents) {
+      result = result && event.isInThePast();
+    }
+    if (!allowPendingEvents) {
+      result = result && event.hasCoach();
+    }
+    if (!allowScheduledEvents) {
+      result = result && !event.hasCoach();
     }
     switch (onDay) {
       case null:
