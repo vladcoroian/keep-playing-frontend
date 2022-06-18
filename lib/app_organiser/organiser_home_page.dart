@@ -12,6 +12,6 @@ class OrganiserHomePage extends StatefulWidget {
 class _OrganiserHomePageState extends State<OrganiserHomePage> {
   @override
   Widget build(BuildContext context) {
-    return EventsPage();
+    return const EventsPage();
   }
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
@@ -7,7 +9,7 @@ import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
-import '../events/manage_event.dart';
+import '../../manage_event_page.dart';
 
 class PendingEventCard extends StatefulWidget {
   final Event event;
@@ -41,37 +43,50 @@ class _PendingEventCardState extends State<PendingEventCard> {
 
   @override
   Widget build(BuildContext context) {
-    return EventCard(
-        event: widget.event,
-        leftButton: _OffersButton(
-          numberOfOffers: offers.length,
-          onPressed: () {
-            if (offers.isNotEmpty) {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return _OffersDialog(
-                      event: widget.event,
-                      button: CancelButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      children: _getOffersList(),
-                    );
-                  });
-            }
-          },
+    final Widget offersButton = ColoredButton(
+      text: offers.isEmpty ? 'No Offers' : 'Offers (${offers.length})',
+      color: offers.isEmpty
+          ? NO_OFFERS_BUTTON_COLOR
+          : AT_LEAST_ONE_OFFER_BUTTON_COLOR,
+      onPressed: () {
+        if (offers.isNotEmpty) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return _OffersDialog(
+                  event: widget.event,
+                  button: CancelButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  children: _getOffersList(),
+                );
+              });
+        }
+      },
+    );
+
+    final Widget manageButton = ColoredButton(
+      text: 'Manage',
+      color: MANAGE_BUTTON_COLOR,
+      onPressed: () => {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: BlocProvider.of<OrganiserEventsCubit>(context),
+              child: ManageEventPage(event: widget.event),
+            ),
+          ),
         ),
-        rightButton: ManageButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ManageEventPage(event: widget.event)),
-            );
-          },
-        ));
+      },
+    );
+
+    return EventCard(
+      event: widget.event,
+      leftButton: offersButton,
+      rightButton: manageButton,
+    );
   }
 
   List<Widget> _getOffersList() {
@@ -100,20 +115,6 @@ class _PendingEventCardState extends State<PendingEventCard> {
     }
     return offersList;
   }
-}
-
-class _OffersButton extends ColoredButton {
-  final int numberOfOffers;
-
-  const _OffersButton(
-      {Key? key, required this.numberOfOffers, required super.onPressed})
-      : super(
-          key: key,
-          text: numberOfOffers == 0 ? 'No Offers' : 'Offers ($numberOfOffers)',
-          color: numberOfOffers == 0
-              ? NO_OFFERS_BUTTON_COLOR
-              : AT_LEAST_ONE_OFFER_BUTTON_COLOR,
-        );
 }
 
 class _OffersDialog extends OneOptionDialog {

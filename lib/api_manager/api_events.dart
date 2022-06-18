@@ -63,8 +63,8 @@ class ApiEvents {
         body: jsonEncode(newEvent.toJson()));
   }
 
-  void cancelEvent({required Event event}) {
-    client.delete(_ApiEventsLinks.deleteEventLink(event.pk));
+  Future<Response> cancelEvent({required Event event}) {
+    return client.delete(_ApiEventsLinks.deleteEventLink(event.pk));
   }
 
   Future<Response> acceptCoach({required Event event, required User coach}) {
@@ -141,7 +141,7 @@ class ApiEvents {
       result = result && !event.isInThePast();
     }
     if (!allowFutureEvents) {
-      result = result && event.isInThePast();
+      result = result && !event.isInTheFuture();
     }
     if (!allowPendingEvents) {
       result = result && event.hasCoach();

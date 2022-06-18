@@ -2,6 +2,7 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:add_2_calendar/add_2_calendar.dart' as add2calendar;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
@@ -12,6 +13,8 @@ import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+
+import '../cubit/organiser_events_cubit.dart';
 
 class ManageEventPage extends StatefulWidget {
   final sport_event.Event event;
@@ -306,20 +309,28 @@ class _ManageEventPageState extends State<ManageEventPage> {
       text: 'Cancel Event',
       color: CANCEL_BUTTON_COLOR,
       onPressed: () {
+        final OrganiserEventsCubit organiserEventsCubit =
+            context.read<OrganiserEventsCubit>();
         showDialog(
             context: context,
-            builder: (BuildContext context) {
-              return ConfirmationDialog(
-                title: 'Are you sure you want to cancel this event?',
-                onNoPressed: () {
-                  Navigator.pop(context);
-                },
-                onYesPressed: () {
-                  API.events.cancelEvent(event: widget.event);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              );
+            builder: (BuildContext buildContext) {
+              return BlocProvider<OrganiserEventsCubit>.value(
+                  value: organiserEventsCubit,
+                  child: ConfirmationDialog(
+                    title: 'Are you sure you want to cancel this event?',
+                    onNoPressed: () {
+                      Navigator.pop(buildContext);
+                    },
+                    onYesPressed: () async {
+                      NavigatorState navigator = Navigator.of(buildContext);
+                      final OrganiserEventsCubit organiserEventsCubit =
+                          context.read<OrganiserEventsCubit>();
+                      await API.events.cancelEvent(event: widget.event);
+                      organiserEventsCubit.retrieveEvents();
+                      navigator.pop();
+                      navigator.pop();
+                    },
+                  ));
             });
       },
     );
@@ -327,7 +338,7 @@ class _ManageEventPageState extends State<ManageEventPage> {
     final Widget saveChangesButton = ColoredButton(
       text: 'Save Changes',
       color: APP_COLOR,
-      onPressed: () {
+      onPressed: () async {
         sport_event.NewEvent newEvent = sport_event.NewEvent(
           name: _name,
           location: _location,
@@ -342,9 +353,20 @@ class _ManageEventPageState extends State<ManageEventPage> {
           price: _price,
           coach: _coach,
         );
-        final Future<Response> response =
-            API.events.changeEvent(event: widget.event, newEvent: newEvent);
-        Navigator.of(context).pop(response);
+
+        NavigatorState navigator = Navigator.of(context);
+        final OrganiserEventsCubit organiserEventsCubit =
+            context.read<OrganiserEventsCubit>();
+        Response response = await API.events.changeEvent(
+          event: widget.event,
+          newEvent: newEvent,
+        );
+        if (response.statusCode == HTTP_202_ACCEPTED) {
+          organiserEventsCubit.retrieveEvents();
+        } else {
+          // TODO
+        }
+        navigator.pop();
       },
     );
 

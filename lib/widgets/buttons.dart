@@ -5,6 +5,7 @@ const double BUTTON_PADDING = 16;
 const double BUTTON_FONT_SIZE = 16;
 const Color BUTTON_GRAY_COLOR = Colors.black12;
 
+const Color MANAGE_BUTTON_COLOR = APP_COLOR;
 const Color DETAILS_BUTTON_COLOR = Colors.black12;
 const Color CANCEL_BUTTON_COLOR = Colors.red;
 const Color APPLIED_BUTTON_COLOR = Colors.red;

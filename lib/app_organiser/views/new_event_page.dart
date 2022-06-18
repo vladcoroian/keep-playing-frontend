@@ -239,6 +239,7 @@ class _NewEventPageState extends State<NewEventPage> {
           price: _price,
           coach: false,
         );
+
         NavigatorState navigator = Navigator.of(context);
         final OrganiserEventsCubit organiserEventsCubit =
             context.read<OrganiserEventsCubit>();

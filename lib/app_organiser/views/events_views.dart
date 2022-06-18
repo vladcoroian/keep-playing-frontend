@@ -4,9 +4,9 @@ import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
-import '../events/new_event.dart';
-import '../events/new_job_button.dart';
-import '../organiser.dart';
+import 'new_event_page.dart';
+import 'widgets/event_cards.dart';
+import 'widgets/new_job_button.dart';
 
 class EventsView extends StatefulWidget {
   const EventsView({Key? key}) : super(key: key);
@@ -44,7 +44,7 @@ class _EventsViewState extends State<EventsView> {
           : ListViewOfEvents(
               events: context.read<OrganiserEventsCubit>().state,
               eventWidgetBuilder: (Event event) =>
-                  Organiser.getCardForEvent(event: event),
+                  OrganiserEventCards.getCardForEvent(event: event),
             );
     });
 

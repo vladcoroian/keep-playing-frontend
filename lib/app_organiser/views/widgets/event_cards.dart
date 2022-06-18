@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 
-import 'event_cards/past_event_card.dart';
-import 'event_cards/pending_event_card.dart';
-import 'event_cards/scheduled_event_card.dart';
+import 'cards/past_event_card.dart';
+import 'cards/pending_event_card.dart';
+import 'cards/scheduled_event_card.dart';
 
-class Organiser {
+export 'cards/past_event_card.dart';
+export 'cards/pending_event_card.dart';
+export 'cards/scheduled_event_card.dart';
+
+class OrganiserEventCards {
   static Widget getCardForEvent({required Event event}) {
     if (event.isInThePast()) {
       return PastEventCard(event: event);
