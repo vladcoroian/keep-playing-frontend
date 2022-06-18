@@ -23,7 +23,8 @@ class FeedView extends StatelessWidget {
           events: state,
           eventWidgetBuilder: (Event event) => _FeedEventWidget(
                 event: event,
-                coachPK: context.read<CurrentCoachUserCubit>().state.pk,
+                coachPK:
+                    BlocProvider.of<CoachUserCubit>(context).state.pk,
               ));
     });
 
@@ -33,7 +34,7 @@ class FeedView extends StatelessWidget {
         ),
         body: RefreshIndicator(
           onRefresh: () async {
-            context.read<FeedEventsCubit>().retrieveFeedEvents();
+            BlocProvider.of<FeedEventsCubit>(context).retrieveFeedEvents();
           },
           child: Center(child: viewOfEvents),
         ));
@@ -64,7 +65,8 @@ class _FeedEventWidget extends StatelessWidget {
       text: 'Apply',
       color: APP_COLOR,
       onPressed: () {
-        final FeedEventsCubit feedEventsCubit = context.read<FeedEventsCubit>();
+        final FeedEventsCubit feedEventsCubit =
+            BlocProvider.of<FeedEventsCubit>(context);
 
         showDialog(
             context: context,
@@ -116,27 +118,27 @@ class _AcceptJobDialog extends StatelessWidget {
   const _AcceptJobDialog({required this.event});
 
   @override
-  Widget build(BuildContext buildContext) {
+  Widget build(BuildContext context) {
     final Widget sendOfferButton = ColoredButton(
       text: 'Send Offer',
       color: APP_COLOR,
       onPressed: () {
         final FeedEventsCubit feedEventsCubit =
-            buildContext.read<FeedEventsCubit>();
+            BlocProvider.of<FeedEventsCubit>(context);
         showDialog(
-            context: buildContext,
-            builder: (BuildContext context) {
+            context: context,
+            builder: (BuildContext buildContext) {
               return BlocProvider<FeedEventsCubit>.value(
                 value: feedEventsCubit,
                 child: ConfirmationDialog(
                   title: 'Are you sure that you want to accept this job?',
                   onNoPressed: () => {
-                    Navigator.pop(context),
+                    Navigator.pop(buildContext),
                   },
                   onYesPressed: () async {
-                    final NavigatorState navigator = Navigator.of(context);
+                    final NavigatorState navigator = Navigator.of(buildContext);
                     final FeedEventsCubit feedEventsCubit =
-                        buildContext.read<FeedEventsCubit>();
+                        BlocProvider.of<FeedEventsCubit>(context);
                     final Response response =
                         await API.events.applyToJob(event: event);
                     if (response.statusCode == HTTP_202_ACCEPTED) {
@@ -156,7 +158,7 @@ class _AcceptJobDialog extends StatelessWidget {
     final Widget cancelButton = ColoredButton(
       text: 'Cancel',
       color: CANCEL_BUTTON_COLOR,
-      onPressed: () => {Navigator.pop(buildContext)},
+      onPressed: () => {Navigator.pop(context)},
     );
 
     return EventDetailsDialog(event: event, widgetsAtTheEnd: [

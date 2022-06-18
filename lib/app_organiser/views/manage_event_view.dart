@@ -310,7 +310,7 @@ class _ManageEventView extends State<ManageEventView> {
       color: CANCEL_BUTTON_COLOR,
       onPressed: () {
         final OrganiserEventsCubit organiserEventsCubit =
-            context.read<OrganiserEventsCubit>();
+            BlocProvider.of<OrganiserEventsCubit>(context);
         showDialog(
             context: context,
             builder: (BuildContext buildContext) {
@@ -324,7 +324,7 @@ class _ManageEventView extends State<ManageEventView> {
                     onYesPressed: () async {
                       NavigatorState navigator = Navigator.of(buildContext);
                       final OrganiserEventsCubit organiserEventsCubit =
-                          context.read<OrganiserEventsCubit>();
+                          BlocProvider.of<OrganiserEventsCubit>(context);
                       await API.events.cancelEvent(event: widget.event);
                       organiserEventsCubit.retrieveEvents();
                       navigator.pop();
@@ -356,7 +356,7 @@ class _ManageEventView extends State<ManageEventView> {
 
         NavigatorState navigator = Navigator.of(context);
         final OrganiserEventsCubit organiserEventsCubit =
-            context.read<OrganiserEventsCubit>();
+            BlocProvider.of<OrganiserEventsCubit>(context);
         Response response = await API.events.changeEvent(
           event: widget.event,
           newEvent: newEvent,

@@ -242,7 +242,7 @@ class _NewEventViewState extends State<NewEventView> {
 
         NavigatorState navigator = Navigator.of(context);
         final OrganiserEventsCubit organiserEventsCubit =
-            context.read<OrganiserEventsCubit>();
+            BlocProvider.of<OrganiserEventsCubit>(context);
         Response response = await API.events.addNewEvent(newEvent: newEvent);
         if (response.statusCode == HTTP_201_CREATED) {
           organiserEventsCubit.retrieveEvents();

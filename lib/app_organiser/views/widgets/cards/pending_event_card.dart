@@ -44,12 +44,14 @@ class _PendingEventCardState extends State<PendingEventCard> {
   @override
   Widget build(BuildContext context) {
     final Widget offersButton = ColoredButton(
-      text: offers.isEmpty ? 'No Offers' : 'Offers (${offers.length})',
-      color: offers.isEmpty
+      text: widget.event.offers.isEmpty
+          ? 'No Offers'
+          : 'Offers (${widget.event.offers.length})',
+      color: widget.event.offers.isEmpty
           ? NO_OFFERS_BUTTON_COLOR
           : AT_LEAST_ONE_OFFER_BUTTON_COLOR,
       onPressed: () {
-        if (offers.isNotEmpty) {
+        if (widget.event.offers.isNotEmpty) {
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -93,26 +95,33 @@ class _PendingEventCardState extends State<PendingEventCard> {
   List<Widget> _getOffersList() {
     List<Widget> offersList = [];
     for (User offer in offers) {
-      offersList.add(Card(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.person),
-              title: Text("${offer.firstName} ${offer.lastName}"),
-              subtitle: Text(offer.email),
-            ),
-            Center(
-              child: _AcceptCoachButton(
-                onPressed: () {
-                  API.events.acceptCoach(event: widget.event, coach: offer);
-                  Navigator.pop(context);
-                },
+      offersList.add(
+        Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: Text("${offer.firstName} ${offer.lastName}"),
+                subtitle: Text(offer.email),
               ),
-            )
-          ],
-        ), // children: [Text("${offer.firstName} ${offer.lastName}")],
-      ));
+              Center(
+                child: _AcceptCoachButton(
+                  onPressed: () async {
+                    NavigatorState navigator = Navigator.of(context);
+                    OrganiserEventsCubit organiserEventsCubit =
+                        BlocProvider.of<OrganiserEventsCubit>(context);
+                    await API.events
+                        .acceptCoach(event: widget.event, coach: offer);
+                    organiserEventsCubit.retrieveEvents();
+                    navigator.pop();
+                  },
+                ),
+              ),
+            ],
+          ), // children: [Text("${offer.firstName} ${offer.lastName}")],
+        ),
+      );
     }
     return offersList;
   }

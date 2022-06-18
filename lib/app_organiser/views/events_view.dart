@@ -4,6 +4,7 @@ import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
+import 'events_for_day_page.dart';
 import 'new_event_page.dart';
 import 'widgets/event_cards.dart';
 import 'widgets/new_job_button.dart';
@@ -38,11 +39,21 @@ class _EventsViewState extends State<EventsView> {
         builder: (context, state) {
       return _calendarView
           ? CalendarViewOfEvents(
-              events: context.read<OrganiserEventsCubit>().state,
-              onDaySelected: (DateTime day) {},
+              events: BlocProvider.of<OrganiserEventsCubit>(context).state,
+              onDaySelected: (DateTime day) => {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => EventsForDayPage(
+                      organiserEventsCubit:
+                          BlocProvider.of<OrganiserEventsCubit>(context),
+                      day: day,
+                    ),
+                  ),
+                ),
+              },
             )
           : ListViewOfEvents(
-              events: context.read<OrganiserEventsCubit>().state,
+              events: BlocProvider.of<OrganiserEventsCubit>(context).state,
               eventWidgetBuilder: (Event event) =>
                   OrganiserEventCards.getCardForEvent(event: event),
             );
@@ -69,7 +80,7 @@ class _EventsViewState extends State<EventsView> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          context.read<OrganiserEventsCubit>().retrieveEvents();
+          BlocProvider.of<OrganiserEventsCubit>(context).retrieveEvents();
         },
         child: viewOfEvents,
       ),

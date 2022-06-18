@@ -14,7 +14,7 @@ class UpcomingJobsPage extends StatelessWidget {
       create: (BuildContext context) {
         UpcomingJobsCubit upcomingJobsCubit = UpcomingJobsCubit();
         upcomingJobsCubit.retrieveUpcomingJobs(
-          withCoachUser: context.read<CurrentCoachUserCubit>().state,
+          withCoachUser: BlocProvider.of<CoachUserCubit>(context).state,
         );
         return upcomingJobsCubit;
       },

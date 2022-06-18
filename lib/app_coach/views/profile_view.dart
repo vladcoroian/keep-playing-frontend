@@ -9,7 +9,8 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User currentUser = context.read<CurrentCoachUserCubit>().state;
+    final User currentUser =
+        BlocProvider.of<CoachUserCubit>(context).state;
 
     final Widget usernameForm = ListTile(
         title: TextFormField(
