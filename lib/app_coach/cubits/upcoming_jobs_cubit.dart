@@ -11,7 +11,6 @@ class UpcomingJobsCubit extends Cubit<List<Event>> {
     retrievedEvents.retainWhere(
       (event) => event.check(
         allowPastEvents: false,
-        allowFutureEvents: true,
         allowPendingEvents: false,
         allowScheduledEvents: true,
         withCoachUser: withCoachUser,

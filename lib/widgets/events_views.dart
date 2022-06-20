@@ -43,11 +43,11 @@ class ListViewButton extends StatelessWidget {
   }
 }
 
-class EventsListViews {
+class ListViewsOfEvents {
   final List<Event> events;
   final Widget Function(Event event) eventWidgetBuilder;
 
-  EventsListViews({required this.events, required this.eventWidgetBuilder});
+  ListViewsOfEvents({required this.events, required this.eventWidgetBuilder});
 
   List<Widget> _list() {
     List<Widget> listOfEventsWidgets = [];

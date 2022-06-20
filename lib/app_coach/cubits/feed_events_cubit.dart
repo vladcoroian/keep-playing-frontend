@@ -10,7 +10,6 @@ class FeedEventsCubit extends Cubit<List<Event>> {
     retrievedEvents.retainWhere(
       (event) => event.check(
           allowPastEvents: false,
-          allowFutureEvents: true,
           allowPendingEvents: true,
           allowScheduledEvents: false),
     );

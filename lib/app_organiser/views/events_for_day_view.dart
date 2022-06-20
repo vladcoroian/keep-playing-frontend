@@ -20,7 +20,7 @@ class EventsForDayView extends StatelessWidget {
             BlocProvider.of<OrganiserEventsCubit>(context).state;
         eventsForDay.retainWhere((event) => isSameDay(event.date, day));
 
-        return EventsListViews(
+        return ListViewsOfEvents(
           events: eventsForDay,
           eventWidgetBuilder: (Event event) =>
               OrganiserEventCards.getCardForEvent(event: event),

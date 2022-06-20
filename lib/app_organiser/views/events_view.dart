@@ -22,10 +22,6 @@ class _EventsViewState extends State<EventsView> {
 
   bool _calendarView = true;
 
-  bool _allowPastEvents = true;
-  bool _allowPendingEvents = true;
-  bool _allowScheduledEvents = true;
-
   @override
   Widget build(BuildContext context) {
     final Widget appBarButton = _calendarView
@@ -45,10 +41,11 @@ class _EventsViewState extends State<EventsView> {
     final List<Widget> optionSelectors = [
       SwitchListTile(
         title: const Text('Past Events'),
-        value: _allowPastEvents,
-        onChanged: (value) {
+        value: BlocProvider.of<OrganiserEventsCubit>(context).allowPastEvents,
+        onChanged: (bool value) {
           setState(() {
-            _allowPastEvents = value;
+            BlocProvider.of<OrganiserEventsCubit>(context)
+                .setAllowPastEventsTo(value);
           });
         },
         activeTrackColor: ACTIVE_TRACK_COLOR,
@@ -56,10 +53,12 @@ class _EventsViewState extends State<EventsView> {
       ),
       SwitchListTile(
         title: const Text('Pending Events'),
-        value: _allowPendingEvents,
-        onChanged: (value) {
+        value:
+            BlocProvider.of<OrganiserEventsCubit>(context).allowPendingEvents,
+        onChanged: (bool value) {
           setState(() {
-            _allowPendingEvents = value;
+            BlocProvider.of<OrganiserEventsCubit>(context)
+                .setAllowPendingEventsTo(value);
           });
         },
         activeTrackColor: ACTIVE_TRACK_COLOR,
@@ -67,10 +66,12 @@ class _EventsViewState extends State<EventsView> {
       ),
       SwitchListTile(
         title: const Text('Scheduled Events'),
-        value: _allowScheduledEvents,
-        onChanged: (value) {
+        value:
+            BlocProvider.of<OrganiserEventsCubit>(context).allowScheduledEvents,
+        onChanged: (bool value) {
           setState(() {
-            _allowScheduledEvents = value;
+            BlocProvider.of<OrganiserEventsCubit>(context)
+                .setAllowScheduledEventsTo(value);
           });
         },
         activeTrackColor: ACTIVE_TRACK_COLOR,
@@ -104,7 +105,7 @@ class _EventsViewState extends State<EventsView> {
                   ],
                 ),
               )
-            : EventsListViews(
+            : ListViewsOfEvents(
                 events: BlocProvider.of<OrganiserEventsCubit>(context).state,
                 eventWidgetBuilder: (Event event) =>
                     OrganiserEventCards.getCardForEvent(event: event),

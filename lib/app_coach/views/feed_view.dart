@@ -19,7 +19,7 @@ class FeedView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<FeedEventsCubit, List<Event>>(
       builder: (context, state) {
-        return EventsListViews(
+        return ListViewsOfEvents(
           events: state,
           eventWidgetBuilder: (Event event) => _FeedEventWidget(
             event: event,

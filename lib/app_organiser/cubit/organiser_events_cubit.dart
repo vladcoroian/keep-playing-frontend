@@ -6,18 +6,21 @@ class OrganiserEventsCubit extends Cubit<List<Event>> {
   final AllEventsCubit allEventsCubit;
 
   bool allowPastEvents = true;
-  bool allowFutureEvents = true;
   bool allowPendingEvents = true;
   bool allowScheduledEvents = true;
 
   OrganiserEventsCubit({required this.allEventsCubit}) : super([]);
+
+  void retrieveEvents() async {
+    await allEventsCubit.retrieveEvents();
+    updateEventsUsingPreferences();
+  }
 
   void updateEventsUsingPreferences() {
     List<Event> events = [...allEventsCubit.state];
     events.retainWhere(
       (event) => event.check(
         allowPastEvents: allowPastEvents,
-        allowFutureEvents: allowFutureEvents,
         allowPendingEvents: allowPendingEvents,
         allowScheduledEvents: allowScheduledEvents,
       ),
@@ -25,8 +28,18 @@ class OrganiserEventsCubit extends Cubit<List<Event>> {
     emit(events);
   }
 
-  void retrieveEvents() async {
-    await allEventsCubit.retrieveEvents();
+  void setAllowPastEventsTo(bool allow) {
+    allowPastEvents = allow;
+    updateEventsUsingPreferences();
+  }
+
+  void setAllowPendingEventsTo(bool allow) {
+    allowPendingEvents = allow;
+    updateEventsUsingPreferences();
+  }
+
+  void setAllowScheduledEventsTo(bool allow) {
+    allowScheduledEvents = allow;
     updateEventsUsingPreferences();
   }
 }

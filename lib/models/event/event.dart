@@ -102,7 +102,6 @@ class Event {
 
   bool check({
     required bool allowPastEvents,
-    required bool allowFutureEvents,
     required bool allowPendingEvents,
     required bool allowScheduledEvents,
     DateTime? onDay,
@@ -111,9 +110,6 @@ class Event {
     bool result = true;
     if (!allowPastEvents) {
       result = result && !isInThePast();
-    }
-    if (!allowFutureEvents) {
-      result = result && !isInTheFuture();
     }
     if (!allowPendingEvents) {
       result = result && hasCoach();
