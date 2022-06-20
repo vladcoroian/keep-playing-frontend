@@ -18,6 +18,13 @@ class EventsView extends StatefulWidget {
 
 class _EventsViewState extends State<EventsView> {
   bool _calendarView = true;
+  int? _selectedIndex = 0;
+
+  void _onItemTapped(int? index) {
+    setState(() {
+      _selectedIndex = index ?? 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +42,74 @@ class _EventsViewState extends State<EventsView> {
                   })
                 });
 
-    final Widget viewOfEvents = BlocBuilder<OrganiserEventsCubit, List<Event>>(
-        builder: (context, state) {
+    final List<Widget> optionSelectors = <Widget>[
+      RadioListTile(
+        value: 0,
+        groupValue: _selectedIndex,
+        onChanged: _onItemTapped,
+        title: const Text('All Events'),
+      ),
+      RadioListTile(
+        value: 1,
+        groupValue: _selectedIndex,
+        onChanged: _onItemTapped,
+        title: const Text('Pending Events'),
+      ),
+      RadioListTile(
+        value: 2,
+        groupValue: _selectedIndex,
+        onChanged: _onItemTapped,
+        title: const Text('Scheduled Events'),
+      ),
+    ];
+
+    final List<Widget> listOfEvents = ListViewOfEvents.listOfEventsWidgets(
+      events: BlocProvider.of<OrganiserEventsCubit>(context).state,
+      eventWidgetBuilder: (Event event) =>
+          OrganiserEventCards.getCardForEvent(event: event),
+    );
+
+    final Widget calendarViewOfEvents = CalendarViewOfEvents(
+      events: BlocProvider.of<OrganiserEventsCubit>(context).state,
+      onDaySelected: (DateTime day) => {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => EventsForDayPage(
+              organiserEventsCubit:
+                  BlocProvider.of<OrganiserEventsCubit>(context),
+              day: day,
+            ),
+          ),
+        ),
+      },
+    );
+
+    final Widget sliverViewOfEvents =
+        BlocBuilder<OrganiserEventsCubit, List<Event>>(
+            builder: (context, state) {
       return _calendarView
-          ? CalendarViewOfEvents(
-              events: BlocProvider.of<OrganiserEventsCubit>(context).state,
-              onDaySelected: (DateTime day) => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => EventsForDayPage(
-                      organiserEventsCubit:
-                          BlocProvider.of<OrganiserEventsCubit>(context),
-                      day: day,
-                    ),
+          ? SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  CalendarViewOfEvents(
+                    events:
+                        BlocProvider.of<OrganiserEventsCubit>(context).state,
+                    onDaySelected: (DateTime day) => {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => EventsForDayPage(
+                            organiserEventsCubit:
+                                BlocProvider.of<OrganiserEventsCubit>(context),
+                            day: day,
+                          ),
+                        ),
+                      ),
+                    },
                   ),
-                ),
-              },
+                ],
+              ),
             )
-          : ListViewOfEvents(
+          : SliverListViewOfEvents(
               events: BlocProvider.of<OrganiserEventsCubit>(context).state,
               eventWidgetBuilder: (Event event) =>
                   OrganiserEventCards.getCardForEvent(event: event),
@@ -82,7 +139,17 @@ class _EventsViewState extends State<EventsView> {
         onRefresh: () async {
           BlocProvider.of<OrganiserEventsCubit>(context).retrieveEvents();
         },
-        child: viewOfEvents,
+        child: CustomScrollView(
+          slivers: [
+            SliverList(
+              delegate: SliverChildListDelegate(optionSelectors),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([const Divider()]),
+            ),
+            sliverViewOfEvents,
+          ],
+        ),
       ),
       floatingActionButton: newJobButton,
     );

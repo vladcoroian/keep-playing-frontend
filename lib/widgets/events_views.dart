@@ -3,6 +3,8 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+const double CALENDAR_PADDING = DEFAULT_PADDING;
+
 class CalendarViewButton extends StatelessWidget {
   final Function()? onTap;
 
@@ -59,34 +61,34 @@ class _CalendarViewOfEventsState extends State<CalendarViewOfEvents> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(children: <Widget>[
-      TableCalendar(
-        startingDayOfWeek: StartingDayOfWeek.monday,
-        firstDay: DateTime.utc(2010, 10, 16),
-        lastDay: DateTime.utc(2030, 3, 14),
-        focusedDay: _focusedDay,
-        selectedDayPredicate: (day) {
-          return isSameDay(_selectedDay, day);
-        },
-        onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(_selectedDay, selectedDay)) {
-            setState(() {
-              _focusedDay = focusedDay;
-              _selectedDay = selectedDay;
-            });
-          }
-          widget.onDaySelected(selectedDay);
-        },
-        calendarFormat: CalendarFormat.month,
-        availableCalendarFormats: const {CalendarFormat.month: 'Month'},
-        onPageChanged: (focusedDay) {
-          _focusedDay = focusedDay;
-        },
-        eventLoader: (day) {
-          return _getEventsForDay(day);
-        },
-      ),
-    ]);
+    return Padding(
+        padding: const EdgeInsets.all(CALENDAR_PADDING),
+        child: TableCalendar(
+          startingDayOfWeek: StartingDayOfWeek.monday,
+          firstDay: DateTime.utc(2010, 10, 16),
+          lastDay: DateTime.utc(2030, 3, 14),
+          focusedDay: _focusedDay,
+          selectedDayPredicate: (day) {
+            return isSameDay(_selectedDay, day);
+          },
+          onDaySelected: (selectedDay, focusedDay) {
+            if (!isSameDay(_selectedDay, selectedDay)) {
+              setState(() {
+                _focusedDay = focusedDay;
+                _selectedDay = selectedDay;
+              });
+            }
+            widget.onDaySelected(selectedDay);
+          },
+          calendarFormat: CalendarFormat.month,
+          availableCalendarFormats: const {CalendarFormat.month: 'Month'},
+          onPageChanged: (focusedDay) {
+            _focusedDay = focusedDay;
+          },
+          eventLoader: (day) {
+            return _getEventsForDay(day);
+          },
+        ));
   }
 
   List<Widget> _getEventsForDay(DateTime day) {
@@ -112,6 +114,17 @@ class ListViewOfEvents extends StatefulWidget {
 
   @override
   State<ListViewOfEvents> createState() => _ListViewOfEventsState();
+
+  static List<Widget> listOfEventsWidgets({
+    required List<Event> events,
+    required Widget Function(Event event) eventWidgetBuilder,
+  }) {
+    List<Widget> listOfEventsCards = [];
+    for (Event event in events) {
+      listOfEventsCards.add(eventWidgetBuilder(event));
+    }
+    return listOfEventsCards;
+  }
 }
 
 class _ListViewOfEventsState extends State<ListViewOfEvents> {
@@ -119,9 +132,44 @@ class _ListViewOfEventsState extends State<ListViewOfEvents> {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: widget.events.length,
-      itemBuilder: (BuildContext context, int index) {
-        return widget.eventWidgetBuilder(widget.events[index]);
-      },
+      itemBuilder: (BuildContext context, int index) =>
+          widget.eventWidgetBuilder(widget.events[index]),
+    );
+  }
+}
+
+class SliverListViewOfEvents extends StatefulWidget {
+  final List<Event> events;
+  final Widget Function(Event event) eventWidgetBuilder;
+
+  const SliverListViewOfEvents(
+      {Key? key, required this.events, required this.eventWidgetBuilder})
+      : super(key: key);
+
+  @override
+  State<SliverListViewOfEvents> createState() => _SliverListViewOfEventsState();
+
+  static List<Widget> listOfEventsWidgets({
+    required List<Event> events,
+    required Widget Function(Event event) eventWidgetBuilder,
+  }) {
+    List<Widget> listOfEventsCards = [];
+    for (Event event in events) {
+      listOfEventsCards.add(eventWidgetBuilder(event));
+    }
+    return listOfEventsCards;
+  }
+}
+
+class _SliverListViewOfEventsState extends State<SliverListViewOfEvents> {
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) =>
+            widget.eventWidgetBuilder(widget.events[index]),
+        childCount: widget.events.length,
+      ),
     );
   }
 }
