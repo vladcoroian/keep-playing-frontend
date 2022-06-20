@@ -4,7 +4,6 @@ import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 import 'api.dart';
 
@@ -101,66 +100,13 @@ class ApiEvents {
         body: jsonEncode(<String, dynamic>{"coach": false}));
   }
 
-  Future<List<Event>> retrieveEvents({
-    bool allowPastEvents = true,
-    bool allowFutureEvents = true,
-    bool allowPendingEvents = true,
-    bool allowScheduledEvents = true,
-    DateTime? onDay,
-    User? withCoachUser,
-  }) async {
+  Future<List<Event>> retrieveEvents() async {
     List<Event> events = [];
     List response =
         json.decode((await client.get(_ApiEventsLinks.eventsLink())).body);
     for (var element in response) {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }
-    events.retainWhere((event) => _checkEvent(
-          event: event,
-          allowPastEvents: allowPastEvents,
-          allowFutureEvents: allowFutureEvents,
-          allowPendingEvents: allowPendingEvents,
-          allowScheduledEvents: allowScheduledEvents,
-          onDay: onDay,
-          withCoachUser: withCoachUser,
-        ));
     return events;
-  }
-
-  bool _checkEvent({
-    required Event event,
-    required bool allowPastEvents,
-    required bool allowFutureEvents,
-    required bool allowPendingEvents,
-    required bool allowScheduledEvents,
-    DateTime? onDay,
-    User? withCoachUser,
-  }) {
-    bool result = true;
-    if (!allowPastEvents) {
-      result = result && !event.isInThePast();
-    }
-    if (!allowFutureEvents) {
-      result = result && !event.isInTheFuture();
-    }
-    if (!allowPendingEvents) {
-      result = result && event.hasCoach();
-    }
-    if (!allowScheduledEvents) {
-      result = result && !event.hasCoach();
-    }
-    switch (onDay) {
-      case null:
-        break;
-      default:
-        result = result && isSameDay(event.date, onDay!);
-    }
-    switch (withCoachUser) {
-      case null:
-        break;
-      default:
-        result = result && event.coachPK == withCoachUser!.pk;
-    }
-    return result;
   }
 }

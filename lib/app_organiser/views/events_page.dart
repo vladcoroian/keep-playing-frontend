@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/all_events_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit.dart';
 
 import 'events_view.dart';
@@ -11,7 +12,9 @@ class EventsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) {
-        OrganiserEventsCubit organiserEventsCubit = OrganiserEventsCubit();
+        OrganiserEventsCubit organiserEventsCubit = OrganiserEventsCubit(
+          allEventsCubit: BlocProvider.of<AllEventsCubit>(context),
+        );
         organiserEventsCubit.retrieveEvents();
         return organiserEventsCubit;
       },

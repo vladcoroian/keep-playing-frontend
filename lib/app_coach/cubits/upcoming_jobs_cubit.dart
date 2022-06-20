@@ -7,10 +7,15 @@ class UpcomingJobsCubit extends Cubit<List<Event>> {
   UpcomingJobsCubit() : super([]);
 
   void retrieveUpcomingJobs({required User withCoachUser}) async {
-    List<Event> retrievedEvents = await API.events.retrieveEvents(
-      allowPastEvents: false,
-      allowPendingEvents: false,
-      withCoachUser: withCoachUser,
+    List<Event> retrievedEvents = await API.events.retrieveEvents();
+    retrievedEvents.retainWhere(
+      (event) => event.check(
+        allowPastEvents: false,
+        allowFutureEvents: true,
+        allowPendingEvents: false,
+        allowScheduledEvents: true,
+        withCoachUser: withCoachUser,
+      ),
     );
     emit(retrievedEvents);
   }

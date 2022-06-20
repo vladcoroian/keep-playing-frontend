@@ -1,25 +1,32 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keep_playing_frontend/api_manager/api.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/all_events_cubit.dart';
 import 'package:keep_playing_frontend/models/event.dart';
-import 'package:keep_playing_frontend/models/user.dart';
 
 class OrganiserEventsCubit extends Cubit<List<Event>> {
+  final AllEventsCubit allEventsCubit;
+
   bool allowPastEvents = true;
   bool allowFutureEvents = true;
   bool allowPendingEvents = true;
   bool allowScheduledEvents = true;
-  DateTime? onDay;
-  User? withCoachUser;
 
-  OrganiserEventsCubit() : super([]);
+  OrganiserEventsCubit({required this.allEventsCubit}) : super([]);
+
+  void updateEventsUsingPreferences() {
+    List<Event> events = [...allEventsCubit.state];
+    events.retainWhere(
+      (event) => event.check(
+        allowPastEvents: allowPastEvents,
+        allowFutureEvents: allowFutureEvents,
+        allowPendingEvents: allowPendingEvents,
+        allowScheduledEvents: allowScheduledEvents,
+      ),
+    );
+    emit(events);
+  }
 
   void retrieveEvents() async {
-    List<Event> retrievedEvents = await API.events.retrieveEvents(
-      allowPastEvents: allowPastEvents,
-      allowFutureEvents: allowFutureEvents,
-      allowPendingEvents: allowPendingEvents,
-      allowScheduledEvents: allowScheduledEvents,
-    );
-    emit(List.of(retrievedEvents));
+    await allEventsCubit.retrieveEvents();
+    updateEventsUsingPreferences();
   }
 }
