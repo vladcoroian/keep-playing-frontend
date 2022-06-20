@@ -19,11 +19,11 @@ class User {
 
   User.fromModel({required UserModel userModel})
       : this._(
-    pk: userModel.pk,
-    username: userModel.username,
-    email: userModel.email,
-    firstName: userModel.first_name,
-    lastName: userModel.last_name,
-    location: userModel.location,
-  );
+          pk: userModel.pk,
+          username: userModel.username,
+          email: userModel.email,
+          firstName: userModel.first_name,
+          lastName: userModel.last_name,
+          location: userModel.location,
+        );
 }

@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../constants.dart';
 import '../models/event.dart';
 
+const double DIALOG_PADDING = 16;
+
 class EventCard extends StatelessWidget {
   final Event event;
   final Widget leftButton;
@@ -18,7 +20,7 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        margin: const EdgeInsets.all(DEFAULT_PADDING),
+        margin: const EdgeInsets.all(CARD_PADDING),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -61,7 +63,7 @@ class EventDetailsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DEFAULT_PADDING),
+      contentPadding: const EdgeInsets.all(DIALOG_PADDING),
       title: Center(
           child: Text(
         event.name,

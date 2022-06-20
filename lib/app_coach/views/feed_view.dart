@@ -17,15 +17,17 @@ class FeedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget viewOfEvents =
-        BlocBuilder<FeedEventsCubit, List<Event>>(builder: (context, state) {
-      return ListViewOfEvents(
+    final Widget viewOfEvents = BlocBuilder<FeedEventsCubit, List<Event>>(
+      builder: (context, state) {
+        return EventsListViews(
           events: state,
           eventWidgetBuilder: (Event event) => _FeedEventWidget(
-                event: event,
-                coachPK: BlocProvider.of<CoachUserCubit>(context).state.pk,
-              ));
-    });
+            event: event,
+            coachPK: BlocProvider.of<CoachUserCubit>(context).state.pk,
+          ),
+        ).listView();
+      },
+    );
 
     return Scaffold(
         appBar: AppBar(

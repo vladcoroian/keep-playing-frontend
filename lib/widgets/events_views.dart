@@ -43,6 +43,29 @@ class ListViewButton extends StatelessWidget {
   }
 }
 
+class EventsListViews {
+  final List<Event> events;
+  final Widget Function(Event event) eventWidgetBuilder;
+
+  EventsListViews({required this.events, required this.eventWidgetBuilder});
+
+  List<Widget> _list() {
+    List<Widget> listOfEventsWidgets = [];
+    for (Event event in events) {
+      listOfEventsWidgets.add(eventWidgetBuilder(event));
+    }
+    return listOfEventsWidgets;
+  }
+
+  Widget listView() {
+    return ListView(children: _list());
+  }
+
+  Widget sliverListView() {
+    return SliverList(delegate: SliverChildListDelegate(_list()));
+  }
+}
+
 class CalendarViewOfEvents extends StatefulWidget {
   final List<Event> events;
   final void Function(DateTime day) onDaySelected;
@@ -101,75 +124,5 @@ class _CalendarViewOfEventsState extends State<CalendarViewOfEvents> {
     return eventsForDay
         .map((event) => const SizedBox(width: 0, height: 0))
         .toList();
-  }
-}
-
-class ListViewOfEvents extends StatefulWidget {
-  final List<Event> events;
-  final Widget Function(Event event) eventWidgetBuilder;
-
-  const ListViewOfEvents(
-      {Key? key, required this.events, required this.eventWidgetBuilder})
-      : super(key: key);
-
-  @override
-  State<ListViewOfEvents> createState() => _ListViewOfEventsState();
-
-  static List<Widget> listOfEventsWidgets({
-    required List<Event> events,
-    required Widget Function(Event event) eventWidgetBuilder,
-  }) {
-    List<Widget> listOfEventsCards = [];
-    for (Event event in events) {
-      listOfEventsCards.add(eventWidgetBuilder(event));
-    }
-    return listOfEventsCards;
-  }
-}
-
-class _ListViewOfEventsState extends State<ListViewOfEvents> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: widget.events.length,
-      itemBuilder: (BuildContext context, int index) =>
-          widget.eventWidgetBuilder(widget.events[index]),
-    );
-  }
-}
-
-class SliverListViewOfEvents extends StatefulWidget {
-  final List<Event> events;
-  final Widget Function(Event event) eventWidgetBuilder;
-
-  const SliverListViewOfEvents(
-      {Key? key, required this.events, required this.eventWidgetBuilder})
-      : super(key: key);
-
-  @override
-  State<SliverListViewOfEvents> createState() => _SliverListViewOfEventsState();
-
-  static List<Widget> listOfEventsWidgets({
-    required List<Event> events,
-    required Widget Function(Event event) eventWidgetBuilder,
-  }) {
-    List<Widget> listOfEventsCards = [];
-    for (Event event in events) {
-      listOfEventsCards.add(eventWidgetBuilder(event));
-    }
-    return listOfEventsCards;
-  }
-}
-
-class _SliverListViewOfEventsState extends State<SliverListViewOfEvents> {
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) =>
-            widget.eventWidgetBuilder(widget.events[index]),
-        childCount: widget.events.length,
-      ),
-    );
   }
 }

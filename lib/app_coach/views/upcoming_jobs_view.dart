@@ -19,10 +19,10 @@ class UpcomingJobsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<UpcomingJobsCubit, List<Event>>(
       builder: (context, state) {
-        return ListViewOfEvents(
+        return EventsListViews(
           events: BlocProvider.of<UpcomingJobsCubit>(context).state,
           eventWidgetBuilder: (Event event) => _UpcomingJobWidget(event: event),
-        );
+        ).listView();
       },
     );
 

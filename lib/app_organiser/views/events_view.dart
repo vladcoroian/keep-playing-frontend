@@ -17,14 +17,14 @@ class EventsView extends StatefulWidget {
 }
 
 class _EventsViewState extends State<EventsView> {
-  bool _calendarView = true;
-  int? _selectedIndex = 0;
+  static const Color ACTIVE_TRACK_COLOR = Colors.lightGreenAccent;
+  static const Color ACTIVE_COLOR = Colors.green;
 
-  void _onItemTapped(int? index) {
-    setState(() {
-      _selectedIndex = index ?? 0;
-    });
-  }
+  bool _calendarView = true;
+
+  bool _allowPastEvents = true;
+  bool _allowPendingEvents = true;
+  bool _allowScheduledEvents = true;
 
   @override
   Widget build(BuildContext context) {
@@ -42,79 +42,75 @@ class _EventsViewState extends State<EventsView> {
                   })
                 });
 
-    final List<Widget> optionSelectors = <Widget>[
-      RadioListTile(
-        value: 0,
-        groupValue: _selectedIndex,
-        onChanged: _onItemTapped,
-        title: const Text('All Events'),
+    final List<Widget> optionSelectors = [
+      SwitchListTile(
+        title: const Text('Past Events'),
+        value: _allowPastEvents,
+        onChanged: (value) {
+          setState(() {
+            _allowPastEvents = value;
+          });
+        },
+        activeTrackColor: ACTIVE_TRACK_COLOR,
+        activeColor: ACTIVE_COLOR,
       ),
-      RadioListTile(
-        value: 1,
-        groupValue: _selectedIndex,
-        onChanged: _onItemTapped,
+      SwitchListTile(
         title: const Text('Pending Events'),
+        value: _allowPendingEvents,
+        onChanged: (value) {
+          setState(() {
+            _allowPendingEvents = value;
+          });
+        },
+        activeTrackColor: ACTIVE_TRACK_COLOR,
+        activeColor: ACTIVE_COLOR,
       ),
-      RadioListTile(
-        value: 2,
-        groupValue: _selectedIndex,
-        onChanged: _onItemTapped,
+      SwitchListTile(
         title: const Text('Scheduled Events'),
+        value: _allowScheduledEvents,
+        onChanged: (value) {
+          setState(() {
+            _allowScheduledEvents = value;
+          });
+        },
+        activeTrackColor: ACTIVE_TRACK_COLOR,
+        activeColor: ACTIVE_COLOR,
       ),
     ];
 
-    final List<Widget> listOfEvents = ListViewOfEvents.listOfEventsWidgets(
-      events: BlocProvider.of<OrganiserEventsCubit>(context).state,
-      eventWidgetBuilder: (Event event) =>
-          OrganiserEventCards.getCardForEvent(event: event),
-    );
-
-    final Widget calendarViewOfEvents = CalendarViewOfEvents(
-      events: BlocProvider.of<OrganiserEventsCubit>(context).state,
-      onDaySelected: (DateTime day) => {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => EventsForDayPage(
-              organiserEventsCubit:
-                  BlocProvider.of<OrganiserEventsCubit>(context),
-              day: day,
-            ),
-          ),
-        ),
-      },
-    );
-
     final Widget sliverViewOfEvents =
         BlocBuilder<OrganiserEventsCubit, List<Event>>(
-            builder: (context, state) {
-      return _calendarView
-          ? SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  CalendarViewOfEvents(
-                    events:
-                        BlocProvider.of<OrganiserEventsCubit>(context).state,
-                    onDaySelected: (DateTime day) => {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => EventsForDayPage(
-                            organiserEventsCubit:
-                                BlocProvider.of<OrganiserEventsCubit>(context),
-                            day: day,
+      builder: (context, state) {
+        return _calendarView
+            ? SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    CalendarViewOfEvents(
+                      events:
+                          BlocProvider.of<OrganiserEventsCubit>(context).state,
+                      onDaySelected: (DateTime day) => {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => EventsForDayPage(
+                              organiserEventsCubit:
+                                  BlocProvider.of<OrganiserEventsCubit>(
+                                      context),
+                              day: day,
+                            ),
                           ),
                         ),
-                      ),
-                    },
-                  ),
-                ],
-              ),
-            )
-          : SliverListViewOfEvents(
-              events: BlocProvider.of<OrganiserEventsCubit>(context).state,
-              eventWidgetBuilder: (Event event) =>
-                  OrganiserEventCards.getCardForEvent(event: event),
-            );
-    });
+                      },
+                    ),
+                  ],
+                ),
+              )
+            : EventsListViews(
+                events: BlocProvider.of<OrganiserEventsCubit>(context).state,
+                eventWidgetBuilder: (Event event) =>
+                    OrganiserEventCards.getCardForEvent(event: event),
+              ).sliverListView();
+      },
+    );
 
     final Widget newJobButton = NewJobButton(
       context: context,
