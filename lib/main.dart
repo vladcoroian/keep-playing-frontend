@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'app_organiser/organiser_home_page.dart';
 import 'constants.dart';
 import 'login_page.dart';
 
@@ -94,8 +93,7 @@ class _EnterAsOrganiserButton extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const OrganiserHomePage()),
+                MaterialPageRoute(builder: (context) => const LoginPage()),
               );
             },
             child: const Text('Enter as organiser')));

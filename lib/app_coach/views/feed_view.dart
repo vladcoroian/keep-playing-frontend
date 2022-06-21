@@ -149,7 +149,7 @@ class _AcceptJobDialog extends StatelessWidget {
                     final FeedEventsCubit feedEventsCubit =
                         BlocProvider.of<FeedEventsCubit>(context);
                     final Response response =
-                        await API.events.applyToJob(event: event);
+                        await API.coach.applyToJob(event: event);
                     if (response.statusCode == HTTP_202_ACCEPTED) {
                       feedEventsCubit.retrieveFeedEvents();
                     } else {

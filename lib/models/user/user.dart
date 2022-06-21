@@ -8,6 +8,9 @@ class User {
   final String lastName;
   final String location;
 
+  final bool isCoach;
+  final bool isOrganiser;
+
   User._({
     required this.pk,
     required this.username,
@@ -15,6 +18,8 @@ class User {
     required this.firstName,
     required this.lastName,
     required this.location,
+    required this.isCoach,
+    required this.isOrganiser,
   });
 
   User.fromModel({required UserModel userModel})
@@ -25,13 +30,15 @@ class User {
           firstName: userModel.first_name,
           lastName: userModel.last_name,
           location: userModel.location,
+          isCoach: userModel.is_coach,
+          isOrganiser: userModel.is_organiser,
         );
 
-  bool isCoach() {
-    return true;
+  bool isCoachUser() {
+    return isCoach;
   }
 
-  bool isOrganiser() {
+  bool isOrganiserUser() {
     return true;
   }
 }

@@ -92,6 +92,10 @@ class Event {
     return getStartTimestamp().isBefore(DateTime.now());
   }
 
+  bool isInTheFuture() {
+    return !isInThePast();
+  }
+
   bool hasCoach() {
     return coach;
   }
@@ -111,7 +115,7 @@ class Event {
       result = result && hasCoach();
     }
     if (!allowScheduledEvents) {
-      result = result && !hasCoach();
+      result = result && !(hasCoach() && isInTheFuture());
     }
     switch (onDay) {
       case null:

@@ -28,15 +28,20 @@ class ApiUsers {
   ApiUsers({required this.client});
 
   Future<Response> login({required UserLogin userLogin}) {
-    return client.post(_ApiUserLinks.loginLink(), body: userLogin.toJson());
+    return client.post(
+      _ApiUserLinks.loginLink(),
+      body: userLogin.toJson(),
+    );
   }
 
   Future<User> getCurrentUser() async {
-    String token = await StoredData.getLoginToken();
+    String token = await StoredData.getLoginTokenFromStorage();
 
     Response response = await client.get(
       _ApiUserLinks.userInformationLink(),
-      headers: <String, String>{'Authorization': 'Token $token'},
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
     );
     final body = jsonDecode(response.body);
 
@@ -44,11 +49,13 @@ class ApiUsers {
   }
 
   Future<UserModel> getCurrentUserModel() async {
-    String token = await StoredData.getLoginToken();
+    String token = await StoredData.getLoginTokenFromStorage();
 
     Response response = await client.get(
       _ApiUserLinks.userInformationLink(),
-      headers: <String, String>{'Authorization': 'Token $token'},
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
     );
     final body = jsonDecode(response.body);
 

@@ -64,7 +64,7 @@ class _UpcomingJobWidget extends StatelessWidget {
                       BlocProvider.of<UpcomingJobsCubit>(context);
                   final User coachUser = StoredData.getCurrentUser();
                   final Response response =
-                      await API.events.cancelJob(event: event);
+                      await API.coach.cancelJob(event: event);
                   if (response.statusCode == HTTP_202_ACCEPTED) {
                     upcomingJobsCubit.retrieveUpcomingJobs(
                         withCoachUser: coachUser);

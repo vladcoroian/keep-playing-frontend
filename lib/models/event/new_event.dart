@@ -57,14 +57,24 @@ class NewEvent {
         'sport': sport,
         'role': role,
         'date': DateFormat('yyyy-MM-dd').format(date),
-        'start_time': const DefaultMaterialLocalizations()
-            .formatTimeOfDay(startTime, alwaysUse24HourFormat: true),
-        'end_time': const DefaultMaterialLocalizations()
-            .formatTimeOfDay(endTime, alwaysUse24HourFormat: true),
-        'flexible_start_time': const DefaultMaterialLocalizations()
-            .formatTimeOfDay(flexibleStartTime, alwaysUse24HourFormat: true),
-        'flexible_end_time': const DefaultMaterialLocalizations()
-            .formatTimeOfDay(flexibleEndTime, alwaysUse24HourFormat: true),
+        'start_time': const DefaultMaterialLocalizations().formatTimeOfDay(
+          startTime,
+          alwaysUse24HourFormat: true,
+        ),
+        'end_time': const DefaultMaterialLocalizations().formatTimeOfDay(
+          endTime,
+          alwaysUse24HourFormat: true,
+        ),
+        'flexible_start_time':
+            const DefaultMaterialLocalizations().formatTimeOfDay(
+          flexibleStartTime,
+          alwaysUse24HourFormat: true,
+        ),
+        'flexible_end_time':
+            const DefaultMaterialLocalizations().formatTimeOfDay(
+          flexibleEndTime,
+          alwaysUse24HourFormat: true,
+        ),
         'price': price.toString(),
         'coach': coach ? 'True' : 'False',
       };

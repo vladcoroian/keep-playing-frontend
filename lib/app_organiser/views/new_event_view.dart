@@ -1,5 +1,6 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -209,6 +210,8 @@ class _NewEventViewState extends State<NewEventView> {
 
     final Widget priceForm = ListTile(
       title: TextFormField(
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         decoration: const InputDecoration(
           icon: Icon(Icons.price_change),
           hintText: 'Enter the fee',
@@ -243,7 +246,7 @@ class _NewEventViewState extends State<NewEventView> {
         NavigatorState navigator = Navigator.of(context);
         final OrganiserEventsCubit organiserEventsCubit =
             BlocProvider.of<OrganiserEventsCubit>(context);
-        Response response = await API.events.addNewEvent(newEvent: newEvent);
+        Response response = await API.organiser.addNewEvent(newEvent: newEvent);
         if (response.statusCode == HTTP_201_CREATED) {
           organiserEventsCubit.retrieveEvents();
         } else {

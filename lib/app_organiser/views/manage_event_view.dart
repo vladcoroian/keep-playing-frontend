@@ -2,6 +2,7 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:add_2_calendar/add_2_calendar.dart' as add2calendar;
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -78,7 +79,7 @@ class _ManageEventView extends State<ManageEventView> {
   _retrieveCoachUser() async {
     User? coach = widget.event.coachPK == null
         ? null
-        : await API.users.getUser(widget.event.coachPK!);
+        : await API.user.getUser(widget.event.coachPK!);
 
     setState(() {
       _sessionCoach = coach;
@@ -294,6 +295,8 @@ class _ManageEventView extends State<ManageEventView> {
 
     final Widget priceForm = ListTile(
         title: TextFormField(
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             initialValue: _price.toString(),
             decoration: const InputDecoration(
               icon: Icon(Icons.price_change),
@@ -325,7 +328,7 @@ class _ManageEventView extends State<ManageEventView> {
                       NavigatorState navigator = Navigator.of(buildContext);
                       final OrganiserEventsCubit organiserEventsCubit =
                           BlocProvider.of<OrganiserEventsCubit>(context);
-                      await API.events.cancelEvent(event: widget.event);
+                      await API.organiser.cancelEvent(event: widget.event);
                       organiserEventsCubit.retrieveEvents();
                       navigator.pop();
                       navigator.pop();
@@ -357,7 +360,7 @@ class _ManageEventView extends State<ManageEventView> {
         NavigatorState navigator = Navigator.of(context);
         final OrganiserEventsCubit organiserEventsCubit =
             BlocProvider.of<OrganiserEventsCubit>(context);
-        Response response = await API.events.changeEvent(
+        Response response = await API.organiser.changeEvent(
           event: widget.event,
           newEvent: newEvent,
         );

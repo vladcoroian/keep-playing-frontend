@@ -6,7 +6,7 @@ class FeedEventsCubit extends Cubit<List<Event>> {
   FeedEventsCubit() : super([]);
 
   void retrieveFeedEvents() async {
-    List<Event> retrievedEvents = await API.events.retrieveEvents();
+    List<Event> retrievedEvents = await API.coach.retrieveFeedEvents();
     retrievedEvents.retainWhere(
       (event) => event.check(
           allowPastEvents: false,

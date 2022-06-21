@@ -39,7 +39,7 @@ class _LoadingScreenPageState extends State<LoadingScreenPage>
   }
 
   Future<void> _login() async {
-    Response response = await API.users.login(userLogin: widget.userLogin);
+    Response response = await API.user.login(userLogin: widget.userLogin);
     if (response.statusCode == HTTP_200_OK) {
       /* Save the token to shared preferences. */
       final body = jsonDecode(response.body);
@@ -80,7 +80,7 @@ class _LoadingScreenPageState extends State<LoadingScreenPage>
       return loadingScreen;
     }
 
-    if (_currentUser!.isCoach()) {
+    if (_currentUser!.isCoachUser()) {
       return const CoachHomePage();
     }
 

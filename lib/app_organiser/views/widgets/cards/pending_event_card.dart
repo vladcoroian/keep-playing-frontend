@@ -32,7 +32,7 @@ class _PendingEventCardState extends State<PendingEventCard> {
   void _retrieveOffers() async {
     List<User> users = [];
     for (var offer in widget.event.offers) {
-      User user = await API.users.getUser(offer);
+      User user = await API.user.getUser(offer);
       users.add(user);
     }
 
@@ -107,7 +107,7 @@ class _PendingEventCardState extends State<PendingEventCard> {
           NavigatorState navigator = Navigator.of(context);
           OrganiserEventsCubit organiserEventsCubit =
               BlocProvider.of<OrganiserEventsCubit>(context);
-          await API.events.acceptCoach(event: widget.event, coach: offer);
+          await API.organiser.acceptCoach(event: widget.event, coach: offer);
           organiserEventsCubit.retrieveEvents();
           navigator.pop();
         },
