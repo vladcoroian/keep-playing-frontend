@@ -1,17 +1,17 @@
 import 'organiser_model.dart';
 
 class Organiser {
-  final List<int> favouriteCoachesPKs;
-  final List<int> blockedCoachesPKs;
+  final List<int> favourites;
+  final List<int> blocked;
 
   Organiser._({
-    required this.favouriteCoachesPKs,
-    required this.blockedCoachesPKs,
+    required this.favourites,
+    required this.blocked,
   });
 
   Organiser.fromModel({required OrganiserModel organiserModel})
       : this._(
-          favouriteCoachesPKs: organiserModel.favourite,
-          blockedCoachesPKs: organiserModel.blocked,
+          favourites: organiserModel.favourites,
+          blocked: organiserModel.blocked,
         );
 }

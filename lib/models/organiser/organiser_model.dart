@@ -4,11 +4,11 @@ part 'organiser_model.g.dart';
 
 @JsonSerializable()
 class OrganiserModel {
-  final List<int> favourite;
+  final List<int> favourites;
   final List<int> blocked;
 
   OrganiserModel({
-    required this.favourite,
+    required this.favourites,
     required this.blocked,
   });
 

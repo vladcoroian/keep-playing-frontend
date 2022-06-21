@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/event.dart';
+import 'package:keep_playing_frontend/models/organiser.dart';
+import 'package:keep_playing_frontend/models/organiser/organiser_model.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 
@@ -9,6 +11,8 @@ import 'api.dart';
 
 class _ApiOrganiserLinks {
   static const String ORGANISER = "${API.PREFIX}organiser/";
+
+  static Uri organiserLink() => Uri.parse(ORGANISER);
 
   static Uri eventsLink() => Uri.parse("${ORGANISER}events/");
 
@@ -29,6 +33,20 @@ class ApiOrganiser {
   final Client client;
 
   ApiOrganiser({required this.client});
+
+  Future<Organiser> getOrganiser() async {
+    String token = StoredData.getLoginToken();
+
+    Response response = await client.get(
+      _ApiOrganiserLinks.organiserLink(),
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
+    );
+    final body = jsonDecode(response.body);
+
+    return Organiser.fromModel(organiserModel: OrganiserModel.fromJson(body));
+  }
 
   Future<Response> addNewEvent({required NewEvent newEvent}) {
     String token = StoredData.getLoginToken();

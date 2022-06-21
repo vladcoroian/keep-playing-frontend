@@ -8,13 +8,13 @@ part of 'organiser_model.dart';
 
 OrganiserModel _$OrganiserModelFromJson(Map<String, dynamic> json) =>
     OrganiserModel(
-      favourite:
-          (json['favourite'] as List<dynamic>).map((e) => e as int).toList(),
+      favourites:
+          (json['favourites'] as List<dynamic>).map((e) => e as int).toList(),
       blocked: (json['blocked'] as List<dynamic>).map((e) => e as int).toList(),
     );
 
 Map<String, dynamic> _$OrganiserModelToJson(OrganiserModel instance) =>
     <String, dynamic>{
-      'favourite': instance.favourite,
+      'favourites': instance.favourites,
       'blocked': instance.blocked,
     };
