@@ -18,12 +18,22 @@ class LoadingScreenPage extends StatefulWidget {
   State<LoadingScreenPage> createState() => _LoadingScreenPageState();
 }
 
-class _LoadingScreenPageState extends State<LoadingScreenPage> {
+class _LoadingScreenPageState extends State<LoadingScreenPage>
+    with TickerProviderStateMixin {
   User? _currentUser;
   bool _invalid = false;
 
+  late AnimationController controller;
+
   @override
   void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 5),
+    )..addListener(() {
+        setState(() {});
+      });
+    controller.repeat(reverse: true);
     _login();
     super.initState();
   }
@@ -53,8 +63,20 @@ class _LoadingScreenPageState extends State<LoadingScreenPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: loadingScreen
-    const Widget loadingScreen = Text('Loading');
+    Widget loadingScreen = Scaffold(
+      backgroundColor: Colors.white,
+      body: Container(
+        alignment: Alignment.center,
+        child: SizedBox(
+          height: 50.0,
+          width: 50.0,
+          child: CircularProgressIndicator(
+            value: controller.value,
+            semanticsLabel: 'Linear progress indicator',
+          ),
+        ),
+      ),
+    );
 
     if (_invalid) {
       Navigator.of(context).pop();
