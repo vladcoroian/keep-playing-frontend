@@ -15,7 +15,7 @@ import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../cubit/organiser_events_cubit.dart';
+import '../../cubit/organiser_events_cubit.dart';
 
 class ManageEventView extends StatefulWidget {
   final sport_event.Event event;

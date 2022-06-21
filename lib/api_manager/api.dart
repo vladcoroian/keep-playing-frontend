@@ -32,7 +32,7 @@ class API {
         'Authorization': 'Token $token',
       },
     );
-    List body = json.decode(response.body);
+    final List body = json.decode(response.body);
     for (var element in body) {
       events.add(Event(eventModel: EventModel.fromJson(element)));
     }

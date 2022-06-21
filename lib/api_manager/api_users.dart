@@ -9,17 +9,11 @@ import 'api.dart';
 class _ApiUserLinks {
   static const String COACH = "${API.PREFIX}coach/";
 
-  static Uri loginLink() {
-    return Uri.parse('${API.PREFIX}login/');
-  }
+  static Uri loginLink() => Uri.parse('${API.PREFIX}login/');
 
-  static Uri userInformationLink() {
-    return Uri.parse("${API.PREFIX}user/");
-  }
+  static Uri userInformationLink() => Uri.parse("${API.PREFIX}user/");
 
-  static Uri coachInformationLink({required int pk}) {
-    return Uri.parse("$COACH$pk/");
-  }
+  static Uri coachInformationLink({required int pk}) => Uri.parse("$COACH$pk/");
 }
 
 class ApiUsers {

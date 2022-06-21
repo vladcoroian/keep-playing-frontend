@@ -21,9 +21,8 @@ class _ApiOrganiserLinks {
   static Uri acceptCoach({
     required int eventPK,
     required int coachPK,
-  }) {
-    return Uri.parse("${ORGANISER}events/$eventPK/accept/$coachPK/");
-  }
+  }) =>
+      Uri.parse("${ORGANISER}events/$eventPK/accept/$coachPK/");
 }
 
 class ApiOrganiser {

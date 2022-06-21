@@ -4,10 +4,10 @@ import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
-import 'events_for_day_page.dart';
-import 'new_event_page.dart';
-import 'widgets/event_cards.dart';
-import 'widgets/new_job_button.dart';
+import 'events/events_for_day_page.dart';
+import 'events/new_event_page.dart';
+import 'events/widgets/event_cards.dart';
+import 'events/widgets/new_job_button.dart';
 
 class EventsView extends StatefulWidget {
   const EventsView({Key? key}) : super(key: key);

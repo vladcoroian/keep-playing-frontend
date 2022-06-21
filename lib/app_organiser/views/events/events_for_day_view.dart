@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit.dart';
-import 'package:keep_playing_frontend/app_organiser/views/widgets/event_cards.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 import 'package:table_calendar/table_calendar.dart';
+
+import 'widgets/event_cards.dart';
 
 class EventsForDayView extends StatelessWidget {
   final DateTime day;
