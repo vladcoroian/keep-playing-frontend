@@ -9,6 +9,8 @@ import 'api.dart';
 class _ApiUserLinks {
   static const String COACH = "${API.PREFIX}coach/";
 
+  static Uri allUsersLink() => Uri.parse("${API.PREFIX}users/");
+
   static Uri loginLink() => Uri.parse('${API.PREFIX}login/');
 
   static Uri userInformationLink() => Uri.parse("${API.PREFIX}user/");
@@ -62,5 +64,17 @@ class ApiUsers {
     final body = jsonDecode(response.body);
 
     return User.fromModel(userModel: UserModel.fromJson(body));
+  }
+
+  Future<List<User>> retrieveAllUsers() async {
+    List<User> users = [];
+    final Response response = await client.get(
+      _ApiUserLinks.allUsersLink(),
+    );
+    final List body = json.decode(response.body);
+    for (var element in body) {
+      users.add(User.fromModel(userModel: UserModel.fromJson(element)));
+    }
+    return users;
   }
 }

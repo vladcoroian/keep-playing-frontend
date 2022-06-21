@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
+
+import 'profile/blocked_page.dart';
+import 'profile/favourites_page.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -83,6 +88,30 @@ class ProfileView extends StatelessWidget {
       ),
     );
 
+    final Widget favouritesListTile = ListTile(
+      title: const Text('Favourites'),
+      trailing: const Icon(Icons.arrow_forward),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => FavouritesPage(
+            organiserCubit: BlocProvider.of<OrganiserCubit>(context),
+          ),
+        ),
+      ),
+    );
+
+    final Widget blockedListTile = ListTile(
+      title: const Text('Blocked'),
+      trailing: const Icon(Icons.arrow_forward),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => BlockedPage(
+            organiserCubit: BlocProvider.of<OrganiserCubit>(context),
+          ),
+        ),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Profile'),
@@ -96,6 +125,8 @@ class ProfileView extends StatelessWidget {
             lastNameForm,
             locationForm,
             phoneNumberForm,
+            favouritesListTile,
+            blockedListTile,
           ],
         ),
       ),

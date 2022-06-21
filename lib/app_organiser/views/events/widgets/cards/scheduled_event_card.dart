@@ -21,8 +21,7 @@ class ScheduledEventCard extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ManageEventPage(
-              eventsCubit:
-                  BlocProvider.of<EventsCubit>(context),
+              eventsCubit: BlocProvider.of<EventsCubit>(context),
               event: event,
             ),
           ),

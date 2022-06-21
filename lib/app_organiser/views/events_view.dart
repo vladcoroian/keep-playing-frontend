@@ -44,8 +44,7 @@ class _EventsViewState extends State<EventsView> {
         value: BlocProvider.of<EventsCubit>(context).allowPastEvents,
         onChanged: (bool value) {
           setState(() {
-            BlocProvider.of<EventsCubit>(context)
-                .setAllowPastEventsTo(value);
+            BlocProvider.of<EventsCubit>(context).setAllowPastEventsTo(value);
           });
         },
         activeTrackColor: ACTIVE_TRACK_COLOR,
@@ -53,8 +52,7 @@ class _EventsViewState extends State<EventsView> {
       ),
       SwitchListTile(
         title: const Text('Pending Events'),
-        value:
-            BlocProvider.of<EventsCubit>(context).allowPendingEvents,
+        value: BlocProvider.of<EventsCubit>(context).allowPendingEvents,
         onChanged: (bool value) {
           setState(() {
             BlocProvider.of<EventsCubit>(context)
@@ -66,8 +64,7 @@ class _EventsViewState extends State<EventsView> {
       ),
       SwitchListTile(
         title: const Text('Scheduled Events'),
-        value:
-            BlocProvider.of<EventsCubit>(context).allowScheduledEvents,
+        value: BlocProvider.of<EventsCubit>(context).allowScheduledEvents,
         onChanged: (bool value) {
           setState(() {
             BlocProvider.of<EventsCubit>(context)
@@ -79,8 +76,7 @@ class _EventsViewState extends State<EventsView> {
       ),
     ];
 
-    final Widget sliverViewOfEvents =
-        BlocBuilder<EventsCubit, List<Event>>(
+    final Widget sliverViewOfEvents = BlocBuilder<EventsCubit, List<Event>>(
       builder: (context, state) {
         return _calendarView
             ? SliverList(
@@ -93,8 +89,7 @@ class _EventsViewState extends State<EventsView> {
                           MaterialPageRoute(
                             builder: (_) => EventsForDayPage(
                               eventsCubit:
-                                  BlocProvider.of<EventsCubit>(
-                                      context),
+                                  BlocProvider.of<EventsCubit>(context),
                               day: day,
                             ),
                           ),
@@ -118,8 +113,7 @@ class _EventsViewState extends State<EventsView> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => NewEventPage(
-              eventsCubit:
-                  BlocProvider.of<EventsCubit>(context),
+              eventsCubit: BlocProvider.of<EventsCubit>(context),
             ),
           ),
         ),

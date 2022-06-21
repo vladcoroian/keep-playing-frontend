@@ -81,8 +81,7 @@ class _PendingEventCardState extends State<PendingEventCard> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ManageEventPage(
-              eventsCubit:
-                  BlocProvider.of<EventsCubit>(context),
+              eventsCubit: BlocProvider.of<EventsCubit>(context),
               event: widget.event,
             ),
           ),
@@ -105,8 +104,7 @@ class _PendingEventCardState extends State<PendingEventCard> {
         color: APP_COLOR,
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
-          EventsCubit eventsCubit =
-              BlocProvider.of<EventsCubit>(context);
+          EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
           await API.organiser.acceptCoach(event: widget.event, coach: offer);
           eventsCubit.retrieveEvents();
           navigator.pop();
