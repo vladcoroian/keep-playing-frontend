@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:keep_playing_frontend/api_manager/api_events.dart';
 import 'package:keep_playing_frontend/api_manager/api_users.dart';
 
+const int HTTP_200_OK = 200;
 const int HTTP_201_CREATED = 201;
 const int HTTP_202_ACCEPTED = 202;
 

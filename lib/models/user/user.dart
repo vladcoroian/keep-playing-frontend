@@ -26,4 +26,12 @@ class User {
           lastName: userModel.last_name,
           location: userModel.location,
         );
+
+  bool isCoach() {
+    return true;
+  }
+
+  bool isOrganiser() {
+    return true;
+  }
 }

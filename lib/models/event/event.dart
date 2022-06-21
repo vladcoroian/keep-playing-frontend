@@ -92,10 +92,6 @@ class Event {
     return getStartTimestamp().isBefore(DateTime.now());
   }
 
-  bool isInTheFuture() {
-    return !isInThePast();
-  }
-
   bool hasCoach() {
     return coach;
   }

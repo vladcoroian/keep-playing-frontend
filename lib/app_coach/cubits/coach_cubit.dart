@@ -5,8 +5,4 @@ import 'package:keep_playing_frontend/models/user.dart';
 class CoachUserCubit extends Cubit<User> {
   CoachUserCubit({required User user}) : super(user);
 
-  void retrieveUserInformation() async {
-    User user = await API.users.getCurrentUser();
-    emit(user);
-  }
 }
