@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
-import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
@@ -81,8 +81,8 @@ class _PendingEventCardState extends State<PendingEventCard> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => ManageEventPage(
-              organiserEventsCubit:
-                  BlocProvider.of<OrganiserEventsCubit>(context),
+              eventsCubit:
+                  BlocProvider.of<EventsCubit>(context),
               event: widget.event,
             ),
           ),
@@ -105,10 +105,10 @@ class _PendingEventCardState extends State<PendingEventCard> {
         color: APP_COLOR,
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
-          OrganiserEventsCubit organiserEventsCubit =
-              BlocProvider.of<OrganiserEventsCubit>(context);
+          EventsCubit eventsCubit =
+              BlocProvider.of<EventsCubit>(context);
           await API.organiser.acceptCoach(event: widget.event, coach: offer);
-          organiserEventsCubit.retrieveEvents();
+          eventsCubit.retrieveEvents();
           navigator.pop();
         },
       );

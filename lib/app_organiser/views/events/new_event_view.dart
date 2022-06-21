@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
-import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
@@ -244,11 +244,11 @@ class _NewEventViewState extends State<NewEventView> {
         );
 
         NavigatorState navigator = Navigator.of(context);
-        final OrganiserEventsCubit organiserEventsCubit =
-            BlocProvider.of<OrganiserEventsCubit>(context);
+        final EventsCubit eventsCubit =
+            BlocProvider.of<EventsCubit>(context);
         Response response = await API.organiser.addNewEvent(newEvent: newEvent);
         if (response.statusCode == HTTP_201_CREATED) {
-          organiserEventsCubit.retrieveEvents();
+          eventsCubit.retrieveEvents();
         } else {
           // TODO
         }

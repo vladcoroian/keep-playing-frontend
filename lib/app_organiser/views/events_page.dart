@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/all_events_cubit.dart';
-import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 
 import 'events_view.dart';
 
@@ -10,13 +10,13 @@ class EventsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<OrganiserEventsCubit>(
+    return BlocProvider<EventsCubit>(
       create: (BuildContext context) {
-        OrganiserEventsCubit organiserEventsCubit = OrganiserEventsCubit(
+        EventsCubit eventsCubit = EventsCubit(
           allEventsCubit: BlocProvider.of<AllEventsCubit>(context),
         );
-        organiserEventsCubit.retrieveEvents();
-        return organiserEventsCubit;
+        eventsCubit.retrieveEvents();
+        return eventsCubit;
       },
       child: const EventsView(),
     );

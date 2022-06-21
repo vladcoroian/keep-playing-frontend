@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keep_playing_frontend/app_organiser/cubit/organiser_events_cubit.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
@@ -41,10 +41,10 @@ class _EventsViewState extends State<EventsView> {
     final List<Widget> optionSelectors = [
       SwitchListTile(
         title: const Text('Past Events'),
-        value: BlocProvider.of<OrganiserEventsCubit>(context).allowPastEvents,
+        value: BlocProvider.of<EventsCubit>(context).allowPastEvents,
         onChanged: (bool value) {
           setState(() {
-            BlocProvider.of<OrganiserEventsCubit>(context)
+            BlocProvider.of<EventsCubit>(context)
                 .setAllowPastEventsTo(value);
           });
         },
@@ -54,10 +54,10 @@ class _EventsViewState extends State<EventsView> {
       SwitchListTile(
         title: const Text('Pending Events'),
         value:
-            BlocProvider.of<OrganiserEventsCubit>(context).allowPendingEvents,
+            BlocProvider.of<EventsCubit>(context).allowPendingEvents,
         onChanged: (bool value) {
           setState(() {
-            BlocProvider.of<OrganiserEventsCubit>(context)
+            BlocProvider.of<EventsCubit>(context)
                 .setAllowPendingEventsTo(value);
           });
         },
@@ -67,10 +67,10 @@ class _EventsViewState extends State<EventsView> {
       SwitchListTile(
         title: const Text('Scheduled Events'),
         value:
-            BlocProvider.of<OrganiserEventsCubit>(context).allowScheduledEvents,
+            BlocProvider.of<EventsCubit>(context).allowScheduledEvents,
         onChanged: (bool value) {
           setState(() {
-            BlocProvider.of<OrganiserEventsCubit>(context)
+            BlocProvider.of<EventsCubit>(context)
                 .setAllowScheduledEventsTo(value);
           });
         },
@@ -80,7 +80,7 @@ class _EventsViewState extends State<EventsView> {
     ];
 
     final Widget sliverViewOfEvents =
-        BlocBuilder<OrganiserEventsCubit, List<Event>>(
+        BlocBuilder<EventsCubit, List<Event>>(
       builder: (context, state) {
         return _calendarView
             ? SliverList(
@@ -92,8 +92,8 @@ class _EventsViewState extends State<EventsView> {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => EventsForDayPage(
-                              organiserEventsCubit:
-                                  BlocProvider.of<OrganiserEventsCubit>(
+                              eventsCubit:
+                                  BlocProvider.of<EventsCubit>(
                                       context),
                               day: day,
                             ),
@@ -118,8 +118,8 @@ class _EventsViewState extends State<EventsView> {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => NewEventPage(
-              organiserEventsCubit:
-                  BlocProvider.of<OrganiserEventsCubit>(context),
+              eventsCubit:
+                  BlocProvider.of<EventsCubit>(context),
             ),
           ),
         ),
@@ -133,7 +133,7 @@ class _EventsViewState extends State<EventsView> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          BlocProvider.of<OrganiserEventsCubit>(context).retrieveEvents();
+          BlocProvider.of<EventsCubit>(context).retrieveEvents();
         },
         child: CustomScrollView(
           slivers: [
