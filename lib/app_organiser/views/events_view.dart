@@ -87,8 +87,7 @@ class _EventsViewState extends State<EventsView> {
                 delegate: SliverChildListDelegate(
                   [
                     CalendarViewOfEvents(
-                      events:
-                          BlocProvider.of<OrganiserEventsCubit>(context).state,
+                      events: state,
                       onDaySelected: (DateTime day) => {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -106,7 +105,7 @@ class _EventsViewState extends State<EventsView> {
                 ),
               )
             : ListViewsOfEvents(
-                events: BlocProvider.of<OrganiserEventsCubit>(context).state,
+                events: state,
                 eventWidgetBuilder: (Event event) =>
                     OrganiserEventCards.getCardForEvent(event: event),
               ).sliverListView();

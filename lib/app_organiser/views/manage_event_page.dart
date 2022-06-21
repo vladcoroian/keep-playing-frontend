@@ -16,7 +16,7 @@ class ManageEventPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
+    return BlocProvider<OrganiserEventsCubit>.value(
       value: organiserEventsCubit,
       child: ManageEventView(event: event),
     );

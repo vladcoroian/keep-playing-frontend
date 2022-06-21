@@ -10,7 +10,7 @@ class EventsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    return BlocProvider<OrganiserEventsCubit>(
       create: (BuildContext context) {
         OrganiserEventsCubit organiserEventsCubit = OrganiserEventsCubit(
           allEventsCubit: BlocProvider.of<AllEventsCubit>(context),

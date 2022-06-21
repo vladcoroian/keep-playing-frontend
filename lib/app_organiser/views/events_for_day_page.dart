@@ -16,7 +16,7 @@ class EventsForDayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
+    return BlocProvider<OrganiserEventsCubit>.value(
       value: organiserEventsCubit,
       child: EventsForDayView(day: day),
     );
