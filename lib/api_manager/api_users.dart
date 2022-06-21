@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:keep_playing_frontend/stored_data.dart';
 
 import 'api.dart';
 
@@ -32,8 +32,7 @@ class ApiUsers {
   }
 
   Future<User> getCurrentUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token') ?? '';
+    String token = await StoredData.getLoginToken();
 
     Response response = await client.get(
       _ApiUserLinks.userInformationLink(),
@@ -42,6 +41,18 @@ class ApiUsers {
     final body = jsonDecode(response.body);
 
     return User.fromModel(userModel: UserModel.fromJson(body));
+  }
+
+  Future<UserModel> getCurrentUserModel() async {
+    String token = await StoredData.getLoginToken();
+
+    Response response = await client.get(
+      _ApiUserLinks.userInformationLink(),
+      headers: <String, String>{'Authorization': 'Token $token'},
+    );
+    final body = jsonDecode(response.body);
+
+    return UserModel.fromJson(body);
   }
 
   Future<User> getUser(int pk) async {

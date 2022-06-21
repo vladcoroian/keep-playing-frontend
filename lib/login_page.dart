@@ -1,11 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'loading_screen.dart';
 
@@ -19,17 +14,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
-  User? currentUser;
-
   String _username = '';
   String _password = '';
-
-  void _retrieveCurrentUserInformation() async {
-    User user = await API.users.getCurrentUser();
-    setState(() {
-      currentUser = user;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +108,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-
 }

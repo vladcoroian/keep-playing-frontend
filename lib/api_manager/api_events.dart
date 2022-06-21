@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:keep_playing_frontend/stored_data.dart';
 
 import 'api.dart';
 
@@ -77,8 +77,7 @@ class ApiEvents {
   }
 
   Future<Response> applyToJob({required Event event}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token') ?? '';
+    String token = await StoredData.getLoginToken();
 
     return client.patch(_ApiEventsLinks.applyToJobLink(event.pk),
         headers: <String, String>{
@@ -89,8 +88,7 @@ class ApiEvents {
   }
 
   Future<Response> cancelJob({required Event event}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('token') ?? '';
+    String token = await StoredData.getLoginToken();
 
     return client.patch(_ApiEventsLinks.cancelJobLink(event.pk),
         headers: <String, String>{

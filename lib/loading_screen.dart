@@ -6,7 +6,7 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 import 'package:keep_playing_frontend/app_organiser/organiser_home_page.dart';
 import 'package:keep_playing_frontend/models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:keep_playing_frontend/stored_data.dart';
 
 class LoadingScreenPage extends StatefulWidget {
   final UserLogin userLogin;
@@ -43,22 +43,16 @@ class _LoadingScreenPageState extends State<LoadingScreenPage>
     if (response.statusCode == HTTP_200_OK) {
       /* Save the token to shared preferences. */
       final body = jsonDecode(response.body);
-      await _saveLoginTokenToSharedPreferences(body['token']);
+      await StoredData.setLoginToken(body['token']);
 
       /* Retrieve current user information. */
-      User user = await API.users.getCurrentUser();
+      await StoredData.setCurrentUser();
       setState(() {
-        _currentUser = user;
+        _currentUser = StoredData.getCurrentUser();
       });
     } else {
       _invalid = true;
     }
-  }
-
-  Future<String> _saveLoginTokenToSharedPreferences(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('token', token);
-    return prefs.getString('token') ?? '';
   }
 
   @override

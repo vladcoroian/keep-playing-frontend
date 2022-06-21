@@ -16,8 +16,9 @@ class EventsForDayView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<OrganiserEventsCubit, List<Event>>(
       builder: (context, state) {
-        List<Event> eventsForDay =
-            [...BlocProvider.of<OrganiserEventsCubit>(context).state];
+        List<Event> eventsForDay = [
+          ...BlocProvider.of<OrganiserEventsCubit>(context).state
+        ];
         eventsForDay.retainWhere((event) => isSameDay(event.date, day));
 
         return ListViewsOfEvents(

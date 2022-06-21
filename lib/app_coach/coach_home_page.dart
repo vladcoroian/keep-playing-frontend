@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
-import 'package:keep_playing_frontend/models/user.dart';
 
-import 'cubits/coach_cubit.dart';
 import 'views/feed_page.dart';
 import 'views/profile_page.dart';
 import 'views/upcoming_jobs_page.dart';
@@ -17,21 +13,6 @@ class CoachHomePage extends StatefulWidget {
 }
 
 class _CoachHomePageState extends State<CoachHomePage> {
-  User? currentUser;
-
-  @override
-  void initState() {
-    _retrieveCurrentUserInformation();
-    super.initState();
-  }
-
-  void _retrieveCurrentUserInformation() async {
-    User user = await API.users.getCurrentUser();
-    setState(() {
-      currentUser = user;
-    });
-  }
-
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
     FeedPage(),
@@ -49,14 +30,8 @@ class _CoachHomePageState extends State<CoachHomePage> {
   Widget build(BuildContext context) {
     Widget currentWidget = _widgetOptions.elementAt(_selectedIndex);
 
-    // TODO: loadingScreen
-    const Widget loadingScreen = Text('Loading');
-
-    final Widget homePage = Scaffold(
-      body: BlocProvider(
-        create: (BuildContext context) => CoachUserCubit(user: currentUser!),
-        child: currentWidget,
-      ),
+    return Scaffold(
+      body: currentWidget,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           _FeedPageNavigationButton(),
@@ -68,11 +43,6 @@ class _CoachHomePageState extends State<CoachHomePage> {
         onTap: _onItemTapped,
       ),
     );
-
-    if (currentUser == null) {
-      return loadingScreen;
-    }
-    return homePage;
   }
 }
 

@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/stored_data.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import '../../../models/event.dart';
-import '../cubits/coach_cubit.dart';
 import '../cubits/feed_events_cubit.dart';
 
 class FeedView extends StatelessWidget {
@@ -23,7 +23,7 @@ class FeedView extends StatelessWidget {
           events: state,
           eventWidgetBuilder: (Event event) => _FeedEventWidget(
             event: event,
-            coachPK: BlocProvider.of<CoachUserCubit>(context).state.pk,
+            coachPK: StoredData.getCurrentUser().pk,
           ),
         ).listView();
       },
