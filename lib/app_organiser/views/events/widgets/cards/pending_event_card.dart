@@ -8,7 +8,7 @@ import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
-import 'package:keep_playing_frontend/widgets/loading_screen.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 import '../../manage_event_page.dart';
 
@@ -121,10 +121,7 @@ class _OffersDialogState extends State<_OffersDialog> {
   @override
   Widget build(BuildContext context) {
     if (organiser == null) {
-      return const SimpleDialog(
-        contentPadding: EdgeInsets.all(DIALOG_PADDING),
-        children: [LoadingScreen.loadingCircle],
-      );
+      return const LoadingDialog();
     }
 
     final Widget backButton = Container(

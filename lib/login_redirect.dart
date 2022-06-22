@@ -7,7 +7,7 @@ import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 import 'package:keep_playing_frontend/app_organiser/organiser_home_page.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
-import 'package:keep_playing_frontend/widgets/loading_screen.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class LoginRedirect extends StatefulWidget {
   final UserLogin userLogin;

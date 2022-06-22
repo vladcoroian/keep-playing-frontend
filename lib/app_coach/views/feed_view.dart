@@ -6,7 +6,6 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
-import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import '../../../models/event.dart';
 import '../cubits/feed_events_cubit.dart';
@@ -18,13 +17,15 @@ class FeedView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<FeedEventsCubit, List<Event>>(
       builder: (context, state) {
-        return ListViewsOfEvents(
-          events: state,
-          eventWidgetBuilder: (Event event) => _FeedEventWidget(
-            event: event,
-            coachPK: StoredData.getCurrentUser().pk,
-          ),
-        ).listView();
+        return ListView.builder(
+          itemCount: state.length,
+          itemBuilder: (context, index) {
+            return _FeedEventWidget(
+              event: state[index],
+              coachPK: StoredData.getCurrentUser().pk,
+            );
+          },
+        );
       },
     );
 
@@ -83,7 +84,7 @@ class _FeedEventWidget extends StatelessWidget {
 class _AcceptButton extends StatelessWidget {
   final Event event;
 
-  const _AcceptButton({super.key, required this.event});
+  const _AcceptButton({required this.event});
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,6 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
-import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import '../../models/event.dart';
 import '../../widgets/event_widgets.dart';
@@ -19,10 +18,12 @@ class UpcomingJobsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<UpcomingJobsCubit, List<Event>>(
       builder: (context, state) {
-        return ListViewsOfEvents(
-          events: BlocProvider.of<UpcomingJobsCubit>(context).state,
-          eventWidgetBuilder: (Event event) => _UpcomingJobWidget(event: event),
-        ).listView();
+        return ListView.builder(
+          itemCount: state.length,
+          itemBuilder: (context, index) {
+            return _UpcomingJobWidget(event: state[index]);
+          },
+        );
       },
     );
 

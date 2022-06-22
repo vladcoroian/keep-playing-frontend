@@ -5,6 +5,10 @@ import 'package:table_calendar/table_calendar.dart';
 
 const double CALENDAR_PADDING = 16;
 
+/* ========================================================================== */
+/* ================ Event Views Buttons                                       */
+/* ========================================================================== */
+
 class CalendarViewButton extends StatelessWidget {
   final Function()? onTap;
 
@@ -40,29 +44,6 @@ class ListViewButton extends StatelessWidget {
             size: APP_BAR_BUTTON_SIZE,
           ),
         ));
-  }
-}
-
-class ListViewsOfEvents {
-  final List<Event> events;
-  final Widget Function(Event event) eventWidgetBuilder;
-
-  ListViewsOfEvents({required this.events, required this.eventWidgetBuilder});
-
-  List<Widget> _list() {
-    List<Widget> listOfEventsWidgets = [];
-    for (Event event in events) {
-      listOfEventsWidgets.add(eventWidgetBuilder(event));
-    }
-    return listOfEventsWidgets;
-  }
-
-  Widget listView() {
-    return ListView(children: _list());
-  }
-
-  Widget sliverListView() {
-    return SliverList(delegate: SliverChildListDelegate(_list()));
   }
 }
 

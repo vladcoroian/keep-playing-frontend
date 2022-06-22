@@ -104,11 +104,15 @@ class _EventsPageState extends State<EventsPage> {
                   ],
                 ),
               )
-            : ListViewsOfEvents(
-                events: state,
-                eventWidgetBuilder: (Event event) =>
-                    OrganiserEventCards.getCardForEvent(event: event),
-              ).sliverListView();
+            : SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return OrganiserEventCards.getCardForEvent(
+                        event: state[index]);
+                  },
+                  childCount: state.length,
+                ),
+              );
       },
     );
 
