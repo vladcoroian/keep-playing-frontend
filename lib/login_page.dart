@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 
-import 'login_loader.dart';
+import 'login_redirect.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
               UserLogin(username: _username, password: _password);
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => LoginLoader(
+              builder: (context) => LoginRedirect(
                 userLogin: userLogin,
               ),
             ),

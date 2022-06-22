@@ -76,6 +76,10 @@ class _FeedEventWidget extends StatelessWidget {
   }
 }
 
+/* ========================================================================== */
+/* ================ BUTTONS                                                   */
+/* ========================================================================== */
+
 class _AcceptButton extends StatelessWidget {
   final Event event;
 
@@ -124,6 +128,10 @@ class _AppliedButton extends StatelessWidget {
     );
   }
 }
+
+/* ========================================================================== */
+/* ================ DIALOGS                                                   */
+/* ========================================================================== */
 
 class _DetailsDialog extends StatelessWidget {
   final Event event;

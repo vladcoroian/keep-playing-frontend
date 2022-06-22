@@ -3,7 +3,7 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-const double CALENDAR_PADDING = DEFAULT_PADDING;
+const double CALENDAR_PADDING = 16;
 
 class CalendarViewButton extends StatelessWidget {
   final Function()? onTap;
@@ -65,6 +65,10 @@ class ListViewsOfEvents {
     return SliverList(delegate: SliverChildListDelegate(_list()));
   }
 }
+
+/* ========================================================================== */
+/* ================ Calendar View of Events                                   */
+/* ========================================================================== */
 
 class CalendarViewOfEvents extends StatefulWidget {
   final List<Event> events;

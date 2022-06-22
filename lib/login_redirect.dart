@@ -9,16 +9,16 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 import 'package:keep_playing_frontend/widgets/loading_screen.dart';
 
-class LoginLoader extends StatefulWidget {
+class LoginRedirect extends StatefulWidget {
   final UserLogin userLogin;
 
-  const LoginLoader({Key? key, required this.userLogin}) : super(key: key);
+  const LoginRedirect({Key? key, required this.userLogin}) : super(key: key);
 
   @override
-  State<LoginLoader> createState() => _LoginLoaderState();
+  State<LoginRedirect> createState() => _LoginRedirectState();
 }
 
-class _LoginLoaderState extends State<LoginLoader> {
+class _LoginRedirectState extends State<LoginRedirect> {
   User? _currentUser;
   bool _invalid = false;
 

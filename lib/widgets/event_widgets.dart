@@ -16,7 +16,7 @@ class EventWidgets {
     color: APP_COLOR,
   );
 
-  List<Widget> getDetailsAboutEvent() {
+  List<Widget> getDetailsTilesAboutEvent() {
     return <Widget>[
       ListTile(
           leading: const Icon(Icons.sports_soccer),
@@ -118,8 +118,8 @@ class EventDetailsDialog extends StatelessWidget {
         style: EventWidgets._textStyleForTitle,
         textScaleFactor: 1.5,
       )),
-      children:
-          EventWidgets(event: event).getDetailsAboutEvent() + widgetsAtTheEnd,
+      children: EventWidgets(event: event).getDetailsTilesAboutEvent() +
+          widgetsAtTheEnd,
     );
   }
 }

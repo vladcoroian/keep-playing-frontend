@@ -123,7 +123,7 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
       body: ListView(
         children: [
           coachInformationCard,
-          ...EventWidgets(event: widget.event).getDetailsAboutEvent()
+          ...EventWidgets(event: widget.event).getDetailsTilesAboutEvent()
         ],
       ),
     );
