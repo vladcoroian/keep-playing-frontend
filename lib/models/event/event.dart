@@ -22,7 +22,7 @@ class Event {
 
   final int price;
   final bool coach;
-
+  final bool recurring;
   final int? coachPK;
 
   final List<int> offers;
@@ -41,6 +41,7 @@ class Event {
     required this.flexibleEndTime,
     required this.price,
     required this.coach,
+    required this.recurring,
     this.coachPK,
     required this.offers,
   });
@@ -60,6 +61,7 @@ class Event {
           flexibleEndTime: eventModel.getFlexibleEndTime(),
           price: eventModel.price,
           coach: eventModel.coach,
+          recurring: eventModel.recurring,
           coachPK: eventModel.coach_user,
           offers: eventModel.offers,
         );
@@ -94,6 +96,10 @@ class Event {
 
   bool isInTheFuture() {
     return !isInThePast();
+  }
+
+  bool isRecurring() {
+    return recurring;
   }
 
   bool hasCoach() {

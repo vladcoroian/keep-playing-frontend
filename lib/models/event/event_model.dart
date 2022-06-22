@@ -20,6 +20,7 @@ class EventModel {
 
   final int price;
   final bool coach;
+  final bool recurring;
 
   final int? coach_user;
 
@@ -39,6 +40,7 @@ class EventModel {
     required this.flexible_end_time,
     required this.price,
     required this.coach,
+    required this.recurring,
     this.coach_user,
     required this.offers,
   });

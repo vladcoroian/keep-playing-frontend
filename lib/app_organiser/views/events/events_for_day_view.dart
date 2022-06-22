@@ -20,7 +20,11 @@ class EventsForDayView extends StatelessWidget {
         List<Event> eventsForDay = [
           ...BlocProvider.of<EventsCubit>(context).state
         ];
-        eventsForDay.retainWhere((event) => isSameDay(event.date, day));
+        eventsForDay.retainWhere((event) =>
+            isSameDay(event.date, day) ||
+            day.weekday == event.date.weekday &&
+                event.isRecurring() &&
+                event.date.isBefore(day));
 
         return ListViewsOfEvents(
           events: eventsForDay,

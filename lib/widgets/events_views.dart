@@ -69,9 +69,13 @@ class ListViewsOfEvents {
 class CalendarViewOfEvents extends StatefulWidget {
   final List<Event> events;
   final void Function(DateTime day) onDaySelected;
+  final bool allowPastEvents;
 
   const CalendarViewOfEvents(
-      {Key? key, required this.events, required this.onDaySelected})
+      {Key? key,
+      required this.events,
+      required this.onDaySelected,
+      required this.allowPastEvents})
       : super(key: key);
 
   @override
@@ -116,9 +120,12 @@ class _CalendarViewOfEventsState extends State<CalendarViewOfEvents> {
 
   List<Widget> _getEventsForDay(DateTime day) {
     List<Event> eventsForDay = [];
-    for (Event pendingEvent in widget.events) {
-      if (isSameDay(day, pendingEvent.date)) {
-        eventsForDay.add(pendingEvent);
+    for (Event event in widget.events) {
+      if (isSameDay(day, event.date) ||
+          day.weekday == event.date.weekday &&
+              event.isRecurring() &&
+              event.date.isBefore(day)) {
+        eventsForDay.add(event);
       }
     }
     return eventsForDay

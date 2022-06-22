@@ -95,6 +95,8 @@ class _EventsViewState extends State<EventsView> {
                           ),
                         ),
                       },
+                      // TODO: Fix this
+                      allowPastEvents: true,
                     ),
                   ],
                 ),
