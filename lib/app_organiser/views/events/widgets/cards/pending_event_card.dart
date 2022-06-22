@@ -4,6 +4,7 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
+import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
@@ -21,12 +22,22 @@ class PendingEventCard extends StatefulWidget {
 }
 
 class _PendingEventCardState extends State<PendingEventCard> {
+  Organiser? organiser;
   List<User> offers = [];
 
   @override
   void initState() {
+    _retrieveOrganiser();
     _retrieveOffers();
     super.initState();
+  }
+
+  void _retrieveOrganiser() async {
+    Organiser retrievedOrganiser = await API.organiser.getOrganiser();
+
+    setState(() {
+      organiser = retrievedOrganiser;
+    });
   }
 
   void _retrieveOffers() async {
@@ -35,6 +46,11 @@ class _PendingEventCardState extends State<PendingEventCard> {
       User user = await API.user.getUser(offer);
       users.add(user);
     }
+    users.sort(
+      (User user1, User user2) =>
+          (organiser!.hasUserAsAFavourite(user2) ? 1 : 0) -
+          (organiser!.hasUserAsAFavourite(user1) ? 1 : 0),
+    );
 
     setState(() {
       offers = users;
@@ -43,6 +59,10 @@ class _PendingEventCardState extends State<PendingEventCard> {
 
   @override
   Widget build(BuildContext context) {
+    if (organiser == null) {
+      return const Text('Loading');
+    }
+
     final Widget offersButton = ColoredButton(
       text: widget.event.offers.isEmpty
           ? 'No Offers'
@@ -98,6 +118,7 @@ class _PendingEventCardState extends State<PendingEventCard> {
 
   List<Widget> _getOffersList() {
     List<Widget> offersList = [];
+
     for (User offer in offers) {
       final Widget acceptButton = ColoredButton(
         text: 'Accept',
@@ -120,6 +141,9 @@ class _PendingEventCardState extends State<PendingEventCard> {
                 leading: const Icon(Icons.person),
                 title: Text("${offer.firstName} ${offer.lastName}"),
                 subtitle: Text(offer.email),
+                trailing: organiser!.hasUserAsAFavourite(offer)
+                    ? const Text('Favourite')
+                    : const SizedBox(height: 0, width: 0),
               ),
               Center(child: acceptButton),
             ],

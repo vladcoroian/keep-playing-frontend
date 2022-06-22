@@ -110,9 +110,8 @@ class _ManageEventView extends State<ManageEventView> {
 
   @override
   Widget build(BuildContext context) {
-    final String coachName = _sessionCoach == null
-        ? ''
-        : _sessionCoach!.getFullName();
+    final String coachName =
+        _sessionCoach == null ? '' : _sessionCoach!.getFullName();
 
     final Widget messageCoachButton = ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -120,26 +119,28 @@ class _ManageEventView extends State<ManageEventView> {
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
       onPressed: () {
         launchEmail(
-            toEmail: _sessionCoach!.email,
-            subject:
-                '${widget.event.name}, on: ${DateFormat.MMMEd().format(widget.event.date)}');
+          toEmail: _sessionCoach!.email,
+          subject:
+              '${widget.event.name}, on: ${DateFormat.MMMEd().format(widget.event.date)}',
+        );
       },
       child: const Icon(Icons.email),
     );
 
     final Widget addToCalendarButton = ColoredButton(
-        text: 'Add to calendar',
-        color: APP_COLOR,
-        onPressed: () {
-          final add2calendar.Event event = add2calendar.Event(
-            title: widget.event.name,
-            description: widget.event.details,
-            location: widget.event.location,
-            startDate: widget.event.getStartTimestamp(),
-            endDate: widget.event.getEndTimestamp(),
-          );
-          Add2Calendar.addEvent2Cal(event);
-        });
+      text: 'Add to calendar',
+      color: APP_COLOR,
+      onPressed: () {
+        final add2calendar.Event event = add2calendar.Event(
+          title: widget.event.name,
+          description: widget.event.details,
+          location: widget.event.location,
+          startDate: widget.event.getStartTimestamp(),
+          endDate: widget.event.getEndTimestamp(),
+        );
+        Add2Calendar.addEvent2Cal(event);
+      },
+    );
 
     final Widget coachInformationCard = Card(
       margin: const EdgeInsets.all(CARD_PADDING),

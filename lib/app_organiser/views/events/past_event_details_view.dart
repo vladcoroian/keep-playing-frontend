@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
@@ -9,6 +10,7 @@ import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class PastEventDetailsView extends StatefulWidget {
   final Event event;
@@ -44,6 +46,30 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
       return const Text('Loading');
     }
 
+    Future launchEmail({
+      required String toEmail,
+      required String subject,
+    }) async {
+      final url = 'mailto:$toEmail?subject=${Uri.encodeFull(subject)}&body=';
+      if (await canLaunchUrlString(url)) {
+        await launchUrlString(url);
+      }
+    }
+
+    final Widget messageCoachButton = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+      onPressed: () {
+        launchEmail(
+          toEmail: coach!.email,
+          subject:
+              '${widget.event.name}, on: ${DateFormat.MMMEd().format(widget.event.date)}',
+        );
+      },
+      child: const Icon(Icons.email),
+    );
+
     final Widget coachInformationListTile = ListTile(
       leading: const Text(
         "Coach\nInformation",
@@ -51,6 +77,7 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
         style: TextStyle(color: APP_COLOR),
       ),
       title: Text(coach!.getFullName()),
+      trailing: messageCoachButton,
       onTap: () {
         showDialog(
           context: context,
