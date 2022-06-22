@@ -368,6 +368,8 @@ class _ManageEventView extends State<ManageEventView> {
           price: _price,
           coach: _coach,
           recurring: _recurring,
+          creationStarted: widget.event.creationStarted,
+          creationEnded: widget.event.creationEnded,
         );
 
         NavigatorState navigator = Navigator.of(context);

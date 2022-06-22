@@ -13,6 +13,8 @@ class EventModel {
   final String role;
 
   final String date;
+  final String creation_started;
+  final String creation_ended;
   final String start_time;
   final String end_time;
   final String flexible_start_time;
@@ -34,6 +36,8 @@ class EventModel {
     required this.sport,
     required this.role,
     required this.date,
+    required this.creation_started,
+    required this.creation_ended,
     required this.start_time,
     required this.end_time,
     required this.flexible_start_time,
@@ -54,6 +58,18 @@ class EventModel {
     final splitDate = date.split('-');
     return DateTime(int.parse(splitDate[0]), int.parse(splitDate[1]),
         int.parse(splitDate[2]));
+  }
+
+  DateTime getCreationStarted() {
+    final splitDate = date.split('-');
+    return DateTime(int.parse(splitDate[0]), int.parse(splitDate[1]),
+        int.parse(splitDate[2]), 0, 0, 0);
+  }
+
+  DateTime getCreationEnded() {
+    final splitDate = date.split('-');
+    return DateTime(int.parse(splitDate[0]), int.parse(splitDate[1]),
+        int.parse(splitDate[2]), 0, 0, 0);
   }
 
   TimeOfDay getStartTime() {

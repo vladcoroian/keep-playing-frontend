@@ -11,6 +11,8 @@ class NewEvent {
   final String role;
 
   final DateTime date;
+  final DateTime creationStarted;
+  final DateTime creationEnded;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
   final TimeOfDay flexibleStartTime;
@@ -34,6 +36,8 @@ class NewEvent {
     required this.price,
     required this.coach,
     required this.recurring,
+    required this.creationStarted,
+    required this.creationEnded,
   });
 
   NewEvent.fromEvent(Event event)
@@ -50,7 +54,9 @@ class NewEvent {
           flexibleEndTime: event.flexibleEndTime,
           price: event.price,
           coach: event.coach,
-          recurring: event.recurring
+          recurring: event.recurring,
+          creationStarted: event.creationStarted,
+          creationEnded: event.creationEnded,
         );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -81,5 +87,7 @@ class NewEvent {
         'price': price.toString(),
         'coach': coach ? 'True' : 'False',
         'recurring': recurring ? 'True' : 'False',
+        'creation_started': DateFormat('yyyy-MM-dd HH:mm:ss').format(creationStarted),
+        'creation_ended': DateFormat('yyyy-MM-dd HH:mm:ss').format(creationEnded),
       };
 }

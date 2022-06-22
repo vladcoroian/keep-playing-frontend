@@ -25,6 +25,7 @@ class _NewEventViewState extends State<NewEventView> {
   String _sport = '';
   String _role = '';
   DateTime _date = DateTime.now();
+  final DateTime _creationStarted = DateTime.now();
   bool recurring = false;
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
@@ -255,6 +256,8 @@ class _NewEventViewState extends State<NewEventView> {
           price: _price,
           coach: false,
           recurring: recurring,
+          creationStarted: _creationStarted,
+          creationEnded: DateTime.now(),
         );
 
         NavigatorState navigator = Navigator.of(context);

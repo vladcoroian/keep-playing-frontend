@@ -15,6 +15,8 @@ class Event {
   final String role;
 
   final DateTime date;
+  final DateTime creationStarted;
+  final DateTime creationEnded;
   final TimeOfDay startTime;
   final TimeOfDay endTime;
   final TimeOfDay flexibleStartTime;
@@ -44,6 +46,8 @@ class Event {
     required this.recurring,
     this.coachPK,
     required this.offers,
+    required this.creationStarted,
+    required this.creationEnded
   });
 
   Event({required EventModel eventModel})
@@ -55,6 +59,8 @@ class Event {
           sport: eventModel.sport,
           role: eventModel.role,
           date: eventModel.getDate(),
+          creationStarted: eventModel.getCreationStarted(),
+          creationEnded: eventModel.getCreationEnded(),
           startTime: eventModel.getStartTime(),
           endTime: eventModel.getEndTime(),
           flexibleStartTime: eventModel.getFlexibleStartTime(),
