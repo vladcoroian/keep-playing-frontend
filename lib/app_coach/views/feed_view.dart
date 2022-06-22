@@ -190,7 +190,7 @@ class _AcceptJobDialog extends StatelessWidget {
                 child: ConfirmationDialog(
                   title: 'Are you sure that you want to accept this job?',
                   onNoPressed: () => {
-                    Navigator.pop(buildContext),
+                    Navigator.of(buildContext).pop(true),
                   },
                   onYesPressed: () async {
                     final NavigatorState navigator = Navigator.of(buildContext);

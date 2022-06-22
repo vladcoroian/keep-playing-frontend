@@ -11,8 +11,8 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart' as sport_event;
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../cubit/events_cubit.dart';
 
@@ -41,12 +41,14 @@ class _ManageEventView extends State<ManageEventView> {
   late int _price;
   late bool _coach;
   late bool _recurring;
-  late User? _sessionCoach;
+  User? _sessionCoach;
   late String selectedSport;
   late String selectedRole;
 
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
+
+  bool dataWasLoaded = false;
 
   @override
   void initState() {
@@ -73,6 +75,8 @@ class _ManageEventView extends State<ManageEventView> {
     endTimeInput.text = const DefaultMaterialLocalizations()
         .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
 
+    dataWasLoaded = true;
+
     super.initState();
   }
 
@@ -97,55 +101,16 @@ class _ManageEventView extends State<ManageEventView> {
         false;
   }
 
-  Future launchEmail({
-    required String toEmail,
-    required String subject,
-  }) async {
-    final url = 'mailto:$toEmail?subject=${Uri.encodeFull(subject)}&body=';
-    if (await canLaunchUrlString(url)) {
-      await launchUrlString(url);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    final String coachName =
-        _sessionCoach == null ? '' : _sessionCoach!.getFullName();
-
-    final Widget messageCoachButton = ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          primary: APP_COLOR,
-          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-      onPressed: () {
-        launchEmail(
-          toEmail: _sessionCoach!.email,
-          subject:
-              '${widget.event.name}, on: ${DateFormat.MMMEd().format(widget.event.date)}',
-        );
-      },
-      child: const Icon(Icons.email),
-    );
+    if (!dataWasLoaded || _sessionCoach == null) {
+      return const LoadingScreen();
+    }
 
     final Widget coachInformationCard = Card(
-      margin: const EdgeInsets.fromLTRB(
-          BUTTON_PADDING, BUTTON_PADDING, BUTTON_PADDING, BUTTON_PADDING),
-      child: ListTile(
-        leading: const Text(
-          "Coach\nInformation",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: APP_COLOR),
-        ),
-        title: Text(coachName),
-        trailing: messageCoachButton,
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (context) => CoachInformationDialog(
-              user: _sessionCoach!,
-            ),
-          );
-        },
-      ),
+      margin: const EdgeInsets.all(BUTTON_PADDING),
+      child:
+          CoachInformationListTile(coach: _sessionCoach!, event: widget.event),
     );
 
     final Widget addToCalendarButton = Container(
@@ -359,9 +324,9 @@ class _ManageEventView extends State<ManageEventView> {
               return BlocProvider<EventsCubit>.value(
                 value: eventsCubit,
                 child: ConfirmationDialog(
-                  title: 'Are you sure you want to cancel this event?',
-                  onNoPressed: () {
-                    Navigator.pop(buildContext);
+                  title: 'Are you sure that you want to cancel this event?',
+                  onNoPressed: () => {
+                    Navigator.of(buildContext).pop(true),
                   },
                   onYesPressed: () async {
                     NavigatorState navigator = Navigator.of(buildContext);

@@ -61,7 +61,9 @@ class _UpcomingJobWidget extends StatelessWidget {
             builder: (BuildContext buildContext) {
               return ConfirmationDialog(
                 title: 'Are you sure that you want to cancel this job?',
-                onNoPressed: () => {Navigator.pop(buildContext)},
+                onNoPressed: () => {
+                  Navigator.of(buildContext).pop(true),
+                },
                 onYesPressed: () async {
                   final NavigatorState navigator = Navigator.of(buildContext);
                   final UpcomingJobsCubit upcomingJobsCubit =

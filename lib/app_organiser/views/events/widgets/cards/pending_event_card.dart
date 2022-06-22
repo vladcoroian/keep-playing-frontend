@@ -137,10 +137,16 @@ class _OffersDialogState extends State<_OffersDialog> {
       ),
     );
 
-    return OneOptionDialog(
-      title: 'Current Offers',
-      button: backButton,
-      children: _getOffersList(),
+    return SimpleDialog(
+      contentPadding: const EdgeInsets.all(DIALOG_PADDING),
+      title: const Center(child: Text('Current Offers')),
+      children: [
+        ..._getOffersList(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [backButton],
+        ),
+      ],
     );
   }
 
