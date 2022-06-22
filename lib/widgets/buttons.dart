@@ -6,10 +6,15 @@ const double BUTTON_FONT_SIZE = 16;
 const Color BUTTON_GRAY_COLOR = Colors.black12;
 
 const Color MANAGE_BUTTON_COLOR = APP_COLOR;
+
 const Color DETAILS_BUTTON_COLOR = Colors.black12;
+const Color BACK_BUTTON_COLOR = Colors.black12;
+
 const Color CANCEL_BUTTON_COLOR = Colors.red;
+const Color BLOCK_BUTTON_COLOR = Colors.red;
 const Color APPLIED_BUTTON_COLOR = Colors.red;
-const Color NO_OFFERS_BUTTON_COLOR = BUTTON_GRAY_COLOR;
+
+const Color NO_OFFERS_BUTTON_COLOR = Colors.black12;
 const Color AT_LEAST_ONE_OFFER_BUTTON_COLOR = Colors.lightGreen;
 
 class ColoredButton extends StatelessWidget {

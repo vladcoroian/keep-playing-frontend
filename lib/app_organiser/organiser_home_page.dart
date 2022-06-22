@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keep_playing_frontend/app_organiser/cubit/all_events_cubit.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/models/organiser.dart';
 
 import 'views/events_page.dart';
 import 'views/profile_page.dart';
@@ -14,14 +17,19 @@ class OrganiserHomePage extends StatefulWidget {
 }
 
 class _OrganiserHomePageState extends State<OrganiserHomePage> {
+  Organiser? organiser;
+
   int _selectedIndex = 0;
-  static final List<Widget> _widgetOptions = <Widget>[
-    BlocProvider(
-      create: (BuildContext context) => AllEventsCubit(),
-      child: const EventsPage(),
-    ),
-    const ProfilePage(),
+  static const List<Widget> _widgetOptions = <Widget>[
+    EventsPage(),
+    ProfilePage(),
   ];
+
+  @override
+  void initState() {
+    _retrieveOrganiserInformation();
+    super.initState();
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,12 +37,37 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
     });
   }
 
+  void _retrieveOrganiserInformation() async {
+    Organiser currentOrganiser = await API.organiser.getOrganiser();
+
+    setState(() {
+      organiser = currentOrganiser;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget currentWidget = _widgetOptions.elementAt(_selectedIndex);
+    if (organiser == null) {
+      return Text('Loading');
+    }
 
     return Scaffold(
-      body: currentWidget,
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<EventsCubit>(
+            create: (BuildContext context) {
+              EventsCubit eventsCubit = EventsCubit();
+              eventsCubit.retrieveEvents();
+              return eventsCubit;
+            },
+          ),
+          BlocProvider<OrganiserCubit>(
+            create: (BuildContext context) =>
+                OrganiserCubit(organiser: organiser!),
+          ),
+        ],
+        child: _widgetOptions.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           _EventsNavigationButton(),

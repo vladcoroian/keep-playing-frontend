@@ -1,23 +1,23 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:keep_playing_frontend/app_organiser/cubit/all_events_cubit.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 
 class EventsCubit extends Cubit<List<Event>> {
-  final AllEventsCubit allEventsCubit;
+  List<Event> allEvents = [];
 
   bool allowPastEvents = true;
   bool allowPendingEvents = true;
   bool allowScheduledEvents = true;
 
-  EventsCubit({required this.allEventsCubit}) : super([]);
+  EventsCubit() : super([]);
 
   void retrieveEvents() async {
-    await allEventsCubit.retrieveEvents();
+    allEvents = await API.organiser.retrieveEvents();
     updateEventsUsingPreferences();
   }
 
   void updateEventsUsingPreferences() {
-    List<Event> events = [...allEventsCubit.state];
+    List<Event> events = [...allEvents];
     events.retainWhere(
       (event) => event.check(
         allowPastEvents: allowPastEvents,
