@@ -22,11 +22,15 @@ class _ApiOrganiserLinks {
 
   static Uri deleteEventLink(int pk) => Uri.parse("${ORGANISER}events/$pk/");
 
-  static Uri acceptCoach({
+  static Uri acceptCoachLink({
     required int eventPK,
     required int coachPK,
   }) =>
       Uri.parse("${ORGANISER}events/$eventPK/accept/$coachPK/");
+
+  static Uri updateFavouritesLink() => Uri.parse(ORGANISER);
+
+  static Uri updateBlockedLink() => Uri.parse(ORGANISER);
 }
 
 class ApiOrganiser {
@@ -57,7 +61,9 @@ class ApiOrganiser {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Token $token',
       },
-      body: jsonEncode(newEvent.toJson()),
+      body: jsonEncode(
+        newEvent.toJson(),
+      ),
     );
   }
 
@@ -73,7 +79,9 @@ class ApiOrganiser {
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Token $token',
       },
-      body: jsonEncode(newEvent.toJson()),
+      body: jsonEncode(
+        newEvent.toJson(),
+      ),
     );
   }
 
@@ -88,7 +96,7 @@ class ApiOrganiser {
     required User coach,
   }) {
     return client.patch(
-      _ApiOrganiserLinks.acceptCoach(
+      _ApiOrganiserLinks.acceptCoachLink(
         eventPK: event.pk,
         coachPK: coach.pk,
       ),
@@ -103,5 +111,35 @@ class ApiOrganiser {
 
   Future<List<Event>> retrieveEvents() async {
     return API.retrieveEvents(_ApiOrganiserLinks.eventsLink());
+  }
+
+  Future<Response> updateFavouritesList(List<int> favourites) {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.updateFavouritesLink(),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token $token',
+      },
+      body: jsonEncode(
+        <String, dynamic>{"favourites_ids": favourites},
+      ),
+    );
+  }
+
+  Future<Response> updateBlockedList(List<int> blocked) {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.updateBlockedLink(),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token $token',
+      },
+      body: jsonEncode(
+        <String, dynamic>{"blocked_ids": blocked},
+      ),
+    );
   }
 }

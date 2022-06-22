@@ -31,7 +31,7 @@ class ApiUsers {
   }
 
   Future<User> getCurrentUser() async {
-    String token = await StoredData.getLoginTokenFromStorage();
+    String token = StoredData.getLoginToken();
 
     Response response = await client.get(
       _ApiUserLinks.userInformationLink(),
@@ -45,7 +45,7 @@ class ApiUsers {
   }
 
   Future<UserModel> getCurrentUserModel() async {
-    String token = await StoredData.getLoginTokenFromStorage();
+    String token = StoredData.getLoginToken();
 
     Response response = await client.get(
       _ApiUserLinks.userInformationLink(),

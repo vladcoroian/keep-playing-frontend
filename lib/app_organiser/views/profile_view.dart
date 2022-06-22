@@ -116,18 +116,24 @@ class ProfileView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Profile'),
       ),
-      body: Center(
-        child: ListView(
-          children: [
-            usernameForm,
-            emailForm,
-            firstNameForm,
-            lastNameForm,
-            locationForm,
-            phoneNumberForm,
-            favouritesListTile,
-            blockedListTile,
-          ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          BlocProvider.of<OrganiserCubit>(context)
+              .retrieveOrganiserInformation();
+        },
+        child: Center(
+          child: ListView(
+            children: [
+              usernameForm,
+              emailForm,
+              firstNameForm,
+              lastNameForm,
+              locationForm,
+              phoneNumberForm,
+              favouritesListTile,
+              blockedListTile,
+            ],
+          ),
         ),
       ),
     );
