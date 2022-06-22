@@ -30,13 +30,22 @@ class _ApiOrganiserLinks {
 
   static Uri updateFavouritesLink() => Uri.parse(ORGANISER);
 
+  static Uri addCoachToFavouritesLink(int pk) =>
+      Uri.parse("${ORGANISER}add-favourite/$pk/");
+
   static Uri updateBlockedLink() => Uri.parse(ORGANISER);
+
+  static Uri blockCoachLink(int pk) => Uri.parse("${ORGANISER}block/$pk/");
 }
 
 class ApiOrganiser {
   final Client client;
 
   ApiOrganiser({required this.client});
+
+  Future<List<Event>> retrieveEvents() async {
+    return API.retrieveEvents(_ApiOrganiserLinks.eventsLink());
+  }
 
   Future<Organiser> getOrganiser() async {
     String token = StoredData.getLoginToken();
@@ -109,10 +118,6 @@ class ApiOrganiser {
     );
   }
 
-  Future<List<Event>> retrieveEvents() async {
-    return API.retrieveEvents(_ApiOrganiserLinks.eventsLink());
-  }
-
   Future<Response> updateFavouritesList(List<int> favourites) {
     String token = StoredData.getLoginToken();
 
@@ -128,6 +133,17 @@ class ApiOrganiser {
     );
   }
 
+  Future<Response> addCoachToFavouritesList(User coach) {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.addCoachToFavouritesLink(coach.pk),
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
+    );
+  }
+
   Future<Response> updateBlockedList(List<int> blocked) {
     String token = StoredData.getLoginToken();
 
@@ -140,6 +156,17 @@ class ApiOrganiser {
       body: jsonEncode(
         <String, dynamic>{"blocked_ids": blocked},
       ),
+    );
+  }
+
+  Future<Response> blockCoach(User coach) {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.blockCoachLink(coach.pk),
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
     );
   }
 }

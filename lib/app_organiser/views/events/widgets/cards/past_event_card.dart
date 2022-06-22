@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/views/events/past_event_details_page.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
@@ -17,7 +20,11 @@ class PastEventCard extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => PastEventDetailsPage(event: event),
+            builder: (_) => PastEventDetailsPage(
+              eventsCubit: BlocProvider.of<EventsCubit>(context),
+              organiserCubit: BlocProvider.of<OrganiserCubit>(context),
+              event: event,
+            ),
           ),
         );
       },

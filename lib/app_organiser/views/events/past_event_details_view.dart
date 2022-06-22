@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
+import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
@@ -40,8 +43,6 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
       return const Text('Loading');
     }
 
-    UserWidgets coachWidgets = UserWidgets(user: coach!);
-
     final Widget coachInformationListTile = ListTile(
       leading: const Text(
         "Coach\nInformation",
@@ -59,44 +60,75 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
       },
     );
 
-    final Widget addToFavouritesButton = Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: APP_COLOR,
-          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
-        ),
-        onPressed: () {},
-        child: const Text('Add To Favourites'),
-      ),
-    );
+    final Widget coachInformationCard = BlocBuilder<OrganiserCubit, Organiser>(
+      builder: (context, state) {
+        final Widget leftButton = state.hasBlockedUser(coach!)
+            ? Container(
+                padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: UNBLOCK_BUTTON_COLOR,
+                    textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+                  ),
+                  onPressed: () {},
+                  child: const Text('Unblock'),
+                ),
+              )
+            : Container(
+                padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: BLOCK_BUTTON_COLOR,
+                    textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+                  ),
+                  onPressed: () {
+                    API.organiser.blockCoach(coach!);
+                  },
+                  child: const Text('Block'),
+                ),
+              );
 
-    final Widget blockButton = Container(
-      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: BLOCK_BUTTON_COLOR,
-          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
-        ),
-        onPressed: () {},
-        child: const Text('Block'),
-      ),
-    );
+        final Widget rightButton = state.hasBlockedUser(coach!)
+            ? const SizedBox(width: 0, height: 0)
+            : (state.hasUserAsAFavourite(coach!)
+                ? Container(
+                    padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: APP_COLOR,
+                        textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+                      ),
+                      onPressed: () {
+                        API.organiser.addCoachToFavouritesList(coach!);
+                      },
+                      child: const Text('Add To Favourites'),
+                    ),
+                  )
+                : Container(
+                    padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: APP_COLOR,
+                        textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+                      ),
+                      onPressed: () {},
+                      child: const Text('Remove from Favourites'),
+                    ),
+                  ));
 
-    final Widget coachInformationCard = Card(
-      margin: const EdgeInsets.all(CARD_PADDING),
-      child: Column(
-        children: [
-          coachInformationListTile,
-          ButtonBar(
-            alignment: MainAxisAlignment.spaceBetween,
+        return Card(
+          margin: const EdgeInsets.all(CARD_PADDING),
+          child: Column(
             children: [
-              blockButton,
-              addToFavouritesButton,
+              coachInformationListTile,
+              ButtonBar(
+                alignment: MainAxisAlignment.spaceBetween,
+                children: [leftButton, rightButton],
+              ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
 
     return Scaffold(
@@ -104,7 +136,10 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
         title: const Text('Details about past event'),
       ),
       body: ListView(
-        children: [coachInformationCard, ...coachWidgets.getDetailsAboutUser()],
+        children: [
+          coachInformationCard,
+          ...UserWidgets(user: coach!).getDetailsAboutUser()
+        ],
       ),
     );
   }
