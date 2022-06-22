@@ -33,9 +33,14 @@ class _ApiOrganiserLinks {
   static Uri addCoachToFavouritesLink(int pk) =>
       Uri.parse("${ORGANISER}add-favourite/$pk/");
 
+  static Uri removeCoachFromFavouritesLink(int pk) =>
+      Uri.parse("${ORGANISER}remove-favourite/$pk/");
+
   static Uri updateBlockedLink() => Uri.parse(ORGANISER);
 
   static Uri blockCoachLink(int pk) => Uri.parse("${ORGANISER}block/$pk/");
+
+  static Uri unblockCoachLink(int pk) => Uri.parse("${ORGANISER}unblock/$pk/");
 }
 
 class ApiOrganiser {
@@ -144,6 +149,17 @@ class ApiOrganiser {
     );
   }
 
+  Future<Response> removeCoachFromFavouritesList(User coach) {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.removeCoachFromFavouritesLink(coach.pk),
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
+    );
+  }
+
   Future<Response> updateBlockedList(List<int> blocked) {
     String token = StoredData.getLoginToken();
 
@@ -164,6 +180,17 @@ class ApiOrganiser {
 
     return client.patch(
       _ApiOrganiserLinks.blockCoachLink(coach.pk),
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
+    );
+  }
+
+  Future<Response> unblockCoach(User coach) {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.unblockCoachLink(coach.pk),
       headers: <String, String>{
         'Authorization': 'Token $token',
       },

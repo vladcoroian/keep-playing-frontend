@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
@@ -63,58 +64,14 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
     final Widget coachInformationCard = BlocBuilder<OrganiserCubit, Organiser>(
       builder: (context, state) {
         final Widget leftButton = state.hasBlockedUser(coach!)
-            ? Container(
-                padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: UNBLOCK_BUTTON_COLOR,
-                    textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
-                  ),
-                  onPressed: () {},
-                  child: const Text('Unblock'),
-                ),
-              )
-            : Container(
-                padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: BLOCK_BUTTON_COLOR,
-                    textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
-                  ),
-                  onPressed: () {
-                    API.organiser.blockCoach(coach!);
-                  },
-                  child: const Text('Block'),
-                ),
-              );
+            ? _UnblockButton(coach: coach!)
+            : _BlockButton(coach: coach!);
 
         final Widget rightButton = state.hasBlockedUser(coach!)
             ? const SizedBox(width: 0, height: 0)
             : (state.hasUserAsAFavourite(coach!)
-                ? Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: APP_COLOR,
-                        textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
-                      ),
-                      onPressed: () {
-                        API.organiser.addCoachToFavouritesList(coach!);
-                      },
-                      child: const Text('Add To Favourites'),
-                    ),
-                  )
-                : Container(
-                    padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: APP_COLOR,
-                        textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
-                      ),
-                      onPressed: () {},
-                      child: const Text('Remove from Favourites'),
-                    ),
-                  ));
+                ? _RemoveFromFavouritesButton(coach: coach!)
+                : _AddToFavouritesButton(coach: coach!));
 
         return Card(
           margin: const EdgeInsets.all(CARD_PADDING),
@@ -140,6 +97,128 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
           coachInformationCard,
           ...UserWidgets(user: coach!).getDetailsAboutUser()
         ],
+      ),
+    );
+  }
+}
+
+class _BlockButton extends StatelessWidget {
+  final User coach;
+
+  const _BlockButton({required this.coach});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: BLOCK_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
+        onPressed: () async {
+          OrganiserCubit organiserCubit =
+              BlocProvider.of<OrganiserCubit>(context);
+          Response response = await API.organiser.blockCoach(coach);
+          if (response.statusCode == HTTP_202_ACCEPTED) {
+            organiserCubit.retrieveOrganiserInformation();
+          } else {
+            // TODO
+          }
+        },
+        child: const Text('Block'),
+      ),
+    );
+  }
+}
+
+class _UnblockButton extends StatelessWidget {
+  final User coach;
+
+  const _UnblockButton({required this.coach});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: UNBLOCK_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
+        onPressed: () async {
+          OrganiserCubit organiserCubit =
+              BlocProvider.of<OrganiserCubit>(context);
+          Response response = await API.organiser.unblockCoach(coach);
+          if (response.statusCode == HTTP_202_ACCEPTED) {
+            organiserCubit.retrieveOrganiserInformation();
+          } else {
+            // TODO
+          }
+        },
+        child: const Text('Unblock'),
+      ),
+    );
+  }
+}
+
+class _AddToFavouritesButton extends StatelessWidget {
+  final User coach;
+
+  const _AddToFavouritesButton({required this.coach});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
+        onPressed: () async {
+          OrganiserCubit organiserCubit =
+              BlocProvider.of<OrganiserCubit>(context);
+          Response response =
+              await API.organiser.addCoachToFavouritesList(coach);
+          if (response.statusCode == HTTP_202_ACCEPTED) {
+            organiserCubit.retrieveOrganiserInformation();
+          } else {
+            // TODO
+          }
+        },
+        child: const Text('Add to Favourites'),
+      ),
+    );
+  }
+}
+
+class _RemoveFromFavouritesButton extends StatelessWidget {
+  final User coach;
+
+  const _RemoveFromFavouritesButton({required this.coach});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
+        onPressed: () async {
+          OrganiserCubit organiserCubit =
+              BlocProvider.of<OrganiserCubit>(context);
+          Response response =
+              await API.organiser.removeCoachFromFavouritesList(coach);
+          if (response.statusCode == HTTP_202_ACCEPTED) {
+            organiserCubit.retrieveOrganiserInformation();
+          } else {
+            // TODO
+          }
+        },
+        child: const Text('Remove from Favourites'),
       ),
     );
   }
