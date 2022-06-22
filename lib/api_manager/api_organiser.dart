@@ -29,6 +29,8 @@ class _ApiOrganiserLinks {
       Uri.parse("${ORGANISER}events/$eventPK/accept/$coachPK/");
 
   static Uri updateFavouritesLink() => Uri.parse(ORGANISER);
+
+  static Uri updateBlockedLink() => Uri.parse(ORGANISER);
 }
 
 class ApiOrganiser {
@@ -122,6 +124,21 @@ class ApiOrganiser {
       },
       body: jsonEncode(
         <String, dynamic>{"favourites_ids": favourites},
+      ),
+    );
+  }
+
+  Future<Response> updateBlockedList(List<int> blocked) {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.updateBlockedLink(),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token $token',
+      },
+      body: jsonEncode(
+        <String, dynamic>{"blocked_ids": blocked},
       ),
     );
   }
