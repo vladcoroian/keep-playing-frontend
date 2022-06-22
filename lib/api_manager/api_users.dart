@@ -71,7 +71,7 @@ class ApiUsers {
     final Response response = await client.get(
       _ApiUserLinks.allUsersLink(),
     );
-    final List body = json.decode(response.body);
+    final body = json.decode(response.body);
     for (var element in body) {
       users.add(User.fromModel(userModel: UserModel.fromJson(element)));
     }

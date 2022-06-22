@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/* ========================================================================== */
+/* ================ COLORS                                                    */
+/* ========================================================================== */
+
 const MaterialColor APP_COLOR = Colors.blue;
 const MaterialAccentColor BOTTOM_NAVIGATION_BAR_COLOR = Colors.lightBlueAccent;
 
@@ -8,6 +12,33 @@ const double CARD_PADDING = 16;
 
 const double APP_BAR_BUTTON_PADDING = 20;
 const double APP_BAR_BUTTON_SIZE = 26;
+
+const Color FAVOURITE_ICON_COLOR = Colors.red;
+
+/* ========================================================================== */
+/* ================ BUTTON COLORS                                             */
+/* ========================================================================== */
+
+const double BUTTON_PADDING = 16;
+const double BUTTON_FONT_SIZE = 16;
+const Color BUTTON_GRAY_COLOR = Colors.black12;
+
+const Color MANAGE_BUTTON_COLOR = APP_COLOR;
+
+const Color DETAILS_BUTTON_COLOR = Colors.black12;
+const Color BACK_BUTTON_COLOR = Colors.black12;
+
+const Color CANCEL_BUTTON_COLOR = Colors.red;
+const Color BLOCK_BUTTON_COLOR = Colors.red;
+const Color UNBLOCK_BUTTON_COLOR = Colors.red;
+const Color APPLIED_BUTTON_COLOR = Colors.red;
+
+const Color NO_OFFERS_BUTTON_COLOR = Colors.black12;
+const Color AT_LEAST_ONE_OFFER_BUTTON_COLOR = Colors.lightGreen;
+
+/* ========================================================================== */
+/* ================ SPORTS AND ROLES                                          */
+/* ========================================================================== */
 
 const List<String> SPORTS = [
   'Futsal',

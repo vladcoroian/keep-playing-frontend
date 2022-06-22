@@ -29,26 +29,25 @@ class Event {
 
   final List<int> offers;
 
-  Event._({
-    required this.pk,
-    required this.name,
-    required this.location,
-    required this.details,
-    required this.sport,
-    required this.role,
-    required this.date,
-    required this.startTime,
-    required this.endTime,
-    required this.flexibleStartTime,
-    required this.flexibleEndTime,
-    required this.price,
-    required this.coach,
-    required this.recurring,
-    this.coachPK,
-    required this.offers,
-    required this.creationStarted,
-    required this.creationEnded
-  });
+  Event._(
+      {required this.pk,
+      required this.name,
+      required this.location,
+      required this.details,
+      required this.sport,
+      required this.role,
+      required this.date,
+      required this.startTime,
+      required this.endTime,
+      required this.flexibleStartTime,
+      required this.flexibleEndTime,
+      required this.price,
+      required this.coach,
+      required this.recurring,
+      this.coachPK,
+      required this.offers,
+      required this.creationStarted,
+      required this.creationEnded});
 
   Event({required EventModel eventModel})
       : this._(

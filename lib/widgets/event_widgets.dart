@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:keep_playing_frontend/models/user.dart';
 
 import '../constants.dart';
 import '../models/event.dart';

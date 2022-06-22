@@ -87,7 +87,9 @@ class NewEvent {
         'price': price.toString(),
         'coach': coach ? 'True' : 'False',
         'recurring': recurring ? 'True' : 'False',
-        'creation_started': DateFormat('yyyy-MM-dd HH:mm:ss').format(creationStarted),
-        'creation_ended': DateFormat('yyyy-MM-dd HH:mm:ss').format(creationEnded),
+        'creation_started':
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(creationStarted),
+        'creation_ended':
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(creationEnded),
       };
 }

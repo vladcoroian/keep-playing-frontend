@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/views/events/past_event_details_page.dart';
+import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
 class PastEventCard extends StatelessWidget {
@@ -14,20 +14,25 @@ class PastEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget detailsButton = ColoredButton(
-      text: 'Details',
-      color: DETAILS_BUTTON_COLOR,
-      onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => PastEventDetailsPage(
-              eventsCubit: BlocProvider.of<EventsCubit>(context),
-              organiserCubit: BlocProvider.of<OrganiserCubit>(context),
-              event: event,
+    final Widget detailsButton = Container(
+      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: DETAILS_BUTTON_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => PastEventDetailsPage(
+                eventsCubit: BlocProvider.of<EventsCubit>(context),
+                organiserCubit: BlocProvider.of<OrganiserCubit>(context),
+                event: event,
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+        child: const Text('Details'),
+      ),
     );
 
     return EventCard(

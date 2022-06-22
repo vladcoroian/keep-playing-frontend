@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import 'buttons.dart';
 
 const double DIALOG_PADDING = 16;
 
@@ -72,9 +71,28 @@ class ConfirmationDialog extends TwoOptionsDialog {
       required this.onNoPressed,
       required this.onYesPressed})
       : super(
-            key: key,
-            leftButton: _YesButton(onPressed: onYesPressed),
-            rightButton: _NoButton(onPressed: onNoPressed));
+          key: key,
+          leftButton: Container(
+            padding: const EdgeInsets.all(BUTTON_PADDING),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: APP_COLOR,
+                  textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+              onPressed: () => onYesPressed,
+              child: const Text('Yes'),
+            ),
+          ),
+          rightButton: Container(
+            padding: const EdgeInsets.all(BUTTON_PADDING),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: BUTTON_GRAY_COLOR,
+                  textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+              onPressed: () => onNoPressed,
+              child: const Text('No'),
+            ),
+          ),
+        );
 }
 
 class ExitDialog extends TwoOptionsDialog {
@@ -87,27 +105,25 @@ class ExitDialog extends TwoOptionsDialog {
       required super.text})
       : super(
           key: key,
-          leftButton:
-              _YesButton(onPressed: () => Navigator.of(context).pop(true)),
-          rightButton:
-              _NoButton(onPressed: () => Navigator.of(context).pop(false)),
-        );
-}
-
-class _NoButton extends ColoredButton {
-  const _NoButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'No',
-          color: BUTTON_GRAY_COLOR,
-        );
-}
-
-class _YesButton extends ColoredButton {
-  const _YesButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Yes',
-          color: APP_COLOR,
+          leftButton: Container(
+            padding: const EdgeInsets.all(BUTTON_PADDING),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: APP_COLOR,
+                  textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Yes'),
+            ),
+          ),
+          rightButton: Container(
+            padding: const EdgeInsets.all(BUTTON_PADDING),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  primary: BUTTON_GRAY_COLOR,
+                  textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('No'),
+            ),
+          ),
         );
 }

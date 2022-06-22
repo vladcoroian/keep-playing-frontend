@@ -12,8 +12,7 @@ import 'package:keep_playing_frontend/widgets/loading_screen.dart';
 class LoginLoader extends StatefulWidget {
   final UserLogin userLogin;
 
-  const LoginLoader({Key? key, required this.userLogin})
-      : super(key: key);
+  const LoginLoader({Key? key, required this.userLogin}) : super(key: key);
 
   @override
   State<LoginLoader> createState() => _LoginLoaderState();
