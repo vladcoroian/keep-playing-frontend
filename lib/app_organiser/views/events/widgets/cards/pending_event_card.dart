@@ -9,6 +9,7 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
+import 'package:keep_playing_frontend/widgets/loading_screen.dart';
 
 import '../../manage_event_page.dart';
 
@@ -60,7 +61,7 @@ class _PendingEventCardState extends State<PendingEventCard> {
   @override
   Widget build(BuildContext context) {
     if (organiser == null) {
-      return const Text('Loading');
+      return const LoadingScreen();
     }
 
     final Widget offersButton = ColoredButton(

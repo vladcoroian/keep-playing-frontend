@@ -9,6 +9,7 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:keep_playing_frontend/widgets/loading_screen.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -43,7 +44,7 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
   @override
   Widget build(BuildContext context) {
     if (coach == null) {
-      return const Text('Loading');
+      return const LoadingScreen();
     }
 
     Future launchEmail({
