@@ -20,19 +20,37 @@ class UserDetailsDialog extends StatelessWidget {
       title: const Center(
           child: Text(
         'Coach Information',
-        style: _UserWidgets._textStyleForTitle,
+        style: UserWidgets._textStyleForTitle,
         textScaleFactor: 1.5,
       )),
-      children: _UserWidgets._getDetailsAboutUser(user: user) + widgetsAtTheEnd,
+      children: UserWidgets(user: user).getDetailsAboutUser() + widgetsAtTheEnd,
     );
   }
 }
 
-class _UserWidgets {
+class UserWidgets {
+  final User user;
+
+  UserWidgets({required this.user});
+
   static const TextStyle _textStyleForTitle =
       TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: APP_COLOR);
 
-  static List<Widget> _getDetailsAboutUser({required User user}) {
+  Widget getCoachInformationCard() {
+    return Card(
+        margin: const EdgeInsets.all(CARD_PADDING),
+        child: ListTile(
+            leading: const Text(
+              "Coach\nInformation",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: APP_COLOR),
+            ),
+            title: Text('${user.firstName} ${user.lastName}'),
+            onTap: () {
+            }));
+  }
+
+  List<Widget> getDetailsAboutUser() {
     return <Widget>[
       ListTile(
           leading: const Icon(Icons.person),
