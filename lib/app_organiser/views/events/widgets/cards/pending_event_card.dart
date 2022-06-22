@@ -131,7 +131,7 @@ class _OffersDialogState extends State<_OffersDialog> {
             primary: BACK_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.of(context).pop();
         },
         child: const Text('Back'),
       ),

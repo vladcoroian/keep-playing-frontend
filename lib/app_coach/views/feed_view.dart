@@ -148,7 +148,7 @@ class _DetailsDialog extends StatelessWidget {
             primary: BACK_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () => {
-          Navigator.pop(context),
+          Navigator.of(context).pop(),
         },
         child: const Text('Back'),
       ),
@@ -190,7 +190,7 @@ class _AcceptJobDialog extends StatelessWidget {
                 child: ConfirmationDialog(
                   title: 'Are you sure that you want to accept this job?',
                   onNoPressed: () => {
-                    Navigator.of(buildContext).pop(true),
+                    Navigator.of(buildContext).pop(),
                   },
                   onYesPressed: () async {
                     final NavigatorState navigator = Navigator.of(buildContext);
@@ -221,19 +221,24 @@ class _AcceptJobDialog extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             primary: CANCEL_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () => {Navigator.pop(context)},
+        onPressed: () => {
+          Navigator.of(context).pop(),
+        },
         child: const Text('Cancel'),
       ),
     );
 
-    return EventDetailsDialog(event: event, widgetsAtTheEnd: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          sendOfferButton,
-          cancelButton,
-        ],
-      ),
-    ]);
+    return EventDetailsDialog(
+      event: event,
+      widgetsAtTheEnd: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            sendOfferButton,
+            cancelButton,
+          ],
+        ),
+      ],
+    );
   }
 }

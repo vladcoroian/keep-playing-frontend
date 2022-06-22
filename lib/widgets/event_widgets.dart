@@ -8,7 +8,9 @@ import 'dialogs.dart';
 class EventWidgets {
   final Event event;
 
-  EventWidgets({required this.event});
+  EventWidgets({
+    required this.event,
+  });
 
   static const TextStyle _textStyleForTitle = TextStyle(
     fontSize: 16.0,
@@ -68,33 +70,34 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        margin: const EdgeInsets.all(CARD_PADDING),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ListTile(
-              leading: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(DateFormat("MMMM dd").format(event.date)),
-                  Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                      event.startTime,
-                      alwaysUse24HourFormat: true)),
-                  Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                      event.endTime,
-                      alwaysUse24HourFormat: true)),
-                ],
-              ),
-              title: Text(event.name, textAlign: TextAlign.left),
-              subtitle: Text(event.location, textAlign: TextAlign.left),
-              trailing: Text(event.getPriceInPounds()),
+      margin: const EdgeInsets.all(CARD_PADDING),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          ListTile(
+            leading: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(DateFormat("MMMM dd").format(event.date)),
+                Text(const DefaultMaterialLocalizations().formatTimeOfDay(
+                    event.startTime,
+                    alwaysUse24HourFormat: true)),
+                Text(const DefaultMaterialLocalizations().formatTimeOfDay(
+                    event.endTime,
+                    alwaysUse24HourFormat: true)),
+              ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [leftButton, rightButton],
-            ),
-          ],
-        ));
+            title: Text(event.name, textAlign: TextAlign.left),
+            subtitle: Text(event.location, textAlign: TextAlign.left),
+            trailing: Text(event.getPriceInPounds()),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [leftButton, rightButton],
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -113,13 +116,16 @@ class EventDetailsDialog extends StatelessWidget {
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(DIALOG_PADDING),
       title: Center(
-          child: Text(
-        event.name,
-        style: EventWidgets._textStyleForTitle,
-        textScaleFactor: 1.5,
-      )),
-      children: EventWidgets(event: event).getDetailsTilesAboutEvent() +
-          widgetsAtTheEnd,
+        child: Text(
+          event.name,
+          style: EventWidgets._textStyleForTitle,
+          textScaleFactor: 1.5,
+        ),
+      ),
+      children: [
+        ...EventWidgets(event: event).getDetailsTilesAboutEvent(),
+        ...widgetsAtTheEnd,
+      ],
     );
   }
 }

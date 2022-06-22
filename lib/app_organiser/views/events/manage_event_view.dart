@@ -326,7 +326,7 @@ class _ManageEventView extends State<ManageEventView> {
                 child: ConfirmationDialog(
                   title: 'Are you sure that you want to cancel this event?',
                   onNoPressed: () => {
-                    Navigator.of(buildContext).pop(true),
+                    Navigator.of(buildContext).pop(),
                   },
                   onYesPressed: () async {
                     NavigatorState navigator = Navigator.of(buildContext);

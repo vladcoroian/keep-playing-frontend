@@ -61,8 +61,8 @@ class _UpcomingJobWidget extends StatelessWidget {
             builder: (BuildContext buildContext) {
               return ConfirmationDialog(
                 title: 'Are you sure that you want to cancel this job?',
-                onNoPressed: () => {
-                  Navigator.of(buildContext).pop(true),
+                onNoPressed: () {
+                  Navigator.of(buildContext).pop();
                 },
                 onYesPressed: () async {
                   final NavigatorState navigator = Navigator.of(buildContext);
@@ -104,7 +104,7 @@ class _UpcomingJobWidget extends StatelessWidget {
                       primary: BACK_BUTTON_COLOR,
                       textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
                   onPressed: () async {
-                    Navigator.pop(buildContext);
+                    Navigator.of(buildContext).pop();
                   },
                   child: const Text('Back'),
                 ),

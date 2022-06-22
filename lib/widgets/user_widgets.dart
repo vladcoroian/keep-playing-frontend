@@ -101,11 +101,12 @@ class _CoachInformationDialog extends StatelessWidget {
     return SimpleDialog(
         contentPadding: const EdgeInsets.all(DIALOG_PADDING),
         title: const Center(
-            child: Text(
-          'Coach Information',
-          style: UserWidgets._textStyleForTitle,
-          textScaleFactor: 1.5,
-        )),
+          child: Text(
+            'Coach Information',
+            style: UserWidgets._textStyleForTitle,
+            textScaleFactor: 1.5,
+          ),
+        ),
         children: UserWidgets(user: coach).getDetailsAboutUser());
   }
 }

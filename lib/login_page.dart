@@ -20,19 +20,24 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     const Widget appTitle = FittedBox(
-        fit: BoxFit.fitWidth,
-        child: Text('Keep\nPlaying',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: APP_COLOR, fontSize: 400.0)));
+      fit: BoxFit.fitWidth,
+      child: Text(
+        'Keep\nPlaying',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: APP_COLOR, fontSize: 400.0),
+      ),
+    );
 
     final Widget usernameField = TextField(
       obscureText: false,
       style: style,
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Username",
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        hintText: "Username",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
+      ),
       onChanged: (text) {
         _username = text;
       },
@@ -42,10 +47,12 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: true,
       style: style,
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Password",
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        hintText: "Password",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(32.0),
+        ),
+      ),
       onChanged: (text) {
         _password = text;
       },

@@ -17,14 +17,15 @@ class CalendarViewButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
-        child: GestureDetector(
-          onTap: onTap,
-          child: const Icon(
-            Icons.calendar_month,
-            size: APP_BAR_BUTTON_SIZE,
-          ),
-        ));
+      padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
+      child: GestureDetector(
+        onTap: onTap,
+        child: const Icon(
+          Icons.calendar_month,
+          size: APP_BAR_BUTTON_SIZE,
+        ),
+      ),
+    );
   }
 }
 
@@ -36,14 +37,15 @@ class ListViewButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
-        child: GestureDetector(
-          onTap: onTap,
-          child: const Icon(
-            Icons.list,
-            size: APP_BAR_BUTTON_SIZE,
-          ),
-        ));
+      padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
+      child: GestureDetector(
+        onTap: onTap,
+        child: const Icon(
+          Icons.list,
+          size: APP_BAR_BUTTON_SIZE,
+        ),
+      ),
+    );
   }
 }
 

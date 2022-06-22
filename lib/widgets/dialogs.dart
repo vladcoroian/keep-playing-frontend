@@ -24,7 +24,7 @@ class ConfirmationDialog extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             primary: APP_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () => onYesPressed,
+        onPressed: onYesPressed,
         child: const Text('Yes'),
       ),
     );
@@ -35,7 +35,7 @@ class ConfirmationDialog extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             primary: BUTTON_GRAY_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () => onNoPressed,
+        onPressed: onNoPressed,
         child: const Text('No'),
       ),
     );
