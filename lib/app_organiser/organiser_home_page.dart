@@ -5,6 +5,7 @@ import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 import 'views/events_page.dart';
 import 'views/profile_page.dart';
@@ -48,7 +49,7 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
   @override
   Widget build(BuildContext context) {
     if (organiser == null) {
-      return Text('Loading');
+      return const LoadingScreen();
     }
 
     return Scaffold(

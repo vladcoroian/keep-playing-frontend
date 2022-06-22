@@ -65,8 +65,7 @@ class _EnterAsCoachButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 25)),
             onPressed: () {
-              Navigator.push(
-                context,
+              Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );
             },
@@ -91,8 +90,7 @@ class _EnterAsOrganiserButton extends StatelessWidget {
             style: ElevatedButton.styleFrom(
                 textStyle: const TextStyle(fontSize: 25)),
             onPressed: () {
-              Navigator.push(
-                context,
+              Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const LoginPage()),
               );
             },

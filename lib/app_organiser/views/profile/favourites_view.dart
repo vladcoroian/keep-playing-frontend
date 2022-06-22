@@ -6,7 +6,6 @@ import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 class FavouritesView extends StatefulWidget {
@@ -67,22 +66,27 @@ class _FavouritesViewState extends State<FavouritesView> {
       },
     );
 
-    final Widget saveChangesButton = ColoredButton(
-      text: 'Save Changes',
-      color: APP_COLOR,
-      onPressed: () async {
-        NavigatorState navigator = Navigator.of(context);
-        final OrganiserCubit organiserCubit =
-            BlocProvider.of<OrganiserCubit>(context);
-        Response response =
-            await API.organiser.updateFavouritesList(favourites);
-        if (response.statusCode == HTTP_202_ACCEPTED) {
-          organiserCubit.retrieveOrganiserInformation();
-        } else {
-          // TODO
-        }
-        navigator.pop();
-      },
+    final Widget saveChangesButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () async {
+          NavigatorState navigator = Navigator.of(context);
+          final OrganiserCubit organiserCubit =
+              BlocProvider.of<OrganiserCubit>(context);
+          Response response =
+              await API.organiser.updateFavouritesList(favourites);
+          if (response.statusCode == HTTP_202_ACCEPTED) {
+            organiserCubit.retrieveOrganiserInformation();
+          } else {
+            // TODO
+          }
+          navigator.pop();
+        },
+        child: const Text('Save Changes'),
+      ),
     );
 
     return WillPopScope(

@@ -1,52 +1,94 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import 'buttons.dart';
 
 const double DIALOG_PADDING = 16;
 
-class OneOptionDialog extends StatelessWidget {
+class ConfirmationDialog extends StatelessWidget {
   final String title;
-  final List<Widget> children;
-  final Widget button;
+  final VoidCallback? onNoPressed;
+  final VoidCallback? onYesPressed;
 
-  const OneOptionDialog(
-      {super.key,
-      required this.title,
-      required this.children,
-      required this.button});
+  const ConfirmationDialog({
+    super.key,
+    required this.title,
+    this.onNoPressed,
+    this.onYesPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final Widget yesButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: onYesPressed,
+        child: const Text('Yes'),
+      ),
+    );
+
+    final Widget noButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: BUTTON_GRAY_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: onNoPressed,
+        child: const Text('No'),
+      ),
+    );
+
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(DIALOG_PADDING),
       title: Center(child: Text(title)),
-      children: children +
-          [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [button],
-            ),
-          ],
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [yesButton, noButton],
+        ),
+      ],
     );
   }
 }
 
-class TwoOptionsDialog extends StatelessWidget {
+class ExitDialog extends StatelessWidget {
   final String title;
   final String text;
-  final Widget leftButton;
-  final Widget rightButton;
+  final BuildContext context;
 
-  const TwoOptionsDialog(
-      {super.key,
-      required this.title,
-      required this.text,
-      required this.leftButton,
-      required this.rightButton});
+  const ExitDialog({
+    super.key,
+    required this.title,
+    required this.text,
+    required this.context,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final Widget yesButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () => Navigator.of(context).pop(true),
+        child: const Text('Yes'),
+      ),
+    );
+
+    final Widget noButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: BUTTON_GRAY_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () => Navigator.of(context).pop(false),
+        child: const Text('No'),
+      ),
+    );
+
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(DIALOG_PADDING),
       title: Center(child: Text(title)),
@@ -54,60 +96,9 @@ class TwoOptionsDialog extends StatelessWidget {
         Container(padding: const EdgeInsets.all(10), child: Text(text)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [leftButton, rightButton],
+          children: [yesButton, noButton],
         ),
       ],
     );
   }
-}
-
-class ConfirmationDialog extends TwoOptionsDialog {
-  final VoidCallback? onNoPressed;
-  final VoidCallback? onYesPressed;
-
-  ConfirmationDialog(
-      {Key? key,
-      required super.title,
-      super.text = '',
-      required this.onNoPressed,
-      required this.onYesPressed})
-      : super(
-            key: key,
-            leftButton: _YesButton(onPressed: onYesPressed),
-            rightButton: _NoButton(onPressed: onNoPressed));
-}
-
-class ExitDialog extends TwoOptionsDialog {
-  final BuildContext context;
-
-  ExitDialog(
-      {Key? key,
-      required this.context,
-      required super.title,
-      required super.text})
-      : super(
-          key: key,
-          leftButton:
-              _YesButton(onPressed: () => Navigator.of(context).pop(true)),
-          rightButton:
-              _NoButton(onPressed: () => Navigator.of(context).pop(false)),
-        );
-}
-
-class _NoButton extends ColoredButton {
-  const _NoButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'No',
-          color: BUTTON_GRAY_COLOR,
-        );
-}
-
-class _YesButton extends ColoredButton {
-  const _YesButton({Key? key, required super.onPressed})
-      : super(
-          key: key,
-          text: 'Yes',
-          color: APP_COLOR,
-        );
 }

@@ -3,11 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_coach/cubits/upcoming_jobs_cubit.dart';
+import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
-import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import '../../models/event.dart';
 import '../../widgets/event_widgets.dart';
@@ -19,10 +18,12 @@ class UpcomingJobsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<UpcomingJobsCubit, List<Event>>(
       builder: (context, state) {
-        return ListViewsOfEvents(
-          events: BlocProvider.of<UpcomingJobsCubit>(context).state,
-          eventWidgetBuilder: (Event event) => _UpcomingJobWidget(event: event),
-        ).listView();
+        return ListView.builder(
+          itemCount: state.length,
+          itemBuilder: (context, index) {
+            return _UpcomingJobWidget(event: state[index]);
+          },
+        );
       },
     );
 
@@ -48,16 +49,21 @@ class _UpcomingJobWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget cancelButton = ColoredButton(
-      text: 'Cancel',
-      color: CANCEL_BUTTON_COLOR,
-      onPressed: () {
-        showDialog(
+    final Widget cancelButton = Container(
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: CANCEL_BUTTON_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () {
+          showDialog(
             context: context,
             builder: (BuildContext buildContext) {
               return ConfirmationDialog(
                 title: 'Are you sure that you want to cancel this job?',
-                onNoPressed: () => {Navigator.pop(buildContext)},
+                onNoPressed: () {
+                  Navigator.of(buildContext).pop();
+                },
                 onYesPressed: () async {
                   final NavigatorState navigator = Navigator.of(buildContext);
                   final UpcomingJobsCubit upcomingJobsCubit =
@@ -74,31 +80,45 @@ class _UpcomingJobWidget extends StatelessWidget {
                   navigator.pop();
                 },
               );
-            });
-      },
+            },
+          );
+        },
+        child: const Text('Cancel'),
+      ),
     );
 
-    final Widget detailsButton = ColoredButton(
-      text: 'Details',
-      color: DETAILS_BUTTON_COLOR,
-      onPressed: () {
-        showDialog(
+    final Widget detailsButton = Container(
+      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: DETAILS_BUTTON_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () {
+          showDialog(
             context: context,
             builder: (BuildContext buildContext) {
-              final Widget cancelButton = ColoredButton(
-                text: 'Cancel',
-                color: CANCEL_BUTTON_COLOR,
-                onPressed: () async {
-                  Navigator.pop(buildContext);
-                },
+              final Widget backButton = Container(
+                padding: const EdgeInsets.all(BUTTON_PADDING),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: BACK_BUTTON_COLOR,
+                      textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+                  onPressed: () async {
+                    Navigator.of(buildContext).pop();
+                  },
+                  child: const Text('Back'),
+                ),
               );
 
               return EventDetailsDialog(
                 event: event,
-                widgetsAtTheEnd: [cancelButton],
+                widgetsAtTheEnd: [backButton],
               );
-            });
-      },
+            },
+          );
+        },
+        child: const Text('Details'),
+      ),
     );
 
     return EventCard(

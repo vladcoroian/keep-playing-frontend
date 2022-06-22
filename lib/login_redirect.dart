@@ -7,33 +7,23 @@ import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 import 'package:keep_playing_frontend/app_organiser/organiser_home_page.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
-class LoadingScreenPage extends StatefulWidget {
+class LoginRedirect extends StatefulWidget {
   final UserLogin userLogin;
 
-  const LoadingScreenPage({Key? key, required this.userLogin})
-      : super(key: key);
+  const LoginRedirect({Key? key, required this.userLogin}) : super(key: key);
 
   @override
-  State<LoadingScreenPage> createState() => _LoadingScreenPageState();
+  State<LoginRedirect> createState() => _LoginRedirectState();
 }
 
-class _LoadingScreenPageState extends State<LoadingScreenPage>
-    with TickerProviderStateMixin {
+class _LoginRedirectState extends State<LoginRedirect> {
   User? _currentUser;
   bool _invalid = false;
 
-  late AnimationController controller;
-
   @override
   void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addListener(() {
-        setState(() {});
-      });
-    controller.repeat(reverse: true);
     _login();
     super.initState();
   }
@@ -57,27 +47,12 @@ class _LoadingScreenPageState extends State<LoadingScreenPage>
 
   @override
   Widget build(BuildContext context) {
-    Widget loadingScreen = Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        alignment: Alignment.center,
-        child: SizedBox(
-          height: 50.0,
-          width: 50.0,
-          child: CircularProgressIndicator(
-            value: controller.value,
-            semanticsLabel: 'Linear progress indicator',
-          ),
-        ),
-      ),
-    );
-
     if (_invalid) {
       Navigator.of(context).pop();
     }
 
     if (_currentUser == null) {
-      return loadingScreen;
+      return const LoadingScreen();
     }
 
     if (_currentUser!.isCoachUser()) {

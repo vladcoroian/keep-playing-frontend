@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
-import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:keep_playing_frontend/widgets/event_widgets.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 import 'package:keep_playing_frontend/widgets/user_widgets.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class PastEventDetailsView extends StatefulWidget {
   final Event event;
@@ -43,50 +42,8 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
   @override
   Widget build(BuildContext context) {
     if (coach == null) {
-      return const Text('Loading');
+      return const LoadingScreen();
     }
-
-    Future launchEmail({
-      required String toEmail,
-      required String subject,
-    }) async {
-      final url = 'mailto:$toEmail?subject=${Uri.encodeFull(subject)}&body=';
-      if (await canLaunchUrlString(url)) {
-        await launchUrlString(url);
-      }
-    }
-
-    final Widget messageCoachButton = ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          primary: APP_COLOR,
-          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-      onPressed: () {
-        launchEmail(
-          toEmail: coach!.email,
-          subject:
-              '${widget.event.name}, on: ${DateFormat.MMMEd().format(widget.event.date)}',
-        );
-      },
-      child: const Icon(Icons.email),
-    );
-
-    final Widget coachInformationListTile = ListTile(
-      leading: const Text(
-        "Coach\nInformation",
-        textAlign: TextAlign.center,
-        style: TextStyle(color: APP_COLOR),
-      ),
-      title: Text(coach!.getFullName()),
-      trailing: messageCoachButton,
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => CoachInformationDialog(
-            user: coach!,
-          ),
-        );
-      },
-    );
 
     final Widget coachInformationCard = BlocBuilder<OrganiserCubit, Organiser>(
       builder: (context, state) {
@@ -104,7 +61,7 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
           margin: const EdgeInsets.all(CARD_PADDING),
           child: Column(
             children: [
-              coachInformationListTile,
+              CoachInformationListTile(coach: coach!, event: widget.event),
               ButtonBar(
                 alignment: MainAxisAlignment.spaceBetween,
                 children: [leftButton, rightButton],
@@ -122,12 +79,16 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
       body: ListView(
         children: [
           coachInformationCard,
-          ...UserWidgets(user: coach!).getDetailsAboutUser()
+          ...EventWidgets(event: widget.event).getDetailsTilesAboutEvent()
         ],
       ),
     );
   }
 }
+
+/* ========================================================================== */
+/* ================ BUTTONS                                                   */
+/* ========================================================================== */
 
 class _BlockButton extends StatelessWidget {
   final User coach;
@@ -197,7 +158,7 @@ class _AddToFavouritesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: APP_COLOR,
@@ -228,7 +189,7 @@ class _RemoveFromFavouritesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: APP_COLOR,

@@ -3,7 +3,11 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-const double CALENDAR_PADDING = DEFAULT_PADDING;
+const double CALENDAR_PADDING = 16;
+
+/* ========================================================================== */
+/* ================ Event Views Buttons                                       */
+/* ========================================================================== */
 
 class CalendarViewButton extends StatelessWidget {
   final Function()? onTap;
@@ -13,14 +17,15 @@ class CalendarViewButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
-        child: GestureDetector(
-          onTap: onTap,
-          child: const Icon(
-            Icons.calendar_month,
-            size: APP_BAR_BUTTON_SIZE,
-          ),
-        ));
+      padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
+      child: GestureDetector(
+        onTap: onTap,
+        child: const Icon(
+          Icons.calendar_month,
+          size: APP_BAR_BUTTON_SIZE,
+        ),
+      ),
+    );
   }
 }
 
@@ -32,39 +37,21 @@ class ListViewButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
-        child: GestureDetector(
-          onTap: onTap,
-          child: const Icon(
-            Icons.list,
-            size: APP_BAR_BUTTON_SIZE,
-          ),
-        ));
+      padding: const EdgeInsets.only(right: APP_BAR_BUTTON_PADDING),
+      child: GestureDetector(
+        onTap: onTap,
+        child: const Icon(
+          Icons.list,
+          size: APP_BAR_BUTTON_SIZE,
+        ),
+      ),
+    );
   }
 }
 
-class ListViewsOfEvents {
-  final List<Event> events;
-  final Widget Function(Event event) eventWidgetBuilder;
-
-  ListViewsOfEvents({required this.events, required this.eventWidgetBuilder});
-
-  List<Widget> _list() {
-    List<Widget> listOfEventsWidgets = [];
-    for (Event event in events) {
-      listOfEventsWidgets.add(eventWidgetBuilder(event));
-    }
-    return listOfEventsWidgets;
-  }
-
-  Widget listView() {
-    return ListView(children: _list());
-  }
-
-  Widget sliverListView() {
-    return SliverList(delegate: SliverChildListDelegate(_list()));
-  }
-}
+/* ========================================================================== */
+/* ================ Calendar View of Events                                   */
+/* ========================================================================== */
 
 class CalendarViewOfEvents extends StatefulWidget {
   final List<Event> events;

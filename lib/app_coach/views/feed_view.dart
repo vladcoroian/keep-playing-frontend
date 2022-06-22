@@ -4,10 +4,8 @@ import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/event_widgets.dart';
-import 'package:keep_playing_frontend/widgets/events_views.dart';
 
 import '../../../models/event.dart';
 import '../cubits/feed_events_cubit.dart';
@@ -19,13 +17,15 @@ class FeedView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<FeedEventsCubit, List<Event>>(
       builder: (context, state) {
-        return ListViewsOfEvents(
-          events: state,
-          eventWidgetBuilder: (Event event) => _FeedEventWidget(
-            event: event,
-            coachPK: StoredData.getCurrentUser().pk,
-          ),
-        ).listView();
+        return ListView.builder(
+          itemCount: state.length,
+          itemBuilder: (context, index) {
+            return _FeedEventWidget(
+              event: state[index],
+              coachPK: StoredData.getCurrentUser().pk,
+            );
+          },
+        );
       },
     );
 
@@ -50,49 +50,89 @@ class _FeedEventWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget detailsButton = ColoredButton(
-      text: 'Details',
-      color: DETAILS_BUTTON_COLOR,
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return _DetailsDialog(event: event);
-            });
-      },
+    final Widget detailsButton = Container(
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: DETAILS_BUTTON_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return _DetailsDialog(event: event);
+              });
+        },
+        child: const Text('Details'),
+      ),
     );
 
-    final Widget applyButton = ColoredButton(
-      text: 'Apply',
-      color: APP_COLOR,
-      onPressed: () {
-        final FeedEventsCubit feedEventsCubit =
-            BlocProvider.of<FeedEventsCubit>(context);
+    return EventCard(
+      event: event,
+      leftButton: detailsButton,
+      rightButton: event.offers.contains(coachPK)
+          ? _AppliedButton()
+          : _AcceptButton(event: event),
+    );
+  }
+}
 
-        showDialog(
+/* ========================================================================== */
+/* ================ BUTTONS                                                   */
+/* ========================================================================== */
+
+class _AcceptButton extends StatelessWidget {
+  final Event event;
+
+  const _AcceptButton({required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () {
+          final FeedEventsCubit feedEventsCubit =
+              BlocProvider.of<FeedEventsCubit>(context);
+
+          showDialog(
             context: context,
             builder: (BuildContext context) {
               return BlocProvider<FeedEventsCubit>.value(
                 value: feedEventsCubit,
                 child: _AcceptJobDialog(event: event),
               );
-            });
-      },
-    );
-
-    final Widget appliedButton = ColoredButton(
-      text: 'Applied',
-      color: APPLIED_BUTTON_COLOR,
-      onPressed: () {},
-    );
-
-    return EventCard(
-      event: event,
-      leftButton: detailsButton,
-      rightButton: event.offers.contains(coachPK) ? appliedButton : applyButton,
+            },
+          );
+        },
+        child: const Text('Apply'),
+      ),
     );
   }
 }
+
+class _AppliedButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APPLIED_BUTTON_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () {},
+        child: const Text('Applied'),
+      ),
+    );
+  }
+}
+
+/* ========================================================================== */
+/* ================ DIALOGS                                                   */
+/* ========================================================================== */
 
 class _DetailsDialog extends StatelessWidget {
   final Event event;
@@ -101,12 +141,17 @@ class _DetailsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget cancelButton = ColoredButton(
-      text: 'Cancel',
-      color: CANCEL_BUTTON_COLOR,
-      onPressed: () => {
-        Navigator.pop(context),
-      },
+    final Widget backButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: BACK_BUTTON_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () => {
+          Navigator.of(context).pop(),
+        },
+        child: const Text('Back'),
+      ),
     );
 
     return EventDetailsDialog(
@@ -114,7 +159,7 @@ class _DetailsDialog extends StatelessWidget {
       widgetsAtTheEnd: [
         Align(
           alignment: Alignment.center,
-          child: cancelButton,
+          child: backButton,
         ),
       ],
     );
@@ -128,13 +173,16 @@ class _AcceptJobDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget sendOfferButton = ColoredButton(
-      text: 'Send Offer',
-      color: APP_COLOR,
-      onPressed: () {
-        final FeedEventsCubit feedEventsCubit =
-            BlocProvider.of<FeedEventsCubit>(context);
-        showDialog(
+    final Widget sendOfferButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () {
+          final FeedEventsCubit feedEventsCubit =
+              BlocProvider.of<FeedEventsCubit>(context);
+          showDialog(
             context: context,
             builder: (BuildContext buildContext) {
               return BlocProvider<FeedEventsCubit>.value(
@@ -142,7 +190,7 @@ class _AcceptJobDialog extends StatelessWidget {
                 child: ConfirmationDialog(
                   title: 'Are you sure that you want to accept this job?',
                   onNoPressed: () => {
-                    Navigator.pop(buildContext),
+                    Navigator.of(buildContext).pop(),
                   },
                   onYesPressed: () async {
                     final NavigatorState navigator = Navigator.of(buildContext);
@@ -160,24 +208,37 @@ class _AcceptJobDialog extends StatelessWidget {
                   },
                 ),
               );
-            });
-      },
-    );
-
-    final Widget cancelButton = ColoredButton(
-      text: 'Cancel',
-      color: CANCEL_BUTTON_COLOR,
-      onPressed: () => {Navigator.pop(context)},
-    );
-
-    return EventDetailsDialog(event: event, widgetsAtTheEnd: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          sendOfferButton,
-          cancelButton,
-        ],
+            },
+          );
+        },
+        child: const Text('Send Offer'),
       ),
-    ]);
+    );
+
+    final Widget cancelButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: CANCEL_BUTTON_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () => {
+          Navigator.of(context).pop(),
+        },
+        child: const Text('Cancel'),
+      ),
+    );
+
+    return EventDetailsDialog(
+      event: event,
+      widgetsAtTheEnd: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            sendOfferButton,
+            cancelButton,
+          ],
+        ),
+      ],
+    );
   }
 }

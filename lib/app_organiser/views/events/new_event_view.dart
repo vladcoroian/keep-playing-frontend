@@ -8,7 +8,6 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
-import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 class NewEventView extends StatefulWidget {
@@ -210,6 +209,16 @@ class _NewEventViewState extends State<NewEventView> {
       ),
     );
 
+    final Widget recurringForm = CheckboxListTile(
+      value: recurring,
+      onChanged: (bool? value) => {
+        setState(() {
+          recurring = value!;
+        })
+      },
+      title: const Text('Is the event weekly?'),
+    );
+
     final Widget priceForm = ListTile(
       title: TextFormField(
         keyboardType: TextInputType.number,
@@ -226,50 +235,44 @@ class _NewEventViewState extends State<NewEventView> {
       ),
     );
 
-    final Widget recurringForm = ListTile(
-      title: CheckboxListTile(
-        value: recurring,
-        onChanged: (bool? value) => {
-          setState(() {
-            recurring = value!;
-          })
+    final Widget submitButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () async {
+          NewEvent newEvent = NewEvent(
+            name: _name,
+            location: _location,
+            details: _details,
+            sport: _sport,
+            role: _role,
+            date: _date,
+            startTime: _startTime,
+            endTime: _endTime,
+            flexibleStartTime: _flexibleStartTime,
+            flexibleEndTime: _flexibleEndTime,
+            price: _price,
+            coach: false,
+            recurring: recurring,
+            creationStarted: _creationStarted,
+            creationEnded: DateTime.now(),
+          );
+
+          NavigatorState navigator = Navigator.of(context);
+          final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
+          Response response =
+              await API.organiser.addNewEvent(newEvent: newEvent);
+          if (response.statusCode == HTTP_201_CREATED) {
+            eventsCubit.retrieveEvents();
+          } else {
+            // TODO
+          }
+          navigator.pop();
         },
-        title: const Text('Is the event weekly?'),
+        child: const Text('Submit'),
       ),
-    );
-
-    final Widget submitButton = ColoredButton(
-      text: 'Submit',
-      color: APP_COLOR,
-      onPressed: () async {
-        NewEvent newEvent = NewEvent(
-          name: _name,
-          location: _location,
-          details: _details,
-          sport: _sport,
-          role: _role,
-          date: _date,
-          startTime: _startTime,
-          endTime: _endTime,
-          flexibleStartTime: _flexibleStartTime,
-          flexibleEndTime: _flexibleEndTime,
-          price: _price,
-          coach: false,
-          recurring: recurring,
-          creationStarted: _creationStarted,
-          creationEnded: DateTime.now(),
-        );
-
-        NavigatorState navigator = Navigator.of(context);
-        final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-        Response response = await API.organiser.addNewEvent(newEvent: newEvent);
-        if (response.statusCode == HTTP_201_CREATED) {
-          eventsCubit.retrieveEvents();
-        } else {
-          // TODO
-        }
-        navigator.pop();
-      },
     );
 
     return WillPopScope(
