@@ -41,4 +41,8 @@ class User {
   bool isOrganiserUser() {
     return true;
   }
+
+  String getFullName() {
+    return '$firstName $lastName';
+  }
 }

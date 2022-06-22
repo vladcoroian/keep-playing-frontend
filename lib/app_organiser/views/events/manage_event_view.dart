@@ -112,7 +112,7 @@ class _ManageEventView extends State<ManageEventView> {
   Widget build(BuildContext context) {
     final String coachName = _sessionCoach == null
         ? ''
-        : "${_sessionCoach!.firstName} ${_sessionCoach!.lastName}";
+        : _sessionCoach!.getFullName();
 
     final Widget messageCoachButton = ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -141,54 +141,60 @@ class _ManageEventView extends State<ManageEventView> {
           Add2Calendar.addEvent2Cal(event);
         });
 
-    final Widget coachInformation = Card(
-        margin: const EdgeInsets.all(DEFAULT_PADDING),
-        child: ListTile(
-            leading: const Text(
-              "Coach\nInformation",
-              textAlign: TextAlign.center,
-              style: TextStyle(color: APP_COLOR),
+    final Widget coachInformationCard = Card(
+      margin: const EdgeInsets.all(CARD_PADDING),
+      child: ListTile(
+        leading: const Text(
+          "Coach\nInformation",
+          textAlign: TextAlign.center,
+          style: TextStyle(color: APP_COLOR),
+        ),
+        title: Text(coachName),
+        trailing: messageCoachButton,
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) => CoachInformationDialog(
+              user: _sessionCoach!,
             ),
-            title: Text(coachName),
-            trailing: messageCoachButton,
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (context) => UserDetailsDialog(
-                        user: _sessionCoach!,
-                        widgetsAtTheEnd: const [],
-                      ));
-            }));
+          );
+        },
+      ),
+    );
 
     final Widget nameForm = ListTile(
-        title: TextFormField(
-            initialValue: _name,
-            readOnly: false,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.title),
-              hintText: 'Enter the name',
-              labelText: 'Name',
-            ),
-            onChanged: (text) {
-              _name = text;
-            }));
+      title: TextFormField(
+        initialValue: _name,
+        readOnly: false,
+        decoration: const InputDecoration(
+          icon: Icon(Icons.title),
+          hintText: 'Enter the name',
+          labelText: 'Name',
+        ),
+        onChanged: (text) {
+          _name = text;
+        },
+      ),
+    );
 
     final Widget sportForm = ListTile(
-        leading: const Icon(Icons.sports_soccer),
-        title: DropdownButton<String>(
-            value: selectedSport,
-            items: SPORTS.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              _sport = newValue!;
-              setState(() {
-                selectedSport = _sport;
-              });
-            }));
+      leading: const Icon(Icons.sports_soccer),
+      title: DropdownButton<String>(
+        value: selectedSport,
+        items: SPORTS.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: (String? newValue) {
+          _sport = newValue!;
+          setState(() {
+            selectedSport = _sport;
+          });
+        },
+      ),
+    );
 
     final Widget roleForm = ListTile(
         leading: const Icon(Icons.sports),
@@ -394,7 +400,7 @@ class _ManageEventView extends State<ManageEventView> {
         body: ListView(children: [
           _sessionCoach == null
               ? const SizedBox(height: 0, width: 0)
-              : coachInformation,
+              : coachInformationCard,
           addToCalendarButton,
           nameForm,
           sportForm,
