@@ -41,8 +41,8 @@ class _ManageEventView extends State<ManageEventView> {
   late TimeOfDay _flexibleEndTime;
   late int _price;
   late bool _coach;
+  late bool _recurring;
   late User? _sessionCoach;
-
   late String selectedSport;
   late String selectedRole;
 
@@ -63,6 +63,7 @@ class _ManageEventView extends State<ManageEventView> {
     _flexibleEndTime = widget.event.flexibleEndTime;
     _price = widget.event.price;
     _coach = widget.event.coach;
+    _recurring = widget.event.recurring;
     _retrieveCoachUser();
 
     selectedSport = _sport;
@@ -337,6 +338,18 @@ class _ManageEventView extends State<ManageEventView> {
       },
     );
 
+    final Widget recurringForm = ListTile(
+      title: CheckboxListTile(
+        value: _recurring,
+        onChanged: (bool? value) => {
+          setState(() {
+            _recurring = value!;
+          })
+        },
+        title: const Text('Is the event weekly?'),
+      ),
+    );
+
     final Widget saveChangesButton = ColoredButton(
       text: 'Save Changes',
       color: APP_COLOR,
@@ -354,6 +367,7 @@ class _ManageEventView extends State<ManageEventView> {
           flexibleEndTime: _flexibleEndTime,
           price: _price,
           coach: _coach,
+          recurring: _recurring,
         );
 
         NavigatorState navigator = Navigator.of(context);
@@ -388,6 +402,7 @@ class _ManageEventView extends State<ManageEventView> {
           dateForm,
           startTimeForm,
           endTimeForm,
+          recurringForm,
           priceForm,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -25,6 +25,7 @@ class _NewEventViewState extends State<NewEventView> {
   String _sport = '';
   String _role = '';
   DateTime _date = DateTime.now();
+  bool recurring = false;
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
   final TimeOfDay _flexibleStartTime = const TimeOfDay(hour: 0, minute: 0);
@@ -224,6 +225,18 @@ class _NewEventViewState extends State<NewEventView> {
       ),
     );
 
+    final Widget recurringForm = ListTile(
+      title: CheckboxListTile(
+        value: recurring,
+        onChanged: (bool? value) => {
+          setState(() {
+            recurring = value!;
+          })
+        },
+        title: const Text('Is the event weekly?'),
+      ),
+    );
+
     final Widget submitButton = ColoredButton(
       text: 'Submit',
       color: APP_COLOR,
@@ -241,6 +254,7 @@ class _NewEventViewState extends State<NewEventView> {
           flexibleEndTime: _flexibleEndTime,
           price: _price,
           coach: false,
+          recurring: recurring,
         );
 
         NavigatorState navigator = Navigator.of(context);
@@ -269,6 +283,7 @@ class _NewEventViewState extends State<NewEventView> {
             dateForm,
             startTimeForm,
             endTimeForm,
+            recurringForm,
             priceForm,
             Center(child: submitButton),
           ],

@@ -18,6 +18,7 @@ class NewEvent {
 
   final int price;
   final bool coach;
+  final bool recurring;
 
   NewEvent({
     required this.name,
@@ -32,6 +33,7 @@ class NewEvent {
     required this.flexibleEndTime,
     required this.price,
     required this.coach,
+    required this.recurring,
   });
 
   NewEvent.fromEvent(Event event)
@@ -48,6 +50,7 @@ class NewEvent {
           flexibleEndTime: event.flexibleEndTime,
           price: event.price,
           coach: event.coach,
+          recurring: event.recurring
         );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
@@ -77,5 +80,6 @@ class NewEvent {
         ),
         'price': price.toString(),
         'coach': coach ? 'True' : 'False',
+        'recurring': recurring ? 'True' : 'False',
       };
 }
