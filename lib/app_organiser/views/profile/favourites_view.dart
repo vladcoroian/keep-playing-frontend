@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
+import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 
 class FavouritesView extends StatefulWidget {
@@ -10,7 +13,7 @@ class FavouritesView extends StatefulWidget {
 }
 
 class _FavouritesViewState extends State<FavouritesView> {
-  List<User> users = [];
+  List<User> coaches = [];
 
   @override
   void initState() {
@@ -20,8 +23,9 @@ class _FavouritesViewState extends State<FavouritesView> {
 
   Future<void> _retrieveUsers() async {
     List<User> retrievedUsers = await API.user.retrieveAllUsers();
+    retrievedUsers.retainWhere((user) => user.isCoachUser());
     setState(() {
-      users = retrievedUsers;
+      coaches = retrievedUsers;
     });
   }
 
@@ -31,14 +35,17 @@ class _FavouritesViewState extends State<FavouritesView> {
       appBar: AppBar(
         title: const Text('Favourites'),
       ),
-      body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) => CheckboxListTile(
-          value: true,
-          onChanged: (bool? value) => {},
-          title: Text('${users[index].firstName} ${users[index].lastName}'),
-        ),
-        itemCount: users.length,
-      ),
+      body: BlocBuilder<OrganiserCubit, Organiser>(builder: (context, state) {
+        return ListView.builder(
+          itemBuilder: (BuildContext context, int index) => CheckboxListTile(
+            value: state.favourites.contains(coaches[index].pk),
+            onChanged: (bool? value) => {},
+            title:
+                Text('${coaches[index].firstName} ${coaches[index].lastName}'),
+          ),
+          itemCount: coaches.length,
+        );
+      }),
     );
   }
 }
