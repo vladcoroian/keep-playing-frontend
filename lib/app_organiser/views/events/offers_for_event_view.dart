@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/models/coach.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
@@ -20,6 +21,7 @@ class OffersForEventView extends StatefulWidget {
 class _OffersForEventViewState extends State<OffersForEventView> {
   Organiser? organiser;
   List<User> offers = [];
+  Map<User, CoachRating> coachRatingMap = {};
 
   @override
   void initState() {
@@ -40,6 +42,8 @@ class _OffersForEventViewState extends State<OffersForEventView> {
     List<User> users = [];
     for (var offer in widget.event.offers) {
       User user = await API.user.getUser(offer);
+      CoachRating coachRating = await API.organiser.getCoachRating(user);
+      coachRatingMap[user] = coachRating;
       users.add(user);
     }
     users.sort(
@@ -93,8 +97,7 @@ class _OffersForEventViewState extends State<OffersForEventView> {
 
       offersList.add(
         Card(
-          margin: const EdgeInsets.fromLTRB(
-              CARD_PADDING, 0, CARD_PADDING, CARD_PADDING),
+          margin: const EdgeInsets.all(CARD_PADDING),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -103,7 +106,11 @@ class _OffersForEventViewState extends State<OffersForEventView> {
                     ? const Icon(Icons.favorite, color: FAVOURITE_ICON_COLOR)
                     : const SizedBox(height: 0, width: 0),
                 title: Text("${offer.firstName} ${offer.lastName}"),
-                subtitle: Text(offer.email),
+                subtitle: Text(coachRatingMap[offer]!.experience.toString() +
+                    "\n" +
+                    coachRatingMap[offer]!.flexibility.toString() +
+                    "\n" +
+                    coachRatingMap[offer]!.reliability.toString()),
               ),
               Center(child: acceptButton),
             ],

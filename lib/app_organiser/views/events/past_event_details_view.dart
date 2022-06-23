@@ -175,7 +175,7 @@ class _AddToFavouritesButton extends StatelessWidget {
             // TODO
           }
         },
-        child: const Text('Add to Favourites'),
+        child: const Text('Add Favourite'),
       ),
     );
   }
@@ -206,7 +206,7 @@ class _RemoveFromFavouritesButton extends StatelessWidget {
             // TODO
           }
         },
-        child: const Text('Remove from Favourites'),
+        child: const Text('Remove Favourite'),
       ),
     );
   }
