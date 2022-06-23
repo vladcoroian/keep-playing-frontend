@@ -23,6 +23,14 @@ class ApiCoach {
 
   ApiCoach({required this.client});
 
+  Future<List<Event>> retrieveFeedEvents() async {
+    return API.retrieveEvents(_ApiCoachLinks.feedEventsLink());
+  }
+
+  Future<List<Event>> retrieveUpcomingJobs() async {
+    return API.retrieveEvents(_ApiCoachLinks.upcomingJobsLink());
+  }
+
   Future<Response> applyToJob({required Event event}) async {
     String token = StoredData.getLoginToken();
 
@@ -47,13 +55,5 @@ class ApiCoach {
       },
       body: jsonEncode(<String, dynamic>{"coach": false}),
     );
-  }
-
-  Future<List<Event>> retrieveFeedEvents() async {
-    return API.retrieveEvents(_ApiCoachLinks.feedEventsLink());
-  }
-
-  Future<List<Event>> retrieveUpcomingJobs() async {
-    return API.retrieveEvents(_ApiCoachLinks.upcomingJobsLink());
   }
 }

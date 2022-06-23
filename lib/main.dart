@@ -66,7 +66,9 @@ class _EnterAsCoachButton extends StatelessWidget {
                 textStyle: const TextStyle(fontSize: 25)),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(
+                  builder: (context) => const LoginPage(),
+                ),
               );
             },
             child: const Text('Enter as coach')));

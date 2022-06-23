@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/user.dart';
+import 'package:keep_playing_frontend/models/user/user_sign_in.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 
 import 'api.dart';
@@ -16,6 +17,8 @@ class _ApiUserLinks {
   static Uri userInformationLink() => Uri.parse("${API.PREFIX}user/");
 
   static Uri coachInformationLink({required int pk}) => Uri.parse("$COACH$pk/");
+
+  static Uri signInAsCoachLink() => Uri.parse("${API.PREFIX}new-coach/");
 }
 
 class ApiUsers {
@@ -76,5 +79,13 @@ class ApiUsers {
       users.add(User.fromModel(userModel: UserModel.fromJson(element)));
     }
     return users;
+  }
+
+  Future<Response> signInAsCoach({required CoachSignIn coachSignIn}) async {
+    return client.post(
+      _ApiUserLinks.signInAsCoachLink(),
+      headers: <String, String>{},
+      body: jsonEncode(coachSignIn.toJson()),
+    );
   }
 }
