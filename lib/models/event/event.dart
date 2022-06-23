@@ -29,7 +29,7 @@ class Event {
 
   final List<int> offers;
 
-  final bool voted;
+  final bool rated;
 
   Event._({
     required this.pk,
@@ -50,7 +50,7 @@ class Event {
     required this.offers,
     required this.creationStarted,
     required this.creationEnded,
-    required this.voted,
+    required this.rated,
   });
 
   Event({required EventModel eventModel})
@@ -73,7 +73,7 @@ class Event {
           recurring: eventModel.recurring,
           coachPK: eventModel.coach_user,
           offers: eventModel.offers,
-          voted: eventModel.voted,
+          rated: eventModel.voted,
         );
 
   String getPriceInPounds() {

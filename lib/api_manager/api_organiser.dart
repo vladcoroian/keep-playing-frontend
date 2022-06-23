@@ -242,6 +242,7 @@ class ApiOrganiser {
     final Response response = await client.get(
       _ApiOrganiserLinks.coachRatingLink(coach.pk),
       headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Token $token',
       },
     );
@@ -259,6 +260,7 @@ class ApiOrganiser {
     return client.patch(
       _ApiOrganiserLinks.rateCoachEventLink(event.pk),
       headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Token $token',
       },
       body: jsonEncode(coachNewRating.toJson()),
