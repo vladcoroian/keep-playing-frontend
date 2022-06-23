@@ -48,7 +48,7 @@ class _ManageEventView extends State<ManageEventView> {
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
 
-  bool dataWasLoaded = false;
+  bool dataIsLoaded = false;
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _ManageEventView extends State<ManageEventView> {
     endTimeInput.text = const DefaultMaterialLocalizations()
         .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
 
-    dataWasLoaded = true;
+    dataIsLoaded = true;
 
     super.initState();
   }
@@ -103,15 +103,23 @@ class _ManageEventView extends State<ManageEventView> {
 
   @override
   Widget build(BuildContext context) {
-    if (!dataWasLoaded || _sessionCoach == null) {
+    final bool dataIsNotLoaded = !dataIsLoaded;
+    final bool coachIsNotLoaded =
+        widget.event.hasCoach() && _sessionCoach == null;
+
+    if (dataIsNotLoaded || coachIsNotLoaded) {
       return const LoadingScreen();
     }
 
-    final Widget coachInformationCard = Card(
-      margin: const EdgeInsets.all(BUTTON_PADDING),
-      child:
-          CoachInformationListTile(coach: _sessionCoach!, event: widget.event),
-    );
+    final Widget coachInformationCard = _sessionCoach == null
+        ? const SizedBox(height: 0, width: 0)
+        : Card(
+            margin: const EdgeInsets.all(BUTTON_PADDING),
+            child: CoachInformationListTile(
+              coach: _sessionCoach!,
+              event: widget.event,
+            ),
+          );
 
     final Widget addToCalendarButton = Container(
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
@@ -314,8 +322,9 @@ class _ManageEventView extends State<ManageEventView> {
           BUTTON_PADDING, BUTTON_PADDING, 0, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: CANCEL_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: CANCEL_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () {
           final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
           showDialog(
@@ -395,9 +404,7 @@ class _ManageEventView extends State<ManageEventView> {
         appBar: AppBar(title: const Text('Manage Event')),
         body: ListView(
           children: [
-            _sessionCoach == null
-                ? const SizedBox(height: 0, width: 0)
-                : coachInformationCard,
+            coachInformationCard,
             addToCalendarButton,
             nameForm,
             sportForm,
