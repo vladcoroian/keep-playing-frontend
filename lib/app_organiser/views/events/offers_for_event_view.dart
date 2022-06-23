@@ -117,7 +117,7 @@ class _OffersForEventViewState extends State<OffersForEventView> {
       );
 
       final Widget reliabilityRatingBar = RatingBarIndicator(
-        rating: coachRatingMap[offer]!.getExperienceAverage(),
+        rating: coachRatingMap[offer]!.getRealiabilityAverage(),
         itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
         itemBuilder: (context, _) => const Icon(
           Icons.star,
