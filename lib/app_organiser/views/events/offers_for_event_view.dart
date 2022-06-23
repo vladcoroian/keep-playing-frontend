@@ -136,14 +136,14 @@ class _OffersForEventViewState extends State<OffersForEventView> {
       final flexibilityRow = Row(
         children: [
           const Text('Flexible'),
-          experienceRatingBar,
+          flexibilityRatingBar,
         ],
       );
 
       final reliabilityRow = Row(
         children: [
           const Text('Reliable'),
-          experienceRatingBar,
+          reliabilityRatingBar,
         ],
       );
 
