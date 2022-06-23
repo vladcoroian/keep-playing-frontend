@@ -25,4 +25,28 @@ class CoachRating {
           flexibility: coachModel.flexibility,
           reliability: coachModel.reliability,
         );
+
+  double getExperienceAverage() {
+    if (votes == 0) {
+      return 0;
+    }
+
+    return experience / votes;
+  }
+
+  double getFlexibilityAverage() {
+    if (votes == 0) {
+      return 0;
+    }
+
+    return flexibility / votes;
+  }
+
+  double getReliabilityAverage() {
+    if (votes == 0) {
+      return 0;
+    }
+
+    return reliability / votes;
+  }
 }

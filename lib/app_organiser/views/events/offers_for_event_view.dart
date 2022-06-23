@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
@@ -95,6 +96,57 @@ class _OffersForEventViewState extends State<OffersForEventView> {
         ),
       );
 
+      final Widget experienceRatingBar = RatingBarIndicator(
+        rating: coachRatingMap[offer]!.getExperienceAverage(),
+        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+        itemBuilder: (context, _) => const Icon(
+          Icons.star,
+          color: Colors.amber,
+        ),
+        itemSize: 20.0,
+      );
+
+      final Widget flexibilityRatingBar = RatingBarIndicator(
+        rating: coachRatingMap[offer]!.getFlexibilityAverage(),
+        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+        itemBuilder: (context, _) => const Icon(
+          Icons.star,
+          color: Colors.amber,
+        ),
+        itemSize: 20.0,
+      );
+
+      final Widget reliabilityRatingBar = RatingBarIndicator(
+        rating: coachRatingMap[offer]!.getExperienceAverage(),
+        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+        itemBuilder: (context, _) => const Icon(
+          Icons.star,
+          color: Colors.amber,
+        ),
+        itemSize: 20.0,
+      );
+
+      final experienceRow = Row(
+        children: [
+          const Text('Experienced'),
+          experienceRatingBar,
+        ],
+      );
+
+      final flexibilityRow = Row(
+        children: [
+          const Text('Flexible'),
+          experienceRatingBar,
+        ],
+      );
+
+      final reliabilityRow = Row(
+        children: [
+          const Text('Reliable'),
+          experienceRatingBar,
+        ],
+      );
+
       offersList.add(
         Card(
           margin: const EdgeInsets.all(CARD_PADDING),
@@ -106,11 +158,13 @@ class _OffersForEventViewState extends State<OffersForEventView> {
                     ? const Icon(Icons.favorite, color: FAVOURITE_ICON_COLOR)
                     : const SizedBox(height: 0, width: 0),
                 title: Text("${offer.firstName} ${offer.lastName}"),
-                subtitle: Text(coachRatingMap[offer]!.experience.toString() +
-                    "\n" +
-                    coachRatingMap[offer]!.flexibility.toString() +
-                    "\n" +
-                    coachRatingMap[offer]!.reliability.toString()),
+                subtitle: Column(
+                  children: [
+                    experienceRow,
+                    flexibilityRow,
+                    reliabilityRow,
+                  ],
+                ),
               ),
               Center(child: acceptButton),
             ],
