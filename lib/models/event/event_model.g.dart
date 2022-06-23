@@ -25,6 +25,7 @@ EventModel _$EventModelFromJson(Map<String, dynamic> json) => EventModel(
       recurring: json['recurring'] as bool,
       coach_user: json['coach_user'] as int?,
       offers: (json['offers'] as List<dynamic>).map((e) => e as int).toList(),
+      voted: json['voted'] as bool,
     );
 
 Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
@@ -47,4 +48,5 @@ Map<String, dynamic> _$EventModelToJson(EventModel instance) =>
       'recurring': instance.recurring,
       'coach_user': instance.coach_user,
       'offers': instance.offers,
+      'voted': instance.voted,
     };

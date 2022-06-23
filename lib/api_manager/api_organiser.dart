@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:keep_playing_frontend/models/coach.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/organiser/organiser_model.dart';
@@ -13,6 +14,10 @@ class _ApiOrganiserLinks {
   static const String ORGANISER = "${API.PREFIX}organiser/";
 
   static Uri organiserLink() => Uri.parse(ORGANISER);
+
+  ////////
+  //////// Events
+  ////////
 
   static Uri eventsLink() => Uri.parse("${ORGANISER}events/");
 
@@ -28,6 +33,10 @@ class _ApiOrganiserLinks {
   }) =>
       Uri.parse("${ORGANISER}events/$eventPK/accept/$coachPK/");
 
+  ////////
+  //////// Favourites List
+  ////////
+
   static Uri updateFavouritesLink() => Uri.parse(ORGANISER);
 
   static Uri addCoachToFavouritesLink(int pk) =>
@@ -36,21 +45,31 @@ class _ApiOrganiserLinks {
   static Uri removeCoachFromFavouritesLink(int pk) =>
       Uri.parse("${ORGANISER}remove-favourite/$pk/");
 
+  ////////
+  //////// Blocked List
+  ////////
+
   static Uri updateBlockedLink() => Uri.parse(ORGANISER);
 
   static Uri blockCoachLink(int pk) => Uri.parse("${ORGANISER}block/$pk/");
 
   static Uri unblockCoachLink(int pk) => Uri.parse("${ORGANISER}unblock/$pk/");
+
+  ////////
+  //////// Coach Rating
+  ////////
+
+  static Uri coachRatingLink(int coachPK) =>
+      Uri.parse("${ORGANISER}coach-model/$coachPK/");
+
+  static Uri rateCoachEventLink(int eventPK) =>
+      Uri.parse("${ORGANISER}vote/$eventPK/");
 }
 
 class ApiOrganiser {
   final Client client;
 
   ApiOrganiser({required this.client});
-
-  Future<List<Event>> retrieveEvents() async {
-    return API.retrieveEvents(_ApiOrganiserLinks.eventsLink());
-  }
 
   Future<Organiser> getOrganiser() async {
     String token = StoredData.getLoginToken();
@@ -64,6 +83,14 @@ class ApiOrganiser {
     final body = jsonDecode(response.body);
 
     return Organiser.fromModel(organiserModel: OrganiserModel.fromJson(body));
+  }
+
+// **************************************************************************
+// **************** EVENTS
+// **************************************************************************
+
+  Future<List<Event>> retrieveEvents() async {
+    return API.retrieveEvents(_ApiOrganiserLinks.eventsLink());
   }
 
   Future<Response> addNewEvent({required NewEvent newEvent}) {
@@ -123,6 +150,10 @@ class ApiOrganiser {
     );
   }
 
+// **************************************************************************
+// **************** FAVOURITES LIST
+// **************************************************************************
+
   Future<Response> updateFavouritesList(List<int> favourites) {
     String token = StoredData.getLoginToken();
 
@@ -160,6 +191,10 @@ class ApiOrganiser {
     );
   }
 
+// **************************************************************************
+// **************** BLOCKED LIST
+// **************************************************************************
+
   Future<Response> updateBlockedList(List<int> blocked) {
     String token = StoredData.getLoginToken();
 
@@ -194,6 +229,39 @@ class ApiOrganiser {
       headers: <String, String>{
         'Authorization': 'Token $token',
       },
+    );
+  }
+
+// **************************************************************************
+// **************** COACH RATING
+// **************************************************************************
+
+  Future<CoachRating> getCoachRating(User coach) async {
+    String token = StoredData.getLoginToken();
+
+    final Response response = await client.get(
+      _ApiOrganiserLinks.coachRatingLink(coach.pk),
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
+    );
+    final body = jsonDecode(response.body);
+
+    return CoachRating.fromModel(coachModel: CoachRatingModel.fromJson(body));
+  }
+
+  Future<Response> rateEventCoach({
+    required Event event,
+    required CoachNewRating coachNewRating,
+  }) async {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.rateCoachEventLink(event.pk),
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
+      body: jsonEncode(coachNewRating.toJson()),
     );
   }
 }

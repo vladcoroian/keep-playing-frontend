@@ -28,6 +28,8 @@ class EventModel {
 
   final List<int> offers;
 
+  final bool voted;
+
   EventModel({
     required this.pk,
     required this.name,
@@ -47,6 +49,7 @@ class EventModel {
     required this.recurring,
     this.coach_user,
     required this.offers,
+    required this.voted,
   });
 
   factory EventModel.fromJson(Map<String, dynamic> json) =>
@@ -91,6 +94,8 @@ class EventModel {
   TimeOfDay _getTimeOfDayFromString(String time) {
     final splitEndTime = time.split(':');
     return TimeOfDay(
-        hour: int.parse(splitEndTime[0]), minute: int.parse(splitEndTime[1]));
+      hour: int.parse(splitEndTime[0]),
+      minute: int.parse(splitEndTime[1]),
+    );
   }
 }
