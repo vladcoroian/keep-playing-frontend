@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
+import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
@@ -23,20 +24,23 @@ class _NewEventViewState extends State<NewEventView> {
   String _details = '';
   String _sport = '';
   String _role = '';
+
   DateTime _date = DateTime.now();
-  final DateTime _creationStarted = DateTime.now();
-  bool recurring = false;
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
+
+  bool recurring = false;
+  int? _price;
+
+  final DateTime _creationStarted = DateTime.now();
+
   final TimeOfDay _flexibleStartTime = const TimeOfDay(hour: 0, minute: 0);
   final TimeOfDay _flexibleEndTime = const TimeOfDay(hour: 0, minute: 0);
-  int _price = 0;
-
-  String? selectedSport;
-  String? selectedRole;
 
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
+
+  bool defaultValuesAreLoaded = false;
 
   @override
   void initState() {
@@ -58,6 +62,16 @@ class _NewEventViewState extends State<NewEventView> {
 
   @override
   Widget build(BuildContext context) {
+    if (!defaultValuesAreLoaded) {
+      _sport = BlocProvider.of<OrganiserCubit>(context).state.defaultSport;
+      _role = BlocProvider.of<OrganiserCubit>(context).state.defaultRole;
+      _location =
+          BlocProvider.of<OrganiserCubit>(context).state.defaultLocation;
+      _price = BlocProvider.of<OrganiserCubit>(context).state.defaultPrice;
+
+      defaultValuesAreLoaded = true;
+    }
+
     final Widget nameForm = ListTile(
       title: TextFormField(
         decoration: const InputDecoration(
@@ -74,7 +88,7 @@ class _NewEventViewState extends State<NewEventView> {
     final Widget sportForm = ListTile(
       leading: const Icon(Icons.sports_soccer),
       title: DropdownButton<String>(
-        value: selectedSport,
+        value: _sport == "" ? null : _sport,
         items: SPORTS.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -83,9 +97,8 @@ class _NewEventViewState extends State<NewEventView> {
         }).toList(),
         hint: const Text('Enter sport'),
         onChanged: (String? newValue) {
-          _sport = newValue!;
           setState(() {
-            selectedSport = _sport;
+            _sport = newValue!;
           });
         },
       ),
@@ -94,7 +107,7 @@ class _NewEventViewState extends State<NewEventView> {
     final Widget roleForm = ListTile(
       leading: const Icon(Icons.sports),
       title: DropdownButton<String>(
-        value: selectedRole,
+        value: _role == "" ? null : _role,
         items: ROLES.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -103,9 +116,8 @@ class _NewEventViewState extends State<NewEventView> {
         }).toList(),
         hint: const Text('Enter role'),
         onChanged: (String? newValue) {
-          _role = newValue!;
           setState(() {
-            selectedRole = _role;
+            _role = newValue!;
           });
         },
       ),
@@ -113,6 +125,7 @@ class _NewEventViewState extends State<NewEventView> {
 
     final Widget locationForm = ListTile(
       title: TextFormField(
+        initialValue: _location,
         decoration: const InputDecoration(
           icon: Icon(Icons.location_on),
           hintText: 'Enter the location',
@@ -223,6 +236,7 @@ class _NewEventViewState extends State<NewEventView> {
       title: TextFormField(
         keyboardType: TextInputType.number,
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        initialValue: _price?.toString(),
         decoration: const InputDecoration(
           icon: Icon(Icons.price_change),
           hintText: 'Enter the fee',
@@ -253,7 +267,7 @@ class _NewEventViewState extends State<NewEventView> {
             endTime: _endTime,
             flexibleStartTime: _flexibleStartTime,
             flexibleEndTime: _flexibleEndTime,
-            price: _price,
+            price: _price!,
             coach: false,
             recurring: recurring,
             creationStarted: _creationStarted,

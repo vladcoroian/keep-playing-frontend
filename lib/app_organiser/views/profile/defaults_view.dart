@@ -37,7 +37,7 @@ class _DefaultsViewState extends State<DefaultsView> {
     final Widget sportForm = ListTile(
       leading: const Icon(Icons.sports_soccer),
       title: DropdownButton<String>(
-        value: _sport != "" ? _sport : null,
+        value: _sport == "" ? null : _sport,
         items: SPORTS.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -56,7 +56,7 @@ class _DefaultsViewState extends State<DefaultsView> {
     final Widget roleForm = ListTile(
       leading: const Icon(Icons.sports),
       title: DropdownButton<String>(
-        value: _role != "" ? _role : null,
+        value: _role == "" ? null : _role,
         items: ROLES.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,

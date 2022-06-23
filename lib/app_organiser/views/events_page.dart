@@ -123,6 +123,7 @@ class _EventsPageState extends State<EventsPage> {
           MaterialPageRoute(
             builder: (_) => NewEventPage(
               eventsCubit: BlocProvider.of<EventsCubit>(context),
+              organiserCubit: BlocProvider.of<OrganiserCubit>(context),
             ),
           ),
         ),
