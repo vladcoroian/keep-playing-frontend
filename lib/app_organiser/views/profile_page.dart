@@ -6,6 +6,7 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 
 import 'profile/blocked_page.dart';
+import 'profile/defaults_page.dart';
 import 'profile/favourites_page.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -112,6 +113,18 @@ class ProfilePage extends StatelessWidget {
       ),
     );
 
+    final Widget defaultsListTile = ListTile(
+      title: const Text('Defaults'),
+      trailing: const Icon(Icons.arrow_forward),
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => DefaultsPage(
+            organiserCubit: BlocProvider.of<OrganiserCubit>(context),
+          ),
+        ),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Profile'),
@@ -132,6 +145,7 @@ class ProfilePage extends StatelessWidget {
               phoneNumberForm,
               favouritesListTile,
               blockedListTile,
+              defaultsListTile,
             ],
           ),
         ),

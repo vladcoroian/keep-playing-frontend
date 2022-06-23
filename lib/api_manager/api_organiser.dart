@@ -4,7 +4,6 @@ import 'package:http/http.dart';
 import 'package:keep_playing_frontend/models/coach.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
-import 'package:keep_playing_frontend/models/organiser/organiser_model.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 
@@ -64,6 +63,12 @@ class _ApiOrganiserLinks {
 
   static Uri rateCoachEventLink(int eventPK) =>
       Uri.parse("${ORGANISER}vote/$eventPK/");
+
+  ////////
+  //////// Defaults
+  ////////
+
+  static Uri changeDefaultsLink() => Uri.parse(ORGANISER);
 }
 
 class ApiOrganiser {
@@ -264,6 +269,25 @@ class ApiOrganiser {
         'Authorization': 'Token $token',
       },
       body: jsonEncode(coachNewRating.toJson()),
+    );
+  }
+
+// **************************************************************************
+// **************** DEFAULTS
+// **************************************************************************
+
+  Future<Response> changeDefaults({
+    required OrganiserDefaults organiserDefaults,
+  }) async {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiOrganiserLinks.changeDefaultsLink(),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token $token',
+      },
+      body: jsonEncode(organiserDefaults.toJson()),
     );
   }
 }

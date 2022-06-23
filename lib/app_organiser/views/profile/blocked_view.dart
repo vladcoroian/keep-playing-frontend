@@ -7,6 +7,7 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class BlockedView extends StatefulWidget {
   const BlockedView({Key? key}) : super(key: key);
@@ -35,6 +36,10 @@ class _BlockedViewState extends State<BlockedView> {
 
   @override
   Widget build(BuildContext context) {
+    if (coaches.isEmpty) {
+      return const LoadingScreen();
+    }
+
     final Widget sliverBlockedCheckboxes =
         BlocBuilder<OrganiserCubit, Organiser>(
       builder: (context, state) {

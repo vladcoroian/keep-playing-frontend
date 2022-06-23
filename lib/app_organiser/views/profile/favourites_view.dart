@@ -7,6 +7,7 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class FavouritesView extends StatefulWidget {
   const FavouritesView({Key? key}) : super(key: key);
@@ -35,6 +36,10 @@ class _FavouritesViewState extends State<FavouritesView> {
 
   @override
   Widget build(BuildContext context) {
+    if (coaches.isEmpty) {
+      return const LoadingScreen();
+    }
+
     final Widget sliverFavouritesList = BlocBuilder<OrganiserCubit, Organiser>(
       builder: (context, state) {
         favourites = state.favourites;
