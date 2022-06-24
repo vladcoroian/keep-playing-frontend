@@ -15,6 +15,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
       location: json['location'] as String,
       is_coach: json['is_coach'] as bool,
       is_organiser: json['is_organiser'] as bool,
+      verified: json['verified'] as bool,
     );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -26,4 +27,5 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'location': instance.location,
       'is_coach': instance.is_coach,
       'is_organiser': instance.is_organiser,
+      'verified': instance.verified,
     };

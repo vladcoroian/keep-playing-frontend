@@ -69,31 +69,24 @@ class _OffersForEventViewState extends State<OffersForEventView> {
         title: const Text('Current Offers'),
       ),
       body: ListView(
-        children: _getOffersList(),
+        children: _getOffersCardsList(),
       ),
     );
   }
 
-  List<Widget> _getOffersList() {
+  List<Widget> _getOffersCardsList() {
     List<Widget> offersList = [];
 
     for (User offer in offers) {
-      final Widget acceptButton = Container(
-        padding:
-            const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              primary: APP_COLOR,
-              textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-          onPressed: () async {
-            NavigatorState navigator = Navigator.of(context);
-            EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-            await API.organiser.acceptCoach(event: widget.event, coach: offer);
-            eventsCubit.retrieveEvents();
-            navigator.pop();
-          },
-          child: const Text('Accept'),
-        ),
+      final Widget leadingListTile = Column(
+        children: [
+          organiser!.hasUserAsAFavourite(offer)
+              ? const Icon(Icons.favorite, color: FAVOURITE_ICON_COLOR)
+              : const SizedBox(height: 0, width: 0),
+          offer.isVerified()
+              ? const Icon(Icons.verified, color: VERIFIED_COLOR)
+              : const SizedBox(width: 0, height: 0),
+        ],
       );
 
       final Widget experienceRatingBar = RatingBarIndicator(
@@ -147,6 +140,24 @@ class _OffersForEventViewState extends State<OffersForEventView> {
         ],
       );
 
+      final Widget acceptButton = Container(
+        padding:
+            const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              primary: APP_COLOR,
+              textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          onPressed: () async {
+            NavigatorState navigator = Navigator.of(context);
+            EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
+            await API.organiser.acceptCoach(event: widget.event, coach: offer);
+            eventsCubit.retrieveEvents();
+            navigator.pop();
+          },
+          child: const Text('Accept'),
+        ),
+      );
+
       offersList.add(
         Card(
           margin: const EdgeInsets.all(CARD_PADDING),
@@ -154,9 +165,7 @@ class _OffersForEventViewState extends State<OffersForEventView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ListTile(
-                leading: organiser!.hasUserAsAFavourite(offer)
-                    ? const Icon(Icons.favorite, color: FAVOURITE_ICON_COLOR)
-                    : const SizedBox(height: 0, width: 0),
+                leading: leadingListTile,
                 title: Text("${offer.firstName} ${offer.lastName}"),
                 subtitle: Column(
                   children: [

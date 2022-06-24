@@ -11,6 +11,8 @@ class User {
   final bool isCoach;
   final bool isOrganiser;
 
+  final bool verified;
+
   User._({
     required this.pk,
     required this.username,
@@ -20,6 +22,7 @@ class User {
     required this.location,
     required this.isCoach,
     required this.isOrganiser,
+    required this.verified,
   });
 
   User.fromModel({required UserModel userModel})
@@ -32,7 +35,12 @@ class User {
           location: userModel.location,
           isCoach: userModel.is_coach,
           isOrganiser: userModel.is_organiser,
+          verified: userModel.verified,
         );
+
+  String getFullName() {
+    return '$firstName $lastName';
+  }
 
   bool isCoachUser() {
     return isCoach;
@@ -42,7 +50,7 @@ class User {
     return true;
   }
 
-  String getFullName() {
-    return '$firstName $lastName';
+  bool isVerified() {
+    return verified;
   }
 }

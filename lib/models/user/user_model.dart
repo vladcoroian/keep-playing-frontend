@@ -15,6 +15,8 @@ class UserModel {
   final bool is_coach;
   final bool is_organiser;
 
+  final bool verified;
+
   UserModel({
     required this.pk,
     required this.username,
@@ -24,6 +26,7 @@ class UserModel {
     required this.location,
     required this.is_coach,
     required this.is_organiser,
+    required this.verified,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
