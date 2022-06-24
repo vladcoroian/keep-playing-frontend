@@ -7,11 +7,13 @@ import 'package:keep_playing_frontend/app_organiser/views/events/new_event_view.
 class NewEventPage extends StatelessWidget {
   final EventsCubit eventsCubit;
   final OrganiserCubit organiserCubit;
+  final DateTime? date;
 
   const NewEventPage({
     Key? key,
     required this.eventsCubit,
     required this.organiserCubit,
+    this.date,
   }) : super(key: key);
 
   @override
@@ -21,7 +23,7 @@ class NewEventPage extends StatelessWidget {
         BlocProvider<EventsCubit>.value(value: eventsCubit),
         BlocProvider<OrganiserCubit>.value(value: organiserCubit),
       ],
-      child: const NewEventView(),
+      child: NewEventView(date: date),
     );
   }
 }

@@ -12,7 +12,8 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 class NewEventView extends StatefulWidget {
-  const NewEventView({Key? key}) : super(key: key);
+  final DateTime? date;
+  const NewEventView({Key? key, this.date}) : super(key: key);
 
   @override
   State<NewEventView> createState() => _NewEventViewState();
@@ -44,6 +45,7 @@ class _NewEventViewState extends State<NewEventView> {
 
   @override
   void initState() {
+    _date = widget.date == null ? DateTime.now() : widget.date!;
     startTimeInput.text = "";
     endTimeInput.text = "";
     super.initState();
@@ -152,6 +154,7 @@ class _NewEventViewState extends State<NewEventView> {
 
     final Widget dateForm = ListTile(
       title: DateTimeField(
+        initialValue: _date,
         decoration: const InputDecoration(
           icon: Icon(Icons.date_range),
           hintText: 'Enter the date',
