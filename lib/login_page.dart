@@ -3,6 +3,7 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 
 import 'login_redirect.dart';
+import 'sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -58,6 +59,23 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
+    final Widget signInButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () async {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const SignInPage(),
+            ),
+          );
+        },
+        child: const Text('Sign In'),
+      ),
+    );
+
     final Widget loginButton = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
@@ -108,6 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(
                   height: 15.0,
                 ),
+                signInButton,
               ],
             ),
           ),

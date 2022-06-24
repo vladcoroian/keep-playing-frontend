@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:keep_playing_frontend/models/user.dart';
+import 'package:keep_playing_frontend/models/user/user_sign_in.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 
 import 'api.dart';
@@ -16,6 +19,8 @@ class _ApiUserLinks {
   static Uri userInformationLink() => Uri.parse("${API.PREFIX}user/");
 
   static Uri coachInformationLink({required int pk}) => Uri.parse("$COACH$pk/");
+
+  static Uri signInAsCoachLink() => Uri.parse("${API.PREFIX}new_coach/");
 }
 
 class ApiUsers {
@@ -76,5 +81,43 @@ class ApiUsers {
       users.add(User.fromModel(userModel: UserModel.fromJson(element)));
     }
     return users;
+  }
+
+  Future<StreamedResponse> signInAsCoach({
+    required CoachSignIn coachSignIn,
+    required File? file,
+  }) async {
+    MultipartRequest multiPartRequest = http.MultipartRequest(
+      'POST',
+      _ApiUserLinks.signInAsCoachLink(),
+    );
+
+    // multiPartRequest.headers.addAll(<String, String>{
+    //   'Content-Type': 'multipart/form-data',
+    //   'Content-Type': 'application/x-www-form-urlencoded',
+    //   // 'Accept': 'application/json',
+    // });
+
+    // if (file != null) {
+    //   multiPartRequest.files.add(
+    //     http.MultipartFile.fromBytes(
+    //       'qualification',
+    //       File(file.path).readAsBytesSync(),
+    //       filename: file.path,
+    //     ),
+    //   );
+    // }
+
+    if (file != null) {
+      http.MultipartFile multipartFile =
+          await http.MultipartFile.fromPath('qualification', file.path);
+      multiPartRequest.files.add(multipartFile);
+    }
+
+    multiPartRequest.fields['username'] = coachSignIn.username;
+    multiPartRequest.fields['password'] = coachSignIn.password;
+
+    StreamedResponse streamedResponse = await multiPartRequest.send();
+    return streamedResponse;
   }
 }
