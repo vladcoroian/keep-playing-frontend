@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user/user_sign_in.dart';
@@ -16,6 +19,7 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   String _username = '';
   String _password = '';
+  File? _qualification;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,17 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
 
+    final Widget uploadQualificationButton = MaterialButton(
+      color: Colors.blue,
+      child: Text(
+        "Upload qualification",
+        style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+      ),
+      onPressed: () async {
+        _qualification = await _getImage();
+      },
+    );
+
     final Widget signInButton = Container(
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
@@ -62,9 +77,13 @@ class _SignInPageState extends State<SignInPage> {
             qualification: 'qualification',
           );
 
-          final Response response =
-              await API.user.signInAsCoach(coachSignIn: coachSignIn);
-          if (response.statusCode == HTTP_202_ACCEPTED) {
+          final StreamedResponse streamedResponse =
+              await API.user.signInAsCoach(
+            coachSignIn: coachSignIn,
+            file: _qualification,
+          );
+          print(streamedResponse.statusCode);
+          if (streamedResponse.statusCode == HTTP_202_ACCEPTED) {
             navigator.push(
               MaterialPageRoute(
                 builder: (context) => const CoachHomePage(),
@@ -86,9 +105,19 @@ class _SignInPageState extends State<SignInPage> {
         children: [
           usernameForm,
           passwordForm,
+          uploadQualificationButton,
           Center(child: signInButton),
         ],
       ),
     );
+  }
+
+  Future<File> _getImage() async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? image =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
+    File file = File(image!.path);
+    return file;
   }
 }
