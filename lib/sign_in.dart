@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user/user_sign_in.dart';
 
@@ -82,13 +81,8 @@ class _SignInPageState extends State<SignInPage> {
             coachSignIn: coachSignIn,
             file: _qualification,
           );
-          print(streamedResponse.statusCode);
-          if (streamedResponse.statusCode == HTTP_202_ACCEPTED) {
-            navigator.push(
-              MaterialPageRoute(
-                builder: (context) => const CoachHomePage(),
-              ),
-            );
+          if (streamedResponse.statusCode == HTTP_200_OK) {
+            navigator.pop();
           } else {
             // TODO
           }
