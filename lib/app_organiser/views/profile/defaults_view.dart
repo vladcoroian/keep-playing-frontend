@@ -6,6 +6,7 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 class DefaultsView extends StatefulWidget {
@@ -172,8 +173,7 @@ class _DefaultsViewState extends State<DefaultsView> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
-          builder: (context) => ExitDialog(
-              context: context,
+          builder: (_) => const ExitDialog(
               title: 'Are you sure that you want to exit?',
               text: 'You haven\'t saved your changes.'),
         )) ??

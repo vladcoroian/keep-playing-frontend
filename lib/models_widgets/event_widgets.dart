@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../constants.dart';
 import '../models/event.dart';
-import 'dialogs.dart';
+import '../widgets/dialogs.dart';
 
 class EventWidgets {
   final Event event;

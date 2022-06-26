@@ -6,10 +6,13 @@ import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class FavouritesView extends StatefulWidget {
+  static const String _title = 'Favourites';
+
   const FavouritesView({Key? key}) : super(key: key);
 
   @override
@@ -37,7 +40,12 @@ class _FavouritesViewState extends State<FavouritesView> {
   @override
   Widget build(BuildContext context) {
     if (coaches.isEmpty) {
-      return const LoadingScreen();
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(FavouritesView._title),
+        ),
+        body: LOADING_CIRCLE,
+      );
     }
 
     final Widget sliverFavouritesList = BlocBuilder<OrganiserCubit, Organiser>(
@@ -98,7 +106,7 @@ class _FavouritesViewState extends State<FavouritesView> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Favourites'),
+          title: const Text(FavouritesView._title),
         ),
         body: CustomScrollView(
           slivers: [
@@ -116,8 +124,7 @@ class _FavouritesViewState extends State<FavouritesView> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
-          builder: (context) => ExitDialog(
-              context: context,
+          builder: (_) => const ExitDialog(
               title: 'Are you sure that you want to exit?',
               text: 'You haven\'t saved your changes.'),
         )) ??

@@ -3,7 +3,6 @@ class CoachSignIn {
   final String password;
   final String qualification;
 
-
   CoachSignIn({
     required this.username,
     required this.password,
@@ -11,8 +10,8 @@ class CoachSignIn {
   });
 
   Map<String, dynamic> toJson() => {
-    "username": username,
-    "password": password,
-    "qualification": qualification,
-  };
+        "username": username,
+        "password": password,
+        "qualification": qualification,
+      };
 }

@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_coach/cubits/upcoming_jobs_cubit.dart';
-import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../models/event.dart';
-import '../../widgets/event_widgets.dart';
+import '../../models_widgets/event_widgets.dart';
 
 class UpcomingJobsView extends StatelessWidget {
   const UpcomingJobsView({Key? key}) : super(key: key);
@@ -20,7 +20,7 @@ class UpcomingJobsView extends StatelessWidget {
       builder: (context, state) {
         return ListView.builder(
           itemCount: state.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (_, index) {
             return _UpcomingJobWidget(event: state[index]);
           },
         );

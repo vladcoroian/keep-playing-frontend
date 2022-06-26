@@ -9,10 +9,12 @@ import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 class NewEventView extends StatefulWidget {
   final DateTime? date;
+
   const NewEventView({Key? key, this.date}) : super(key: key);
 
   @override
@@ -54,8 +56,7 @@ class _NewEventViewState extends State<NewEventView> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
-          builder: (context) => ExitDialog(
-              context: context,
+          builder: (_) => const ExitDialog(
               title: 'Are you sure that you want to exit?',
               text: 'You haven\'t finished editing the new event'),
         )) ??
@@ -279,14 +280,19 @@ class _NewEventViewState extends State<NewEventView> {
 
           NavigatorState navigator = Navigator.of(context);
           final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
+
           Response response =
               await API.organiser.addNewEvent(newEvent: newEvent);
           if (response.statusCode == HTTP_201_CREATED) {
             eventsCubit.retrieveEvents();
+            navigator.pop();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
-          navigator.pop();
         },
         child: const Text('Submit'),
       ),

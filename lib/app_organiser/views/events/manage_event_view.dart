@@ -10,13 +10,16 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart' as sport_event;
 import 'package:keep_playing_frontend/models/user.dart';
+import 'package:keep_playing_frontend/models_widgets/user_widgets.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
-import 'package:keep_playing_frontend/widgets/user_widgets.dart';
 
 import '../../cubit/events_cubit.dart';
 
 class ManageEventView extends StatefulWidget {
+  static const String _title = 'Manage Event';
+
   final sport_event.Event event;
 
   const ManageEventView({super.key, required this.event});
@@ -93,8 +96,7 @@ class _ManageEventView extends State<ManageEventView> {
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
-          builder: (context) => ExitDialog(
-              context: context,
+          builder: (_) => const ExitDialog(
               title: 'Are you sure that you want to exit?',
               text: 'You haven\'t finished editing the event'),
         )) ??
@@ -108,7 +110,12 @@ class _ManageEventView extends State<ManageEventView> {
         widget.event.hasCoach() && _sessionCoach == null;
 
     if (dataIsNotLoaded || coachIsNotLoaded) {
-      return const LoadingScreen();
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(ManageEventView._title),
+        ),
+        body: LOADING_CIRCLE,
+      );
     }
 
     final Widget coachInformationCard = _sessionCoach == null
@@ -383,16 +390,21 @@ class _ManageEventView extends State<ManageEventView> {
 
           NavigatorState navigator = Navigator.of(context);
           final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
+
           Response response = await API.organiser.changeEvent(
             event: widget.event,
             newEvent: newEvent,
           );
           if (response.statusCode == HTTP_202_ACCEPTED) {
             eventsCubit.retrieveEvents();
+            navigator.pop();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
-          navigator.pop();
         },
         child: const Text('Save Changes'),
       ),
@@ -401,7 +413,9 @@ class _ManageEventView extends State<ManageEventView> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(title: const Text('Manage Event')),
+        appBar: AppBar(
+          title: const Text(ManageEventView._title),
+        ),
         body: ListView(
           children: [
             coachInformationCard,

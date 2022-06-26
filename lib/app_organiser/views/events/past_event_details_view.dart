@@ -10,12 +10,15 @@ import 'package:keep_playing_frontend/models/coach.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
+import 'package:keep_playing_frontend/models_widgets/event_widgets.dart';
+import 'package:keep_playing_frontend/models_widgets/user_widgets.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
-import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
-import 'package:keep_playing_frontend/widgets/user_widgets.dart';
 
 class PastEventDetailsView extends StatefulWidget {
+  static const String _title = 'Details about past event';
+
   final Event event;
 
   const PastEventDetailsView({
@@ -46,7 +49,12 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
   @override
   Widget build(BuildContext context) {
     if (coach == null) {
-      return const LoadingScreen();
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(PastEventDetailsView._title),
+        ),
+        body: LOADING_CIRCLE,
+      );
     }
 
     final Widget blockButton = BlocBuilder<OrganiserCubit, Organiser>(
@@ -91,7 +99,7 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Details about past event'),
+        title: const Text(PastEventDetailsView._title),
       ),
       body: RefreshIndicator(
         onRefresh: () async {

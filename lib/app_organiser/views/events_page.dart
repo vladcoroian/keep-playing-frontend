@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/models/event.dart';
-import 'package:keep_playing_frontend/widgets/events_views.dart';
+import 'package:keep_playing_frontend/models_widgets/events_views.dart';
 
 import 'events/events_for_day_page.dart';
 import 'events/new_event_page.dart';

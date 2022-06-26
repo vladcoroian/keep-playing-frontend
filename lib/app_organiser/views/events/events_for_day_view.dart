@@ -30,7 +30,7 @@ class EventsForDayView extends StatelessWidget {
 
         return ListView.builder(
           itemCount: eventsForDay.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (_, index) {
             return OrganiserEventCards.getCardForEvent(
                 event: eventsForDay[index]);
           },
@@ -63,7 +63,9 @@ class EventsForDayView extends StatelessWidget {
         },
         child: viewOfEvents,
       ),
-      floatingActionButton: DateTime.now().isBefore(day) ? newJobButton : const SizedBox(width: 0, height: 0),
+      floatingActionButton: DateTime.now().isBefore(day)
+          ? newJobButton
+          : const SizedBox(width: 0, height: 0),
     );
   }
 }

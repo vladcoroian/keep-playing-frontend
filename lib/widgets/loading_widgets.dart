@@ -4,7 +4,7 @@ import 'package:keep_playing_frontend/constants.dart';
 
 import 'dialogs.dart';
 
-const Widget _loadingCircle = SpinKitCircle(
+const Widget LOADING_CIRCLE = SpinKitCircle(
   color: APP_COLOR,
   size: 50.0,
 );
@@ -15,7 +15,7 @@ class LoadingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: _loadingCircle,
+      body: LOADING_CIRCLE,
     );
   }
 }
@@ -27,7 +27,7 @@ class LoadingDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SimpleDialog(
       contentPadding: EdgeInsets.all(DIALOG_PADDING),
-      children: [_loadingCircle],
+      children: [LOADING_CIRCLE],
     );
   }
 }

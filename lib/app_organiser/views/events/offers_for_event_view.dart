@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/constants.dart';
@@ -8,9 +9,13 @@ import 'package:keep_playing_frontend/models/coach.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class OffersForEventView extends StatefulWidget {
+  static const String _title = 'Current Offers';
+
   final Event event;
 
   const OffersForEventView({Key? key, required this.event}) : super(key: key);
@@ -61,127 +66,158 @@ class _OffersForEventViewState extends State<OffersForEventView> {
   @override
   Widget build(BuildContext context) {
     if (organiser == null) {
-      return const LoadingScreen();
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(OffersForEventView._title),
+        ),
+        body: LOADING_CIRCLE,
+      );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Current Offers'),
+        title: const Text(OffersForEventView._title),
       ),
-      body: ListView(
-        children: _getOffersCardsList(),
+      body: ListView.builder(
+        itemCount: offers.length,
+        itemBuilder: (_, index) {
+          return _OfferCard(
+            event: widget.event,
+            organiser: organiser!,
+            user: offers[index],
+            coachRatingMap: coachRatingMap,
+          );
+        },
       ),
     );
   }
+}
 
-  List<Widget> _getOffersCardsList() {
-    List<Widget> offersList = [];
+class _OfferCard extends StatelessWidget {
+  final Event event;
+  final Organiser organiser;
+  final User user;
+  final Map<User, CoachRating> coachRatingMap;
 
-    for (User offer in offers) {
-      final Widget leadingListTile = Column(
-        children: [
-          organiser!.hasUserAsAFavourite(offer)
-              ? const Icon(Icons.favorite, color: FAVOURITE_ICON_COLOR)
-              : const SizedBox(height: 0, width: 0),
-          offer.isVerified()
-              ? const Icon(Icons.verified, color: VERIFIED_COLOR)
-              : const SizedBox(width: 0, height: 0),
-        ],
-      );
+  const _OfferCard({
+    required this.event,
+    required this.organiser,
+    required this.user,
+    required this.coachRatingMap,
+  });
 
-      final Widget experienceRatingBar = RatingBarIndicator(
-        rating: coachRatingMap[offer]!.getExperienceAverage(),
-        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-        itemBuilder: (context, _) => const Icon(
-          Icons.star,
-          color: Colors.amber,
-        ),
-        itemSize: 20.0,
-      );
+  @override
+  Widget build(BuildContext context) {
+    final Widget leadingListTile = Column(
+      children: [
+        organiser.hasUserAsAFavourite(user)
+            ? const Icon(Icons.favorite, color: FAVOURITE_ICON_COLOR)
+            : const SizedBox(height: 0, width: 0),
+        user.isVerified()
+            ? const Icon(Icons.verified, color: VERIFIED_ICON_COLOR)
+            : const SizedBox(width: 0, height: 0),
+      ],
+    );
 
-      final Widget flexibilityRatingBar = RatingBarIndicator(
-        rating: coachRatingMap[offer]!.getFlexibilityAverage(),
-        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-        itemBuilder: (context, _) => const Icon(
-          Icons.star,
-          color: Colors.amber,
-        ),
-        itemSize: 20.0,
-      );
+    final Widget experienceRatingBar = RatingBarIndicator(
+      rating: coachRatingMap[user]!.getExperienceAverage(),
+      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+      itemBuilder: (context, _) => const Icon(
+        Icons.star,
+        color: Colors.amber,
+      ),
+      itemSize: 20.0,
+    );
 
-      final Widget reliabilityRatingBar = RatingBarIndicator(
-        rating: coachRatingMap[offer]!.getReliabilityAverage(),
-        itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-        itemBuilder: (context, _) => const Icon(
-          Icons.star,
-          color: Colors.amber,
-        ),
-        itemSize: 20.0,
-      );
+    final Widget flexibilityRatingBar = RatingBarIndicator(
+      rating: coachRatingMap[user]!.getFlexibilityAverage(),
+      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+      itemBuilder: (context, _) => const Icon(
+        Icons.star,
+        color: Colors.amber,
+      ),
+      itemSize: 20.0,
+    );
 
-      final experienceRow = Row(
-        children: [
-          const Text('Experienced'),
-          experienceRatingBar,
-        ],
-      );
+    final Widget reliabilityRatingBar = RatingBarIndicator(
+      rating: coachRatingMap[user]!.getReliabilityAverage(),
+      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+      itemBuilder: (context, _) => const Icon(
+        Icons.star,
+        color: Colors.amber,
+      ),
+      itemSize: 20.0,
+    );
 
-      final flexibilityRow = Row(
-        children: [
-          const Text('Flexible'),
-          flexibilityRatingBar,
-        ],
-      );
+    final experienceRow = Row(
+      children: [
+        const Text('Experienced'),
+        experienceRatingBar,
+      ],
+    );
 
-      final reliabilityRow = Row(
-        children: [
-          const Text('Reliable'),
-          reliabilityRatingBar,
-        ],
-      );
+    final flexibilityRow = Row(
+      children: [
+        const Text('Flexible'),
+        flexibilityRatingBar,
+      ],
+    );
 
-      final Widget acceptButton = Container(
-        padding:
-            const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              primary: APP_COLOR,
-              textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-          onPressed: () async {
-            NavigatorState navigator = Navigator.of(context);
-            EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-            await API.organiser.acceptCoach(event: widget.event, coach: offer);
+    final reliabilityRow = Row(
+      children: [
+        const Text('Reliable'),
+        reliabilityRatingBar,
+      ],
+    );
+
+    final Widget acceptButton = Container(
+      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () async {
+          NavigatorState navigator = Navigator.of(context);
+          EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
+
+          final Response response = await API.organiser.acceptCoach(
+            event: event,
+            coach: user,
+          );
+          if (response.statusCode == HTTP_202_ACCEPTED) {
             eventsCubit.retrieveEvents();
             navigator.pop();
-          },
-          child: const Text('Accept'),
-        ),
-      );
+          } else {
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
+          }
+        },
+        child: const Text('Accept'),
+      ),
+    );
 
-      offersList.add(
-        Card(
-          margin: const EdgeInsets.all(CARD_PADDING),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ListTile(
-                leading: leadingListTile,
-                title: Text("${offer.firstName} ${offer.lastName}"),
-                subtitle: Column(
-                  children: [
-                    experienceRow,
-                    flexibilityRow,
-                    reliabilityRow,
-                  ],
-                ),
-              ),
-              Center(child: acceptButton),
-            ],
-          ), // children: [Text("${offer.firstName} ${offer.lastName}")],
-        ),
-      );
-    }
-
-    return offersList;
+    return Card(
+      margin: const EdgeInsets.all(CARD_PADDING),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          ListTile(
+            leading: leadingListTile,
+            title: Text("${user.firstName} ${user.lastName}"),
+            subtitle: Column(
+              children: [
+                experienceRow,
+                flexibilityRow,
+                reliabilityRow,
+              ],
+            ),
+          ),
+          Center(child: acceptButton),
+        ],
+      ), // children: [Text("${offer.firstName} ${offer.lastName}")],
+    );
   }
 }

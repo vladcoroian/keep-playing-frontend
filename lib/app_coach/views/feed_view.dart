@@ -3,9 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
+import 'package:keep_playing_frontend/models_widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
+import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
-import 'package:keep_playing_frontend/widgets/event_widgets.dart';
 
 import '../../../models/event.dart';
 import '../cubits/feed_events_cubit.dart';
@@ -19,7 +20,7 @@ class FeedView extends StatelessWidget {
       builder: (context, state) {
         return ListView.builder(
           itemCount: state.length,
-          itemBuilder: (context, index) {
+          itemBuilder: (_, index) {
             return _FeedEventWidget(
               event: state[index],
               coachPK: StoredData.getCurrentUser().pk,
