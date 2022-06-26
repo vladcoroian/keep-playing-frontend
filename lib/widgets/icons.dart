@@ -11,3 +11,12 @@ class EventIcons {
   static const IconData END_TIME_ICON = Icons.access_time;
   static const IconData PRICE_ICON = Icons.price_change;
 }
+
+class UserIcons {
+  static const IconData USERNAME_ICON = Icons.account_box;
+  static const IconData EMAIL_ICON = Icons.email;
+  static const IconData NAME_ICON = Icons.person;
+  static const IconData FIRST_NAME_ICON = Icons.person;
+  static const IconData LAST_NAME_ICON = Icons.person;
+  static const IconData LOCATION_ICON = Icons.location_on;
+}

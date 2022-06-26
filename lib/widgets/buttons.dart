@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/constants.dart';
 
-// **************************************************************************
-// **************** COLORS
-// **************************************************************************
-
 const double BUTTON_PADDING = 16;
 const double BUTTON_FONT_SIZE = 16;
 const Color BUTTON_GRAY_COLOR = Colors.black12;

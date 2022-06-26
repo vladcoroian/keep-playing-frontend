@@ -94,16 +94,6 @@ class _ManageEventView extends State<ManageEventView> {
     });
   }
 
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (_) => const ExitDialog(
-              title: 'Are you sure that you want to exit?',
-              text: 'You haven\'t finished editing the event'),
-        )) ??
-        false;
-  }
-
   @override
   Widget build(BuildContext context) {
     final bool dataIsNotLoaded = !dataIsLoaded;
@@ -459,5 +449,15 @@ class _ManageEventView extends State<ManageEventView> {
         ),
       ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (_) => const ExitDialog(
+              title: 'Are you sure that you want to exit?',
+              text: 'You haven\'t finished editing the event'),
+        )) ??
+        false;
   }
 }

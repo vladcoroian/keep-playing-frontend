@@ -31,7 +31,8 @@ class PastEventDetailsView extends StatefulWidget {
 }
 
 class _PastEventDetailsViewState extends State<PastEventDetailsView> {
-  User? coach;
+  User? _coach;
+  bool _coachInformationIsLoaded = false;
 
   @override
   void initState() {
@@ -40,15 +41,19 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
   }
 
   void _retrieveCoachInformation() async {
-    User retrievedCoach = await API.user.getUser(widget.event.coachPK!);
+    User? retrievedCoach;
+    if (widget.event.coachPK != null) {
+      retrievedCoach = await API.user.getUser(widget.event.coachPK!);
+    }
     setState(() {
-      coach = retrievedCoach;
+      _coach = retrievedCoach;
+      _coachInformationIsLoaded = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (coach == null) {
+    if (!_coachInformationIsLoaded) {
       return Scaffold(
         appBar: AppBar(
           title: const Text(PastEventDetailsView._title),
@@ -59,19 +64,19 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
 
     final Widget blockButton = BlocBuilder<OrganiserCubit, Organiser>(
       builder: (context, state) {
-        return state.hasBlockedUser(coach!)
-            ? _UnblockButton(coach: coach!)
-            : _BlockButton(coach: coach!);
+        return state.hasBlockedUser(_coach!)
+            ? _UnblockButton(coach: _coach!)
+            : _BlockButton(coach: _coach!);
       },
     );
 
     final Widget favouriteButton = BlocBuilder<OrganiserCubit, Organiser>(
       builder: (context, state) {
-        return state.hasBlockedUser(coach!)
+        return state.hasBlockedUser(_coach!)
             ? const SizedBox(width: 0, height: 0)
-            : (state.hasUserAsAFavourite(coach!)
-                ? _RemoveFromFavouritesButton(coach: coach!)
-                : _AddToFavouritesButton(coach: coach!));
+            : (state.hasUserAsAFavourite(_coach!)
+                ? _RemoveFromFavouritesButton(coach: _coach!)
+                : _AddToFavouritesButton(coach: _coach!));
       },
     );
 
@@ -83,19 +88,26 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
       },
     );
 
-    final Widget coachInformationCard = Card(
-      margin: const EdgeInsets.all(CARD_PADDING),
-      child: Column(
-        children: [
-          CoachInformationListTile(coach: coach!, event: widget.event),
-          ButtonBar(
-            alignment: MainAxisAlignment.spaceBetween,
-            children: [blockButton, favouriteButton],
-          ),
-          rateButton,
-        ],
-      ),
-    );
+    final Widget coachInformationCard = _coach == null
+        ? const Card(
+            margin: EdgeInsets.all(CARD_PADDING),
+            child: ListTile(
+              title: Center(child: Text('This event didn\'t have a coach.')),
+            ),
+          )
+        : Card(
+            margin: const EdgeInsets.all(CARD_PADDING),
+            child: Column(
+              children: [
+                CoachInformationListTile(coach: _coach!, event: widget.event),
+                ButtonBar(
+                  alignment: MainAxisAlignment.spaceBetween,
+                  children: [blockButton, favouriteButton],
+                ),
+                rateButton,
+              ],
+            ),
+          );
 
     return Scaffold(
       appBar: AppBar(

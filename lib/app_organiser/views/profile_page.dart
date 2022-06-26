@@ -4,6 +4,7 @@ import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
+import 'package:keep_playing_frontend/widgets/icons.dart';
 
 import 'profile/blocked_page.dart';
 import 'profile/defaults_page.dart';
@@ -21,7 +22,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.username,
         readOnly: true,
         decoration: const InputDecoration(
-          icon: Icon(Icons.account_box),
+          icon: Icon(UserIcons.USERNAME_ICON),
           hintText: 'Enter your username',
           labelText: 'Username',
         ),
@@ -33,7 +34,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.email,
         readOnly: false,
         decoration: const InputDecoration(
-          icon: Icon(Icons.email),
+          icon: Icon(UserIcons.EMAIL_ICON),
           hintText: 'Enter your Email',
           labelText: 'Email',
         ),
@@ -45,7 +46,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.firstName,
         readOnly: true,
         decoration: const InputDecoration(
-          icon: Icon(Icons.account_box),
+          icon: Icon(UserIcons.FIRST_NAME_ICON),
           hintText: 'Enter your first name',
           labelText: 'First Name',
         ),
@@ -57,7 +58,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.lastName,
         readOnly: true,
         decoration: const InputDecoration(
-          icon: Icon(Icons.account_box),
+          icon: Icon(UserIcons.LAST_NAME_ICON),
           hintText: 'Enter your last name',
           labelText: 'Last Name',
         ),
@@ -69,7 +70,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.location,
         readOnly: false,
         decoration: const InputDecoration(
-          icon: Icon(Icons.home),
+          icon: Icon(UserIcons.LOCATION_ICON),
           hintText: 'Enter your location',
           labelText: 'Location',
         ),

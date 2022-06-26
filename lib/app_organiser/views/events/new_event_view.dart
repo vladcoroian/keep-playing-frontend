@@ -54,16 +54,6 @@ class _NewEventViewState extends State<NewEventView> {
     super.initState();
   }
 
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (_) => const ExitDialog(
-              title: 'Are you sure that you want to exit?',
-              text: 'You haven\'t finished editing the new event'),
-        )) ??
-        false;
-  }
-
   @override
   Widget build(BuildContext context) {
     if (!defaultValuesAreLoaded) {
@@ -333,5 +323,15 @@ class _NewEventViewState extends State<NewEventView> {
         ),
       ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (_) => const ExitDialog(
+              title: 'Are you sure that you want to exit?',
+              text: 'You haven\'t finished editing the new event'),
+        )) ??
+        false;
   }
 }

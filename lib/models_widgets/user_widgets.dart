@@ -5,6 +5,7 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/icons.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class UserWidgets {
@@ -18,17 +19,20 @@ class UserWidgets {
   List<Widget> getDetailsAboutUser() {
     return <Widget>[
       ListTile(
-          leading: const Icon(Icons.person),
-          title: const Text('Name', style: _textStyleForTitle),
-          subtitle: Text('${user.firstName} ${user.lastName}')),
+        leading: const Icon(UserIcons.NAME_ICON),
+        title: const Text('Name', style: _textStyleForTitle),
+        subtitle: Text('${user.firstName} ${user.lastName}'),
+      ),
       ListTile(
-          leading: const Icon(Icons.email),
-          title: const Text('Email', style: _textStyleForTitle),
-          subtitle: Text(user.email)),
+        leading: const Icon(UserIcons.EMAIL_ICON),
+        title: const Text('Email', style: _textStyleForTitle),
+        subtitle: Text(user.email),
+      ),
       ListTile(
-          leading: const Icon(Icons.location_on),
-          title: const Text('Location', style: _textStyleForTitle),
-          subtitle: Text(user.location)),
+        leading: const Icon(UserIcons.LOCATION_ICON),
+        title: const Text('Location', style: _textStyleForTitle),
+        subtitle: Text(user.location),
+      ),
     ];
   }
 }
@@ -66,7 +70,7 @@ class CoachInformationListTile extends StatelessWidget {
               '${event.name}, on: ${DateFormat.MMMEd().format(event.date)}',
         );
       },
-      child: const Icon(Icons.email),
+      child: const Icon(UserIcons.EMAIL_ICON),
     );
 
     return ListTile(
