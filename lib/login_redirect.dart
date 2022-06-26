@@ -25,6 +25,7 @@ class _LoginRedirectState extends State<LoginRedirect> {
   @override
   void initState() {
     _login();
+
     super.initState();
   }
 

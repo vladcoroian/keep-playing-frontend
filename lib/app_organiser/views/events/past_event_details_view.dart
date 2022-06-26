@@ -66,7 +66,7 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
     }
 
     final Widget blockButton = BlocBuilder<OrganiserCubit, Organiser>(
-      builder: (context, state) {
+      builder: (_, state) {
         return state.hasBlockedUser(_coach!)
             ? _UnblockButton(coach: _coach!)
             : _BlockButton(coach: _coach!);
@@ -74,7 +74,7 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
     );
 
     final Widget favouriteButton = BlocBuilder<OrganiserCubit, Organiser>(
-      builder: (context, state) {
+      builder: (_, state) {
         return state.hasBlockedUser(_coach!)
             ? const SizedBox(width: 0, height: 0)
             : (state.hasUserAsAFavourite(_coach!)
@@ -84,7 +84,7 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
     );
 
     final Widget rateButton = BlocBuilder<EventsCubit, List<Event>>(
-      builder: (context, state) {
+      builder: (_, __) {
         return widget.event.rated
             ? _RatedButton()
             : _RateButton(event: widget.event);
@@ -359,7 +359,7 @@ class _RateDialogState extends State<_RateDialog> {
       itemSize: 30.0,
       itemCount: 5,
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (context, _) => const Icon(
+      itemBuilder: (_, __) => const Icon(
         Icons.star,
         color: Colors.amber,
       ),
@@ -376,7 +376,7 @@ class _RateDialogState extends State<_RateDialog> {
       itemSize: 30.0,
       itemCount: 5,
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (context, _) => const Icon(
+      itemBuilder: (_, __) => const Icon(
         Icons.star,
         color: Colors.amber,
       ),
@@ -393,7 +393,7 @@ class _RateDialogState extends State<_RateDialog> {
       itemSize: 30.0,
       itemCount: 5,
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (context, _) => const Icon(
+      itemBuilder: (_, __) => const Icon(
         Icons.star,
         color: Colors.amber,
       ),

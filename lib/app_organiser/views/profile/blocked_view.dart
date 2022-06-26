@@ -20,26 +20,30 @@ class BlockedView extends StatefulWidget {
 }
 
 class _BlockedViewState extends State<BlockedView> {
-  List<User> coaches = [];
-  List<int> blocked = [];
+  List<User>? _coaches;
+  List<int> _blocked = [];
 
   @override
   void initState() {
     _retrieveUsers();
+
     super.initState();
   }
 
   Future<void> _retrieveUsers() async {
     List<User> retrievedUsers = await API.user.retrieveAllUsers();
     retrievedUsers.retainWhere((user) => user.isCoachUser());
+
     setState(() {
-      coaches = retrievedUsers;
+      _coaches = retrievedUsers;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (coaches.isEmpty) {
+    final bool coachesAreNotLoaded = _coaches == null;
+
+    if (coachesAreNotLoaded) {
       return Scaffold(
         appBar: AppBar(
           title: const Text(BlockedView._title),
@@ -50,20 +54,20 @@ class _BlockedViewState extends State<BlockedView> {
 
     final Widget sliverBlockedCheckboxes =
         BlocBuilder<OrganiserCubit, Organiser>(
-      builder: (context, state) {
-        blocked = state.blocked;
+      builder: (_, state) {
+        _blocked = state.blocked;
 
         List<Widget> blockedCheckboxes = [];
-        for (User coach in coaches) {
+        for (User coach in _coaches!) {
           blockedCheckboxes.add(
             CheckboxListTile(
-              value: blocked.contains(coach.pk),
+              value: _blocked.contains(coach.pk),
               onChanged: (bool? newValue) => setState(
                 () {
                   if (newValue!) {
-                    blocked.add(coach.pk);
+                    _blocked.add(coach.pk);
                   } else {
-                    blocked.remove(coach.pk);
+                    _blocked.remove(coach.pk);
                   }
                 },
               ),
@@ -91,7 +95,7 @@ class _BlockedViewState extends State<BlockedView> {
           final OrganiserCubit organiserCubit =
               BlocProvider.of<OrganiserCubit>(context);
 
-          Response response = await API.organiser.updateBlockedList(blocked);
+          Response response = await API.organiser.updateBlockedList(_blocked);
           if (response.statusCode == HTTP_202_ACCEPTED) {
             organiserCubit.retrieveOrganiserInformation();
             navigator.pop();

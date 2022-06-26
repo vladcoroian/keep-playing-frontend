@@ -17,7 +17,7 @@ class FeedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<FeedEventsCubit, List<Event>>(
-      builder: (context, state) {
+      builder: (_, state) {
         return ListView.builder(
           itemCount: state.length,
           itemBuilder: (_, index) {
@@ -60,7 +60,7 @@ class _FeedEventWidget extends StatelessWidget {
         onPressed: () {
           showDialog(
               context: context,
-              builder: (BuildContext context) {
+              builder: (BuildContext _) {
                 return _DetailsDialog(event: event);
               });
         },
@@ -101,7 +101,7 @@ class _AcceptButton extends StatelessWidget {
 
           showDialog(
             context: context,
-            builder: (BuildContext context) {
+            builder: (BuildContext _) {
               return BlocProvider<FeedEventsCubit>.value(
                 value: feedEventsCubit,
                 child: _AcceptJobDialog(event: event),

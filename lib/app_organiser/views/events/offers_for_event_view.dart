@@ -126,7 +126,7 @@ class _OfferCard extends StatelessWidget {
     final Widget experienceRatingBar = RatingBarIndicator(
       rating: coachRatingMap[user]!.getExperienceAverage(),
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (context, _) => const Icon(
+      itemBuilder: (_, __) => const Icon(
         Icons.star,
         color: Colors.amber,
       ),
@@ -136,7 +136,7 @@ class _OfferCard extends StatelessWidget {
     final Widget flexibilityRatingBar = RatingBarIndicator(
       rating: coachRatingMap[user]!.getFlexibilityAverage(),
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (context, _) => const Icon(
+      itemBuilder: (_, __) => const Icon(
         Icons.star,
         color: Colors.amber,
       ),
@@ -146,7 +146,7 @@ class _OfferCard extends StatelessWidget {
     final Widget reliabilityRatingBar = RatingBarIndicator(
       rating: coachRatingMap[user]!.getReliabilityAverage(),
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (context, _) => const Icon(
+      itemBuilder: (_, __) => const Icon(
         Icons.star,
         color: Colors.amber,
       ),

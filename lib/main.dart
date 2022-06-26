@@ -67,7 +67,7 @@ class _EnterAsCoachButton extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
+                  builder: (_) => const LoginPage(),
                 ),
               );
             },
@@ -93,7 +93,7 @@ class _EnterAsOrganiserButton extends StatelessWidget {
                 textStyle: const TextStyle(fontSize: 25)),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const LoginPage()),
+                MaterialPageRoute(builder: (_) => const LoginPage()),
               );
             },
             child: const Text('Enter as organiser')));

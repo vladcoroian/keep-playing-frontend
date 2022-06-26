@@ -22,18 +22,18 @@ class _DefaultsViewState extends State<DefaultsView> {
   String _role = '';
   String _location = '';
   int? _price;
-  bool initialised = false;
+  bool initialValuesAreLoaded = false;
 
   @override
   Widget build(BuildContext context) {
-    if (!initialised) {
+    if (!initialValuesAreLoaded) {
       _sport = BlocProvider.of<OrganiserCubit>(context).state.defaultSport;
       _role = BlocProvider.of<OrganiserCubit>(context).state.defaultRole;
       _location =
           BlocProvider.of<OrganiserCubit>(context).state.defaultLocation;
       _price = BlocProvider.of<OrganiserCubit>(context).state.defaultPrice;
 
-      initialised = true;
+      initialValuesAreLoaded = true;
     }
 
     final Widget sportForm = ListTile(
@@ -107,7 +107,7 @@ class _DefaultsViewState extends State<DefaultsView> {
     );
 
     final Widget sliverListOfForms = BlocBuilder<OrganiserCubit, Organiser>(
-      builder: (context, state) {
+      builder: (_, state) {
         return SliverList(
           delegate: SliverChildListDelegate(
             [

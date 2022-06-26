@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
         onPressed: () async {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => const SignInPage(),
+              builder: (_) => const SignInPage(),
             ),
           );
         },
@@ -89,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
               UserLogin(username: _username, password: _password);
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => LoginRedirect(
+              builder: (_) => LoginRedirect(
                 userLogin: userLogin,
               ),
             ),

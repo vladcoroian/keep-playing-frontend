@@ -20,26 +20,30 @@ class FavouritesView extends StatefulWidget {
 }
 
 class _FavouritesViewState extends State<FavouritesView> {
-  List<User> coaches = [];
-  List<int> favourites = [];
+  List<User>? _coaches;
+  List<int> _favourites = [];
 
   @override
   void initState() {
     _retrieveUsers();
+
     super.initState();
   }
 
   Future<void> _retrieveUsers() async {
     List<User> retrievedUsers = await API.user.retrieveAllUsers();
     retrievedUsers.retainWhere((user) => user.isCoachUser());
+
     setState(() {
-      coaches = retrievedUsers;
+      _coaches = retrievedUsers;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (coaches.isEmpty) {
+    final bool coachesAreNotLoaded = _coaches == null;
+
+    if (coachesAreNotLoaded) {
       return Scaffold(
         appBar: AppBar(
           title: const Text(FavouritesView._title),
@@ -49,20 +53,20 @@ class _FavouritesViewState extends State<FavouritesView> {
     }
 
     final Widget sliverFavouritesList = BlocBuilder<OrganiserCubit, Organiser>(
-      builder: (context, state) {
-        favourites = state.favourites;
+      builder: (_, state) {
+        _favourites = state.favourites;
 
         List<Widget> favouritesCheckboxes = [];
-        for (User coach in coaches) {
+        for (User coach in _coaches!) {
           favouritesCheckboxes.add(
             CheckboxListTile(
-              value: favourites.contains(coach.pk),
+              value: _favourites.contains(coach.pk),
               onChanged: (bool? newValue) => setState(
                 () {
                   if (newValue!) {
-                    favourites.add(coach.pk);
+                    _favourites.add(coach.pk);
                   } else {
-                    favourites.remove(coach.pk);
+                    _favourites.remove(coach.pk);
                   }
                 },
               ),
@@ -91,7 +95,7 @@ class _FavouritesViewState extends State<FavouritesView> {
               BlocProvider.of<OrganiserCubit>(context);
 
           Response response =
-              await API.organiser.updateFavouritesList(favourites);
+              await API.organiser.updateFavouritesList(_favourites);
           if (response.statusCode == HTTP_202_ACCEPTED) {
             organiserCubit.retrieveOrganiserInformation();
             navigator.pop();

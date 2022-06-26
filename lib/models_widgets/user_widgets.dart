@@ -84,7 +84,7 @@ class CoachInformationListTile extends StatelessWidget {
       onTap: () {
         showDialog(
           context: context,
-          builder: (context) => _CoachInformationDialog(
+          builder: (_) => _CoachInformationDialog(
             coach: coach,
           ),
         );

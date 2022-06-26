@@ -18,7 +18,7 @@ class EventsForDayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<EventsCubit, List<Event>>(
-      builder: (context, state) {
+      builder: (_, __) {
         List<Event> eventsForDay = [
           ...BlocProvider.of<EventsCubit>(context).state
         ];

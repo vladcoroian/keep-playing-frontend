@@ -17,7 +17,7 @@ class UpcomingJobsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget viewOfEvents = BlocBuilder<UpcomingJobsCubit, List<Event>>(
-      builder: (context, state) {
+      builder: (_, state) {
         return ListView.builder(
           itemCount: state.length,
           itemBuilder: (_, index) {

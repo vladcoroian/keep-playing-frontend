@@ -29,13 +29,8 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
   @override
   void initState() {
     _retrieveOrganiserInformation();
-    super.initState();
-  }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    super.initState();
   }
 
   void _retrieveOrganiserInformation() async {
@@ -46,9 +41,17 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
     });
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (organiser == null) {
+    final bool organiserIsNotLoaded = organiser == null;
+
+    if (organiserIsNotLoaded) {
       return const LoadingScreen();
     }
 
