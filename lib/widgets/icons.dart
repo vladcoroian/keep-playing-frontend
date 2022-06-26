@@ -20,3 +20,19 @@ class UserIcons {
   static const IconData LAST_NAME_ICON = Icons.person;
   static const IconData LOCATION_ICON = Icons.location_on;
 }
+
+class CoachIcons {
+  static const Icon RATE_ICON = Icon(
+    Icons.star,
+    color: Colors.amber,
+  );
+
+  static const Icon FAVOURITE_ICON = Icon(
+    Icons.favorite,
+    color: Colors.red,
+  );
+  static const Icon VERIFIED_ICON = Icon(
+    Icons.verified,
+    color: Colors.blue,
+  );
+}

@@ -7,14 +7,14 @@ const double DIALOG_PADDING = 16;
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
-  final VoidCallback? onNoPressed;
-  final VoidCallback? onYesPressed;
+  final VoidCallback onNoPressed;
+  final VoidCallback onYesPressed;
 
   const ConfirmationDialog({
     super.key,
     required this.title,
-    this.onNoPressed,
-    this.onYesPressed,
+    required this.onNoPressed,
+    required this.onYesPressed,
   });
 
   @override

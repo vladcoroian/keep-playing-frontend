@@ -11,6 +11,7 @@ import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/icons.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class OffersForEventView extends StatefulWidget {
@@ -88,7 +89,7 @@ class _OffersForEventViewState extends State<OffersForEventView> {
           return _OfferCard(
             event: widget.event,
             organiser: organiser!,
-            user: offers![index],
+            coach: offers![index],
             coachRatingMap: coachRatingMap,
           );
         },
@@ -100,13 +101,13 @@ class _OffersForEventViewState extends State<OffersForEventView> {
 class _OfferCard extends StatelessWidget {
   final Event event;
   final Organiser organiser;
-  final User user;
+  final User coach;
   final Map<User, CoachRating> coachRatingMap;
 
   const _OfferCard({
     required this.event,
     required this.organiser,
-    required this.user,
+    required this.coach,
     required this.coachRatingMap,
   });
 
@@ -114,42 +115,33 @@ class _OfferCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget leadingListTile = Column(
       children: [
-        organiser.hasUserAsAFavourite(user)
-            ? const Icon(Icons.favorite, color: FAVOURITE_ICON_COLOR)
+        organiser.hasUserAsAFavourite(coach)
+            ? CoachIcons.FAVOURITE_ICON
             : const SizedBox(height: 0, width: 0),
-        user.isVerified()
-            ? const Icon(Icons.verified, color: VERIFIED_ICON_COLOR)
+        coach.isVerified()
+            ? CoachIcons.VERIFIED_ICON
             : const SizedBox(width: 0, height: 0),
       ],
     );
 
     final Widget experienceRatingBar = RatingBarIndicator(
-      rating: coachRatingMap[user]!.getExperienceAverage(),
+      rating: coachRatingMap[coach]!.getExperienceAverage(),
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
+      itemBuilder: (_, __) => CoachIcons.RATE_ICON,
       itemSize: 20.0,
     );
 
     final Widget flexibilityRatingBar = RatingBarIndicator(
-      rating: coachRatingMap[user]!.getFlexibilityAverage(),
+      rating: coachRatingMap[coach]!.getFlexibilityAverage(),
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
+      itemBuilder: (_, __) => CoachIcons.RATE_ICON,
       itemSize: 20.0,
     );
 
     final Widget reliabilityRatingBar = RatingBarIndicator(
-      rating: coachRatingMap[user]!.getReliabilityAverage(),
+      rating: coachRatingMap[coach]!.getReliabilityAverage(),
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
+      itemBuilder: (_, __) => CoachIcons.RATE_ICON,
       itemSize: 20.0,
     );
 
@@ -189,7 +181,7 @@ class _OfferCard extends StatelessWidget {
 
           final Response response = await API.organiser.acceptCoach(
             event: event,
-            coach: user,
+            coach: coach,
           );
           if (response.statusCode == HTTP_202_ACCEPTED) {
             eventsCubit.retrieveEvents();
@@ -213,7 +205,7 @@ class _OfferCard extends StatelessWidget {
         children: <Widget>[
           ListTile(
             leading: leadingListTile,
-            title: Text("${user.firstName} ${user.lastName}"),
+            title: Text("${coach.firstName} ${coach.lastName}"),
             subtitle: Column(
               children: [
                 experienceRow,

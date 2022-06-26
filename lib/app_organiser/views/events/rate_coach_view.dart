@@ -9,6 +9,7 @@ import 'package:keep_playing_frontend/models/coach.dart';
 import 'package:keep_playing_frontend/models/event/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/icons.dart';
 
 class RateCoachView extends StatefulWidget {
   final Event event;
@@ -39,10 +40,7 @@ class _RateCoachViewState extends State<RateCoachView> {
       itemSize: 30.0,
       itemCount: 5,
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
+      itemBuilder: (_, __) => CoachIcons.RATE_ICON,
       onRatingUpdate: (rating) {
         _experienceRating = rating;
       },
@@ -56,10 +54,7 @@ class _RateCoachViewState extends State<RateCoachView> {
       itemSize: 30.0,
       itemCount: 5,
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
+      itemBuilder: (_, __) => CoachIcons.RATE_ICON,
       onRatingUpdate: (rating) {
         _flexibilityRating = rating;
       },
@@ -73,10 +68,7 @@ class _RateCoachViewState extends State<RateCoachView> {
       itemSize: 30.0,
       itemCount: 5,
       itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
+      itemBuilder: (_, __) => CoachIcons.RATE_ICON,
       onRatingUpdate: (rating) {
         _reliabilityRating = rating;
       },
@@ -104,7 +96,7 @@ class _RateCoachViewState extends State<RateCoachView> {
           );
           if (response.statusCode == HTTP_200_OK) {
             eventsCubit.retrieveEvents();
-            navigator.pop();
+            navigator.pop(true);
           } else {
             showDialog(
               context: context,
@@ -150,18 +142,31 @@ class _RateCoachViewState extends State<RateCoachView> {
       ),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rate Event'),
-      ),
-      body: ListView(
-        children: [
-          experienceRow,
-          flexibilityRow,
-          reliabilityRow,
-          sendRatingButton,
-        ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Rate Event'),
+        ),
+        body: ListView(
+          children: [
+            experienceRow,
+            flexibilityRow,
+            reliabilityRow,
+            sendRatingButton,
+          ],
+        ),
       ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (_) => const ExitDialog(
+              title: 'Are you sure that you want to exit?',
+              text: 'You didn\'t send the rating.'),
+        )) ??
+        false;
   }
 }

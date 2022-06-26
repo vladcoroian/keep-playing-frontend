@@ -31,13 +31,23 @@ class PastEventDetailsView extends StatefulWidget {
 
 class _PastEventDetailsViewState extends State<PastEventDetailsView> {
   User? _coach;
+
+  bool? _rated;
+
   bool _coachInformationIsLoaded = false;
 
   @override
   void initState() {
+    _retrieveRatingStatus();
     _retrieveCoachInformation();
 
     super.initState();
+  }
+
+  void _retrieveRatingStatus() {
+    setState(() {
+      _rated = widget.event.rated;
+    });
   }
 
   void _retrieveCoachInformation() async {
@@ -53,9 +63,10 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
 
   @override
   Widget build(BuildContext context) {
+    final bool ratedStatusIsNotLoaded = _rated == null;
     final bool coachInformationIsNotLoaded = !_coachInformationIsLoaded;
 
-    if (coachInformationIsNotLoaded) {
+    if (ratedStatusIsNotLoaded || coachInformationIsNotLoaded) {
       return Scaffold(
         appBar: AppBar(
           title: const Text(PastEventDetailsView._title),
@@ -82,13 +93,16 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
       },
     );
 
-    final Widget rateButton = BlocBuilder<EventsCubit, List<Event>>(
-      builder: (_, __) {
-        return widget.event.rated
-            ? _RatedButton()
-            : _RateButton(event: widget.event);
-      },
-    );
+    final Widget rateButton = _rated!
+        ? _RatedButton()
+        : _RateButton(
+            event: widget.event,
+            onRatingGiven: () {
+              setState(() {
+                _rated = true;
+              });
+            },
+          );
 
     final Widget coachInformationCard = _coach == null
         ? const Card(
@@ -116,7 +130,6 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          BlocProvider.of<EventsCubit>(context).retrieveEvents();
           BlocProvider.of<OrganiserCubit>(context)
               .retrieveOrganiserInformation();
         },
@@ -279,8 +292,12 @@ class _RemoveFromFavouritesButton extends StatelessWidget {
 
 class _RateButton extends StatelessWidget {
   final Event event;
+  final VoidCallback onRatingGiven;
 
-  const _RateButton({required this.event});
+  const _RateButton({
+    required this.event,
+    required this.onRatingGiven,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -293,13 +310,20 @@ class _RateButton extends StatelessWidget {
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
         onPressed: () {
-          Navigator.of(context).push(
+          Navigator.of(context)
+              .push(
             MaterialPageRoute(
               builder: (_) => RateCoachPage(
-                  eventsCubit: BlocProvider.of<EventsCubit>(context),
-                  event: event),
+                eventsCubit: BlocProvider.of<EventsCubit>(context),
+                event: event,
+              ),
             ),
-          );
+          )
+              .then((value) {
+            if (value == true) {
+              onRatingGiven();
+            }
+          });
         },
         child: const Text('Rate'),
       ),

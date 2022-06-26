@@ -19,9 +19,6 @@ const double APP_BAR_BUTTON_SIZE = 26;
 
 const double CARD_PADDING = 16;
 
-const Color VERIFIED_ICON_COLOR = Colors.blue;
-const Color FAVOURITE_ICON_COLOR = Colors.red;
-
 // **************************************************************************
 // **************** SPORTS AND ROLES
 // **************************************************************************
