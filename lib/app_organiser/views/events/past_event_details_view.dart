@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
+import 'package:keep_playing_frontend/app_organiser/views/events/rate_coach_page.dart';
 import 'package:keep_playing_frontend/constants.dart';
-import 'package:keep_playing_frontend/models/coach.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
@@ -294,14 +293,12 @@ class _RateButton extends StatelessWidget {
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return BlocProvider<EventsCubit>.value(
-                value: BlocProvider.of<EventsCubit>(context),
-                child: _RateDialog(event: event),
-              );
-            },
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => RateCoachPage(
+                  eventsCubit: BlocProvider.of<EventsCubit>(context),
+                  event: event),
+            ),
           );
         },
         child: const Text('Rate'),
@@ -324,142 +321,6 @@ class _RatedButton extends StatelessWidget {
         onPressed: () {},
         child: const Text('Rated'),
       ),
-    );
-  }
-}
-
-// **************************************************************************
-// **************** DIALOGS
-// **************************************************************************
-
-class _RateDialog extends StatefulWidget {
-  final Event event;
-
-  const _RateDialog({required this.event});
-
-  @override
-  State<_RateDialog> createState() => _RateDialogState();
-}
-
-class _RateDialogState extends State<_RateDialog> {
-  double _experienceRating = 3;
-
-  double _flexibilityRating = 3;
-
-  double _reliabilityRating = 3;
-
-  @override
-  Widget build(BuildContext context) {
-    final Widget experienceRatingBar = RatingBar.builder(
-      initialRating: _experienceRating,
-      minRating: 1,
-      direction: Axis.horizontal,
-      allowHalfRating: false,
-      itemSize: 30.0,
-      itemCount: 5,
-      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
-      onRatingUpdate: (rating) {
-        _experienceRating = rating;
-      },
-    );
-
-    final Widget flexibilityRatingBar = RatingBar.builder(
-      initialRating: _flexibilityRating,
-      minRating: 1,
-      direction: Axis.horizontal,
-      allowHalfRating: false,
-      itemSize: 30.0,
-      itemCount: 5,
-      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
-      onRatingUpdate: (rating) {
-        _flexibilityRating = rating;
-      },
-    );
-
-    final Widget reliabilityRatingBar = RatingBar.builder(
-      initialRating: _reliabilityRating,
-      minRating: 1,
-      direction: Axis.horizontal,
-      allowHalfRating: false,
-      itemSize: 30.0,
-      itemCount: 5,
-      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-      itemBuilder: (_, __) => const Icon(
-        Icons.star,
-        color: Colors.amber,
-      ),
-      onRatingUpdate: (rating) {
-        _reliabilityRating = rating;
-      },
-    );
-
-    final experienceListTile = ListTile(
-      title: const Text('Experienced'),
-      subtitle: experienceRatingBar,
-    );
-
-    final flexibilityListTile = ListTile(
-      title: const Text('Flexible'),
-      subtitle: flexibilityRatingBar,
-    );
-
-    final reliabilityListTile = ListTile(
-      title: const Text('Reliable'),
-      subtitle: reliabilityRatingBar,
-    );
-
-    final Widget sendRatingButton = Container(
-      padding: const EdgeInsets.all(BUTTON_PADDING),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: SEND_RATING_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () async {
-          NavigatorState navigator = Navigator.of(context);
-          EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-
-          CoachNewRating coachNewRating = CoachNewRating(
-            experience: _experienceRating.toInt(),
-            flexibility: _flexibilityRating.toInt(),
-            reliability: _reliabilityRating.toInt(),
-          );
-
-          final Response response = await API.organiser.rateEventCoach(
-            event: widget.event,
-            coachNewRating: coachNewRating,
-          );
-          if (response.statusCode == HTTP_202_ACCEPTED) {
-            eventsCubit.retrieveEvents();
-            navigator.pop();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
-        },
-        child: const Text('Send Rating'),
-      ),
-    );
-
-    return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DIALOG_PADDING),
-      title: const Center(child: Text('Rate')),
-      children: <Widget>[
-        experienceListTile,
-        flexibilityListTile,
-        reliabilityListTile,
-        sendRatingButton,
-      ],
     );
   }
 }

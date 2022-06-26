@@ -153,23 +153,26 @@ class _OfferCard extends StatelessWidget {
       itemSize: 20.0,
     );
 
-    final experienceRow = Row(
+    final Widget experienceRow = Row(
       children: [
         const Text('Experienced'),
+        const Spacer(),
         experienceRatingBar,
       ],
     );
 
-    final flexibilityRow = Row(
+    final Widget flexibilityRow = Row(
       children: [
         const Text('Flexible'),
+        const Spacer(),
         flexibilityRatingBar,
       ],
     );
 
-    final reliabilityRow = Row(
+    final Widget reliabilityRow = Row(
       children: [
         const Text('Reliable'),
+        const Spacer(),
         reliabilityRatingBar,
       ],
     );
