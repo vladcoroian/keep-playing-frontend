@@ -197,15 +197,20 @@ class _AcceptJobDialog extends StatelessWidget {
                     final NavigatorState navigator = Navigator.of(buildContext);
                     final FeedEventsCubit feedEventsCubit =
                         BlocProvider.of<FeedEventsCubit>(context);
+
                     final Response response =
                         await API.coach.applyToJob(event: event);
                     if (response.statusCode == HTTP_202_ACCEPTED) {
                       feedEventsCubit.retrieveFeedEvents();
+                      navigator.pop();
+                      navigator.pop();
                     } else {
-                      // TODO
+                      showDialog(
+                        context: context,
+                        builder: (_) => const RequestFailedDialog(),
+                        barrierDismissible: false,
+                      );
                     }
-                    navigator.pop();
-                    navigator.pop();
                   },
                 ),
               );

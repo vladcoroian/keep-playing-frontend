@@ -73,11 +73,16 @@ class _UpcomingJobWidget extends StatelessWidget {
                       await API.coach.cancelJob(event: event);
                   if (response.statusCode == HTTP_202_ACCEPTED) {
                     upcomingJobsCubit.retrieveUpcomingJobs(
-                        withCoachUser: coachUser);
+                      withCoachUser: coachUser,
+                    );
+                    navigator.pop();
                   } else {
-                    // TODO
+                    showDialog(
+                      context: context,
+                      builder: (_) => const RequestFailedDialog(),
+                      barrierDismissible: false,
+                    );
                   }
-                  navigator.pop();
                 },
               );
             },

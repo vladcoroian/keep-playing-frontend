@@ -8,6 +8,7 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/icons.dart';
 
 class DefaultsView extends StatefulWidget {
   const DefaultsView({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _DefaultsViewState extends State<DefaultsView> {
     }
 
     final Widget sportForm = ListTile(
-      leading: const Icon(Icons.sports_soccer),
+      leading: const Icon(EventIcons.SPORT_ICON),
       title: DropdownButton<String>(
         value: _sport == "" ? null : _sport,
         items: SPORTS.map<DropdownMenuItem<String>>((String value) {
@@ -55,7 +56,7 @@ class _DefaultsViewState extends State<DefaultsView> {
     );
 
     final Widget roleForm = ListTile(
-      leading: const Icon(Icons.sports),
+      leading: const Icon(EventIcons.ROLE_ICON),
       title: DropdownButton<String>(
         value: _role == "" ? null : _role,
         items: ROLES.map<DropdownMenuItem<String>>((String value) {
@@ -78,7 +79,7 @@ class _DefaultsViewState extends State<DefaultsView> {
         initialValue: _location,
         readOnly: false,
         decoration: const InputDecoration(
-          icon: Icon(Icons.location_on),
+          icon: Icon(EventIcons.LOCATION_ICON),
           hintText: 'Enter the location',
           labelText: 'Location',
         ),
@@ -95,7 +96,7 @@ class _DefaultsViewState extends State<DefaultsView> {
         initialValue: _price?.toString(),
         readOnly: false,
         decoration: const InputDecoration(
-          icon: Icon(Icons.price_change),
+          icon: Icon(EventIcons.PRICE_ICON),
           hintText: 'Enter the price',
           labelText: 'Price',
         ),
@@ -137,15 +138,19 @@ class _DefaultsViewState extends State<DefaultsView> {
           NavigatorState navigator = Navigator.of(context);
           final OrganiserCubit organiserCubit =
               BlocProvider.of<OrganiserCubit>(context);
+
           Response response = await API.organiser
               .changeDefaults(organiserDefaults: organiserDefaults);
           if (response.statusCode == HTTP_202_ACCEPTED) {
             organiserCubit.retrieveOrganiserInformation();
+            navigator.pop();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
-
-          navigator.pop();
         },
         child: const Text('Save Changes'),
       ),

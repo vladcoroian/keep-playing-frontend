@@ -13,6 +13,7 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/models_widgets/user_widgets.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/icons.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 import '../../cubit/events_cubit.dart';
@@ -153,7 +154,7 @@ class _ManageEventView extends State<ManageEventView> {
         initialValue: _name,
         readOnly: false,
         decoration: const InputDecoration(
-          icon: Icon(Icons.title),
+          icon: Icon(EventIcons.NAME_ICON),
           hintText: 'Enter the name',
           labelText: 'Name',
         ),
@@ -164,7 +165,7 @@ class _ManageEventView extends State<ManageEventView> {
     );
 
     final Widget sportForm = ListTile(
-      leading: const Icon(Icons.sports_soccer),
+      leading: const Icon(EventIcons.SPORT_ICON),
       title: DropdownButton<String>(
         value: selectedSport,
         items: SPORTS.map<DropdownMenuItem<String>>((String value) {
@@ -183,7 +184,7 @@ class _ManageEventView extends State<ManageEventView> {
     );
 
     final Widget roleForm = ListTile(
-      leading: const Icon(Icons.sports),
+      leading: const Icon(EventIcons.ROLE_ICON),
       title: DropdownButton<String>(
         value: selectedRole,
         items: ROLES.map<DropdownMenuItem<String>>((String value) {
@@ -205,7 +206,7 @@ class _ManageEventView extends State<ManageEventView> {
       title: TextFormField(
         initialValue: _location,
         decoration: const InputDecoration(
-          icon: Icon(Icons.location_on),
+          icon: Icon(EventIcons.LOCATION_ICON),
           hintText: 'Enter the location',
           labelText: 'Location',
         ),
@@ -219,7 +220,7 @@ class _ManageEventView extends State<ManageEventView> {
       title: TextFormField(
         initialValue: _details,
         decoration: const InputDecoration(
-          icon: Icon(Icons.details),
+          icon: Icon(EventIcons.DETAILS_ICON),
           hintText: 'Enter details',
           labelText: 'Details',
         ),
@@ -233,7 +234,7 @@ class _ManageEventView extends State<ManageEventView> {
       title: DateTimeField(
         initialValue: _date,
         decoration: const InputDecoration(
-          icon: Icon(Icons.date_range),
+          icon: Icon(EventIcons.DATE_ICON),
           hintText: 'Enter the date',
           labelText: 'Date',
         ),
@@ -255,7 +256,9 @@ class _ManageEventView extends State<ManageEventView> {
       title: TextField(
         controller: startTimeInput,
         decoration: const InputDecoration(
-            icon: Icon(Icons.access_time), labelText: "Start Time"),
+          icon: Icon(EventIcons.START_TIME_ICON),
+          labelText: "Start Time",
+        ),
         readOnly: true,
         onTap: () async {
           final TimeOfDay? newTime = await showTimePicker(
@@ -266,8 +269,11 @@ class _ManageEventView extends State<ManageEventView> {
           if (newTime != null) {
             setState(() {
               _startTime = newTime;
-              startTimeInput.text = const DefaultMaterialLocalizations()
-                  .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
+              startTimeInput.text =
+                  const DefaultMaterialLocalizations().formatTimeOfDay(
+                _startTime,
+                alwaysUse24HourFormat: true,
+              );
             });
           }
         },
@@ -278,7 +284,9 @@ class _ManageEventView extends State<ManageEventView> {
       title: TextField(
         controller: endTimeInput,
         decoration: const InputDecoration(
-            icon: Icon(Icons.access_time), labelText: "End Time"),
+          icon: Icon(EventIcons.END_TIME_ICON),
+          labelText: "End Time",
+        ),
         readOnly: true,
         onTap: () async {
           final TimeOfDay? newTime = await showTimePicker(
@@ -289,8 +297,11 @@ class _ManageEventView extends State<ManageEventView> {
           if (newTime != null) {
             setState(() {
               _endTime = newTime;
-              endTimeInput.text = const DefaultMaterialLocalizations()
-                  .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
+              endTimeInput.text =
+                  const DefaultMaterialLocalizations().formatTimeOfDay(
+                _endTime,
+                alwaysUse24HourFormat: true,
+              );
             });
           }
         },
@@ -313,7 +324,7 @@ class _ManageEventView extends State<ManageEventView> {
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         initialValue: _price.toString(),
         decoration: const InputDecoration(
-          icon: Icon(Icons.price_change),
+          icon: Icon(EventIcons.PRICE_ICON),
           hintText: 'Enter the fee',
           labelText: 'Fee',
         ),
@@ -348,10 +359,20 @@ class _ManageEventView extends State<ManageEventView> {
                     NavigatorState navigator = Navigator.of(buildContext);
                     final EventsCubit eventsCubit =
                         BlocProvider.of<EventsCubit>(context);
-                    await API.organiser.cancelEvent(event: widget.event);
-                    eventsCubit.retrieveEvents();
-                    navigator.pop();
-                    navigator.pop();
+
+                    final Response response =
+                        await API.organiser.cancelEvent(event: widget.event);
+                    if (response.statusCode == HTTP_200_OK) {
+                      eventsCubit.retrieveEvents();
+                      navigator.pop();
+                      navigator.pop();
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (_) => const RequestFailedDialog(),
+                        barrierDismissible: false,
+                      );
+                    }
                   },
                 ),
               );

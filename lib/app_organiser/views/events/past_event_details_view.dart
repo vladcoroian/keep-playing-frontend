@@ -139,11 +139,16 @@ class _BlockButton extends StatelessWidget {
         onPressed: () async {
           OrganiserCubit organiserCubit =
               BlocProvider.of<OrganiserCubit>(context);
+
           Response response = await API.organiser.blockCoach(coach);
           if (response.statusCode == HTTP_202_ACCEPTED) {
             organiserCubit.retrieveOrganiserInformation();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
         },
         child: const Text('Block'),
@@ -169,11 +174,16 @@ class _UnblockButton extends StatelessWidget {
         onPressed: () async {
           OrganiserCubit organiserCubit =
               BlocProvider.of<OrganiserCubit>(context);
+
           Response response = await API.organiser.unblockCoach(coach);
           if (response.statusCode == HTTP_202_ACCEPTED) {
             organiserCubit.retrieveOrganiserInformation();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
         },
         child: const Text('Unblock'),
@@ -199,12 +209,17 @@ class _AddToFavouritesButton extends StatelessWidget {
         onPressed: () async {
           OrganiserCubit organiserCubit =
               BlocProvider.of<OrganiserCubit>(context);
+
           Response response =
               await API.organiser.addCoachToFavouritesList(coach);
           if (response.statusCode == HTTP_202_ACCEPTED) {
             organiserCubit.retrieveOrganiserInformation();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
         },
         child: const Text('Add Favourite'),
@@ -230,12 +245,17 @@ class _RemoveFromFavouritesButton extends StatelessWidget {
         onPressed: () async {
           OrganiserCubit organiserCubit =
               BlocProvider.of<OrganiserCubit>(context);
+
           Response response =
               await API.organiser.removeCoachFromFavouritesList(coach);
           if (response.statusCode == HTTP_202_ACCEPTED) {
             organiserCubit.retrieveOrganiserInformation();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
         },
         child: const Text('Remove Favourite'),
@@ -404,11 +424,14 @@ class _RateDialogState extends State<_RateDialog> {
           );
           if (response.statusCode == HTTP_202_ACCEPTED) {
             eventsCubit.retrieveEvents();
+            navigator.pop();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
-
-          navigator.pop();
         },
         child: const Text('Send Rating'),
       ),

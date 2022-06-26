@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:keep_playing_frontend/widgets/icons.dart';
 
 import '../constants.dart';
 import '../models/event.dart';
@@ -21,36 +22,53 @@ class EventWidgets {
   List<Widget> getDetailsTilesAboutEvent() {
     return <Widget>[
       ListTile(
-          leading: const Icon(Icons.sports_soccer),
-          title: const Text('Sport', style: _textStyleForTitle),
-          subtitle: Text(event.sport)),
+        leading: const Icon(EventIcons.SPORT_ICON),
+        title: const Text('Sport', style: _textStyleForTitle),
+        subtitle: Text(event.sport),
+      ),
       ListTile(
-          leading: const Icon(Icons.sports),
-          title: const Text('Role', style: _textStyleForTitle),
-          subtitle: Text(event.role)),
+        leading: const Icon(EventIcons.ROLE_ICON),
+        title: const Text('Role', style: _textStyleForTitle),
+        subtitle: Text(event.role),
+      ),
       ListTile(
-          leading: const Icon(Icons.location_on),
-          title: const Text('Location', style: _textStyleForTitle),
-          subtitle: Text(event.location)),
+        leading: const Icon(EventIcons.LOCATION_ICON),
+        title: const Text('Location', style: _textStyleForTitle),
+        subtitle: Text(event.location),
+      ),
       ListTile(
-          leading: const Icon(Icons.date_range),
-          title: const Text('Date', style: _textStyleForTitle),
-          subtitle: Text(DateFormat("MMMM dd").format(event.date))),
+        leading: const Icon(EventIcons.DATE_ICON),
+        title: const Text('Date', style: _textStyleForTitle),
+        subtitle: Text(
+          DateFormat("MMMM dd").format(event.date),
+        ),
+      ),
       ListTile(
-          leading: const Icon(Icons.access_time),
-          title: const Text('Start Time', style: _textStyleForTitle),
-          subtitle: Text(const DefaultMaterialLocalizations()
-              .formatTimeOfDay(event.startTime, alwaysUse24HourFormat: true))),
+        leading: const Icon(EventIcons.START_TIME_ICON),
+        title: const Text('Start Time', style: _textStyleForTitle),
+        subtitle: Text(
+          const DefaultMaterialLocalizations().formatTimeOfDay(
+            event.startTime,
+            alwaysUse24HourFormat: true,
+          ),
+        ),
+      ),
       ListTile(
-          leading: const Icon(Icons.access_time),
-          title: const Text('End Time', style: _textStyleForTitle),
-          subtitle: Text(const DefaultMaterialLocalizations()
-              .formatTimeOfDay(event.endTime, alwaysUse24HourFormat: true))),
+        leading: const Icon(EventIcons.END_TIME_ICON),
+        title: const Text('End Time', style: _textStyleForTitle),
+        subtitle: Text(
+          const DefaultMaterialLocalizations().formatTimeOfDay(
+            event.endTime,
+            alwaysUse24HourFormat: true,
+          ),
+        ),
+      ),
       const Divider(),
       ListTile(
-          leading: const Icon(Icons.details),
-          title: const Text('Details', style: _textStyleForTitle),
-          subtitle: Text(event.details)),
+        leading: const Icon(EventIcons.DETAILS_ICON),
+        title: const Text('Details', style: _textStyleForTitle),
+        subtitle: Text(event.details),
+      ),
       const Divider()
     ];
   }

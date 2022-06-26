@@ -89,14 +89,19 @@ class _FavouritesViewState extends State<FavouritesView> {
           NavigatorState navigator = Navigator.of(context);
           final OrganiserCubit organiserCubit =
               BlocProvider.of<OrganiserCubit>(context);
+
           Response response =
               await API.organiser.updateFavouritesList(favourites);
           if (response.statusCode == HTTP_202_ACCEPTED) {
             organiserCubit.retrieveOrganiserInformation();
+            navigator.pop();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
-          navigator.pop();
         },
         child: const Text('Save Changes'),
       ),

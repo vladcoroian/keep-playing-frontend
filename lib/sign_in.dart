@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user/user_sign_in.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import 'api_manager/api.dart';
 
@@ -54,7 +55,7 @@ class _SignInPageState extends State<SignInPage> {
 
     final Widget uploadQualificationButton = MaterialButton(
       color: Colors.blue,
-      child: Text(
+      child: const Text(
         "Upload qualification",
         style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
       ),
@@ -85,7 +86,11 @@ class _SignInPageState extends State<SignInPage> {
           if (streamedResponse.statusCode == HTTP_200_OK) {
             navigator.pop();
           } else {
-            // TODO
+            showDialog(
+              context: context,
+              builder: (_) => const RequestFailedDialog(),
+              barrierDismissible: false,
+            );
           }
         },
         child: const Text('Sign In'),

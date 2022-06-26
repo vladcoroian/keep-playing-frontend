@@ -41,7 +41,9 @@ class _LoginRedirectState extends State<LoginRedirect> {
         _currentUser = StoredData.getCurrentUser();
       });
     } else {
-      _invalid = true;
+      setState(() {
+        _invalid = true;
+      });
     }
   }
 
