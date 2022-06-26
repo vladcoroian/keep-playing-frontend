@@ -31,7 +31,6 @@ class ManageEventView extends StatefulWidget {
 
 class _ManageEventView extends State<ManageEventView> {
   late String _name;
-
   late String _location;
   late String _details;
   late String _sport;
@@ -40,51 +39,59 @@ class _ManageEventView extends State<ManageEventView> {
   late DateTime _date;
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
+
+  late bool _recurring;
+  late int _price;
+
+  late bool _coach;
+  User? _sessionCoach;
+
   late TimeOfDay _flexibleStartTime;
   late TimeOfDay _flexibleEndTime;
-  late int _price;
-  late bool _coach;
-  late bool _recurring;
-  User? _sessionCoach;
-  late String selectedSport;
-  late String selectedRole;
 
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
 
-  bool dataIsLoaded = false;
+  bool _initialValuesAreLoaded = false;
 
   @override
   void initState() {
+    _setInitialValues();
+    _retrieveCoachUser();
+
+    super.initState();
+  }
+
+  void _setInitialValues() {
     _name = widget.event.name;
     _location = widget.event.location;
     _details = widget.event.details;
+
     _sport = widget.event.sport;
     _role = widget.event.role;
+
     _date = widget.event.date;
     _startTime = widget.event.startTime;
     _endTime = widget.event.endTime;
     _flexibleStartTime = widget.event.flexibleStartTime;
     _flexibleEndTime = widget.event.flexibleEndTime;
+
     _price = widget.event.price;
     _coach = widget.event.coach;
-    _recurring = widget.event.recurring;
-    _retrieveCoachUser();
 
-    selectedSport = _sport;
-    selectedRole = _role;
+    _recurring = widget.event.recurring;
 
     startTimeInput.text = const DefaultMaterialLocalizations()
         .formatTimeOfDay(_startTime, alwaysUse24HourFormat: true);
     endTimeInput.text = const DefaultMaterialLocalizations()
         .formatTimeOfDay(_endTime, alwaysUse24HourFormat: true);
 
-    dataIsLoaded = true;
-
-    super.initState();
+    setState(() {
+      _initialValuesAreLoaded = true;
+    });
   }
 
-  _retrieveCoachUser() async {
+  void _retrieveCoachUser() async {
     User? coach = widget.event.coachPK == null
         ? null
         : await API.user.getUser(widget.event.coachPK!);
@@ -96,11 +103,11 @@ class _ManageEventView extends State<ManageEventView> {
 
   @override
   Widget build(BuildContext context) {
-    final bool dataIsNotLoaded = !dataIsLoaded;
+    final bool initialValuesAreNotLoaded = !_initialValuesAreLoaded;
     final bool coachIsNotLoaded =
         widget.event.hasCoach() && _sessionCoach == null;
 
-    if (dataIsNotLoaded || coachIsNotLoaded) {
+    if (initialValuesAreNotLoaded || coachIsNotLoaded) {
       return Scaffold(
         appBar: AppBar(
           title: const Text(ManageEventView._title),
@@ -157,7 +164,7 @@ class _ManageEventView extends State<ManageEventView> {
     final Widget sportForm = ListTile(
       leading: const Icon(EventIcons.SPORT_ICON),
       title: DropdownButton<String>(
-        value: selectedSport,
+        value: _sport == "" ? null : _sport,
         items: SPORTS.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -165,9 +172,8 @@ class _ManageEventView extends State<ManageEventView> {
           );
         }).toList(),
         onChanged: (String? newValue) {
-          _sport = newValue!;
           setState(() {
-            selectedSport = _sport;
+            _sport = newValue!;
           });
         },
       ),
@@ -176,7 +182,7 @@ class _ManageEventView extends State<ManageEventView> {
     final Widget roleForm = ListTile(
       leading: const Icon(EventIcons.ROLE_ICON),
       title: DropdownButton<String>(
-        value: selectedRole,
+        value: _role == "" ? null : _role,
         items: ROLES.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
             value: value,
@@ -184,9 +190,8 @@ class _ManageEventView extends State<ManageEventView> {
           );
         }).toList(),
         onChanged: (String? newValue) {
-          _role = newValue!;
           setState(() {
-            selectedRole = _role;
+            _role = newValue!;
           });
         },
       ),

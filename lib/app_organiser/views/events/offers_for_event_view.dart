@@ -26,13 +26,14 @@ class OffersForEventView extends StatefulWidget {
 
 class _OffersForEventViewState extends State<OffersForEventView> {
   Organiser? organiser;
-  List<User> offers = [];
+  List<User>? offers;
   Map<User, CoachRating> coachRatingMap = {};
 
   @override
   void initState() {
     _retrieveOrganiser();
     _retrieveOffers();
+
     super.initState();
   }
 
@@ -65,7 +66,10 @@ class _OffersForEventViewState extends State<OffersForEventView> {
 
   @override
   Widget build(BuildContext context) {
-    if (organiser == null) {
+    final bool organiserIsNotLoaded = organiser == null;
+    final bool offersAreNotLoaded = offers == null;
+
+    if (organiserIsNotLoaded || offersAreNotLoaded) {
       return Scaffold(
         appBar: AppBar(
           title: const Text(OffersForEventView._title),
@@ -79,12 +83,12 @@ class _OffersForEventViewState extends State<OffersForEventView> {
         title: const Text(OffersForEventView._title),
       ),
       body: ListView.builder(
-        itemCount: offers.length,
+        itemCount: offers!.length,
         itemBuilder: (_, index) {
           return _OfferCard(
             event: widget.event,
             organiser: organiser!,
-            user: offers[index],
+            user: offers![index],
             coachRatingMap: coachRatingMap,
           );
         },

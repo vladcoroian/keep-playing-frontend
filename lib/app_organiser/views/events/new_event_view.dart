@@ -12,8 +12,11 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/icons.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class NewEventView extends StatefulWidget {
+  static const String _title = 'New Event';
+
   final DateTime? date;
 
   const NewEventView({Key? key, this.date}) : super(key: key);
@@ -29,11 +32,11 @@ class _NewEventViewState extends State<NewEventView> {
   String _sport = '';
   String _role = '';
 
-  DateTime _date = DateTime.now();
+  late DateTime _date;
   TimeOfDay _startTime = TimeOfDay.now();
   TimeOfDay _endTime = TimeOfDay.now();
 
-  bool recurring = false;
+  bool _recurring = false;
   int? _price;
 
   final DateTime _creationStarted = DateTime.now();
@@ -44,26 +47,48 @@ class _NewEventViewState extends State<NewEventView> {
   TextEditingController startTimeInput = TextEditingController();
   TextEditingController endTimeInput = TextEditingController();
 
-  bool defaultValuesAreLoaded = false;
+  bool _defaultValuesAreLoaded = false;
+  bool _initialValuesAreLoaded = false;
 
   @override
   void initState() {
+    _setInitialValues();
+
+    super.initState();
+  }
+
+  void _setInitialValues() {
     _date = widget.date == null ? DateTime.now() : widget.date!;
+
     startTimeInput.text = "";
     endTimeInput.text = "";
-    super.initState();
+
+    setState(() {
+      _initialValuesAreLoaded = true;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!defaultValuesAreLoaded) {
+    final bool initialValuesAreNotLoaded = !_initialValuesAreLoaded;
+
+    if (!_defaultValuesAreLoaded) {
       _sport = BlocProvider.of<OrganiserCubit>(context).state.defaultSport;
       _role = BlocProvider.of<OrganiserCubit>(context).state.defaultRole;
       _location =
           BlocProvider.of<OrganiserCubit>(context).state.defaultLocation;
       _price = BlocProvider.of<OrganiserCubit>(context).state.defaultPrice;
 
-      defaultValuesAreLoaded = true;
+      _defaultValuesAreLoaded = true;
+    }
+
+    if (initialValuesAreNotLoaded) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(NewEventView._title),
+        ),
+        body: LOADING_CIRCLE,
+      );
     }
 
     final Widget nameForm = ListTile(
@@ -231,10 +256,10 @@ class _NewEventViewState extends State<NewEventView> {
     );
 
     final Widget recurringForm = CheckboxListTile(
-      value: recurring,
+      value: _recurring,
       onChanged: (bool? value) => {
         setState(() {
-          recurring = value!;
+          _recurring = value!;
         })
       },
       title: const Text('Is the event weekly?'),
@@ -277,7 +302,7 @@ class _NewEventViewState extends State<NewEventView> {
             flexibleEndTime: _flexibleEndTime,
             price: _price!,
             coach: false,
-            recurring: recurring,
+            recurring: _recurring,
             creationStarted: _creationStarted,
             creationEnded: DateTime.now(),
           );
@@ -305,7 +330,7 @@ class _NewEventViewState extends State<NewEventView> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(title: const Text('New Event')),
+        appBar: AppBar(title: const Text(NewEventView._title)),
         body: ListView(
           children: [
             nameForm,

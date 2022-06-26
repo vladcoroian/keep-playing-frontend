@@ -37,14 +37,15 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
   @override
   void initState() {
     _retrieveCoachInformation();
+
     super.initState();
   }
 
   void _retrieveCoachInformation() async {
-    User? retrievedCoach;
-    if (widget.event.coachPK != null) {
-      retrievedCoach = await API.user.getUser(widget.event.coachPK!);
-    }
+    User? retrievedCoach = widget.event.coachPK == null
+        ? null
+        : await API.user.getUser(widget.event.coachPK!);
+
     setState(() {
       _coach = retrievedCoach;
       _coachInformationIsLoaded = true;
@@ -53,7 +54,9 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    if (!_coachInformationIsLoaded) {
+    final bool coachInformationIsNotLoaded = !_coachInformationIsLoaded;
+
+    if (coachInformationIsNotLoaded) {
       return Scaffold(
         appBar: AppBar(
           title: const Text(PastEventDetailsView._title),
