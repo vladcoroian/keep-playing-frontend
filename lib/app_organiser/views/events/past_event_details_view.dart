@@ -101,12 +101,11 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
         : Card(
             margin: const EdgeInsets.all(CARD_PADDING),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 CoachInformationListTile(coach: _coach!, event: widget.event),
-                ButtonBar(
-                  alignment: MainAxisAlignment.spaceBetween,
-                  children: [blockButton, favouriteButton],
-                ),
+                blockButton,
+                favouriteButton,
                 rateButton,
               ],
             ),
@@ -145,7 +144,7 @@ class _BlockButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: BLOCK_BUTTON_COLOR,
@@ -180,7 +179,7 @@ class _UnblockButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, 0),
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: UNBLOCK_BUTTON_COLOR,
@@ -215,7 +214,7 @@ class _AddToFavouritesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: APP_COLOR,
@@ -251,7 +250,7 @@ class _RemoveFromFavouritesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, 0),
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: APP_COLOR,
