@@ -91,22 +91,16 @@ class _BlockedViewState extends State<BlockedView> {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () async {
-          NavigatorState navigator = Navigator.of(context);
-          final OrganiserCubit organiserCubit =
-              BlocProvider.of<OrganiserCubit>(context);
-
-          Response response = await API.organiser.updateBlockedList(_blocked);
-          if (response.statusCode == HTTP_202_ACCEPTED) {
-            organiserCubit.retrieveOrganiserInformation();
-            navigator.pop();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (_) {
+              return BlocProvider<OrganiserCubit>.value(
+                value: BlocProvider.of<OrganiserCubit>(context),
+                child: _SaveChangesDialog(blocked: _blocked),
+              );
+            },
+          );
         },
         child: const Text('Save Changes'),
       ),
@@ -139,5 +133,43 @@ class _BlockedViewState extends State<BlockedView> {
               text: 'You haven\'t saved your changes.'),
         )) ??
         false;
+  }
+}
+
+// **************************************************************************
+// **************** DIALOGS
+// **************************************************************************
+
+class _SaveChangesDialog extends StatelessWidget {
+  final List<int> blocked;
+
+  const _SaveChangesDialog({
+    required this.blocked,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ConfirmationDialog(
+      title: 'Are you sure that you want to save your changes?',
+      onNoPressed: () => Navigator.of(context).pop(),
+      onYesPressed: () async {
+        NavigatorState navigator = Navigator.of(context);
+        final OrganiserCubit organiserCubit =
+            BlocProvider.of<OrganiserCubit>(context);
+
+        Response response = await API.organiser.updateBlockedList(blocked);
+        if (response.statusCode == HTTP_202_ACCEPTED) {
+          organiserCubit.retrieveOrganiserInformation();
+          navigator.pop();
+          navigator.pop();
+        } else {
+          showDialog(
+            context: context,
+            builder: (_) => const RequestFailedDialog(),
+            barrierDismissible: false,
+          );
+        }
+      },
+    );
   }
 }

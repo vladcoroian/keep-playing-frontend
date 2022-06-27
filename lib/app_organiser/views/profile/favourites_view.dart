@@ -90,23 +90,16 @@ class _FavouritesViewState extends State<FavouritesView> {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () async {
-          NavigatorState navigator = Navigator.of(context);
-          final OrganiserCubit organiserCubit =
-              BlocProvider.of<OrganiserCubit>(context);
-
-          Response response =
-              await API.organiser.updateFavouritesList(_favourites);
-          if (response.statusCode == HTTP_202_ACCEPTED) {
-            organiserCubit.retrieveOrganiserInformation();
-            navigator.pop();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (_) {
+              return BlocProvider<OrganiserCubit>.value(
+                value: BlocProvider.of<OrganiserCubit>(context),
+                child: _SaveChangesDialog(favourites: _favourites),
+              );
+            },
+          );
         },
         child: const Text('Save Changes'),
       ),
@@ -139,5 +132,44 @@ class _FavouritesViewState extends State<FavouritesView> {
               text: 'You haven\'t saved your changes.'),
         )) ??
         false;
+  }
+}
+
+// **************************************************************************
+// **************** DIALOGS
+// **************************************************************************
+
+class _SaveChangesDialog extends StatelessWidget {
+  final List<int> favourites;
+
+  const _SaveChangesDialog({
+    required this.favourites,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ConfirmationDialog(
+      title: 'Are you sure that you want to save your changes?',
+      onNoPressed: () => Navigator.of(context).pop(),
+      onYesPressed: () async {
+        NavigatorState navigator = Navigator.of(context);
+        final OrganiserCubit organiserCubit =
+            BlocProvider.of<OrganiserCubit>(context);
+
+        Response response =
+            await API.organiser.updateFavouritesList(favourites);
+        if (response.statusCode == HTTP_202_ACCEPTED) {
+          organiserCubit.retrieveOrganiserInformation();
+          navigator.pop();
+          navigator.pop();
+        } else {
+          showDialog(
+            context: context,
+            builder: (_) => const RequestFailedDialog(),
+            barrierDismissible: false,
+          );
+        }
+      },
+    );
   }
 }
