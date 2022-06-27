@@ -57,8 +57,9 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           File image = await _getImage();
 
@@ -78,8 +79,9 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: SIGN_UP_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: SIGN_UP_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
           CoachSignUp coachSignUp = CoachSignUp(

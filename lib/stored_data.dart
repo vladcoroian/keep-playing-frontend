@@ -41,7 +41,9 @@ class StoredData {
   static Future<User> getCurrentUserFromStorage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return User.fromModel(
-      userModel: UserModel.fromJson(jsonDecode(prefs.getString(_USER)!)),
+      userModel: UserModel.fromJson(
+        jsonDecode(prefs.getString(_USER)!),
+      ),
     );
   }
 }

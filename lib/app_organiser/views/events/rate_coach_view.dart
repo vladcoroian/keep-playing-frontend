@@ -76,8 +76,9 @@ class _RateCoachViewState extends State<RateCoachView> {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: SEND_RATING_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: SEND_RATING_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
           EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);

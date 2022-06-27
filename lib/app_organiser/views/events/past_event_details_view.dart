@@ -109,7 +109,9 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
         ? const Card(
             margin: EdgeInsets.all(CARD_PADDING),
             child: ListTile(
-              title: Center(child: Text('This event didn\'t have a coach.')),
+              title: Center(
+                child: Text('This event didn\'t have a coach.'),
+              ),
             ),
           )
         : Card(

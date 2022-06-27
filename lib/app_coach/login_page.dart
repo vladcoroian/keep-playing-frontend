@@ -114,8 +114,9 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: SIGN_UP_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: SIGN_UP_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           Navigator.of(context).push(
             MaterialPageRoute(

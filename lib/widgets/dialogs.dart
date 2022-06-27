@@ -23,8 +23,9 @@ class ConfirmationDialog extends StatelessWidget {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: onYesPressed,
         child: const Text('Yes'),
       ),
@@ -34,8 +35,9 @@ class ConfirmationDialog extends StatelessWidget {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: BUTTON_GRAY_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: BUTTON_GRAY_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: onNoPressed,
         child: const Text('No'),
       ),
@@ -70,8 +72,9 @@ class ExitDialog extends StatelessWidget {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () => Navigator.of(context).pop(true),
         child: const Text('Yes'),
       ),
@@ -81,8 +84,9 @@ class ExitDialog extends StatelessWidget {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: BUTTON_GRAY_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: BUTTON_GRAY_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () => Navigator.of(context).pop(false),
         child: const Text('No'),
       ),
@@ -111,8 +115,9 @@ class RequestFailedDialog extends StatelessWidget {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () => Navigator.of(context).pop(),
         child: const Text('Ok'),
       ),

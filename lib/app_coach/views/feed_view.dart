@@ -76,7 +76,10 @@ class _FeedEventWidget extends StatelessWidget {
   final Event event;
   final int coachPK;
 
-  const _FeedEventWidget({required this.event, required this.coachPK});
+  const _FeedEventWidget({
+    required this.event,
+    required this.coachPK,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +87,9 @@ class _FeedEventWidget extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: DETAILS_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: DETAILS_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -122,8 +126,9 @@ class _ApplyButton extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APPLY_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () {
           final FeedEventsCubit feedEventsCubit =
               BlocProvider.of<FeedEventsCubit>(context);
@@ -155,8 +160,9 @@ class _UnapplyButton extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: UNAPPLY_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: UNAPPLY_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () {
           final FeedEventsCubit feedEventsCubit =
               BlocProvider.of<FeedEventsCubit>(context);
@@ -188,74 +194,26 @@ class _ApplyToJobDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget sendOfferButton = Container(
-      padding: const EdgeInsets.all(BUTTON_PADDING),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () {
-          final FeedEventsCubit feedEventsCubit =
-              BlocProvider.of<FeedEventsCubit>(context);
+    return ConfirmationDialog(
+      title: 'Are you sure that you want to apply?',
+      onNoPressed: () => Navigator.of(context).pop(),
+      onYesPressed: () async {
+        final NavigatorState navigator = Navigator.of(context);
+        final FeedEventsCubit feedEventsCubit =
+            BlocProvider.of<FeedEventsCubit>(context);
+
+        final Response response = await API.coach.applyToJob(event: event);
+        if (response.statusCode == HTTP_202_ACCEPTED) {
+          feedEventsCubit.retrieveFeedEvents();
+          navigator.pop();
+        } else {
           showDialog(
             context: context,
-            builder: (BuildContext buildContext) {
-              return BlocProvider<FeedEventsCubit>.value(
-                value: feedEventsCubit,
-                child: ConfirmationDialog(
-                  title: 'Are you sure that you want to apply to this job?',
-                  onNoPressed: () => {
-                    Navigator.of(buildContext).pop(),
-                  },
-                  onYesPressed: () async {
-                    final NavigatorState navigator = Navigator.of(buildContext);
-                    final FeedEventsCubit feedEventsCubit =
-                        BlocProvider.of<FeedEventsCubit>(context);
-
-                    final Response response =
-                        await API.coach.applyToJob(event: event);
-                    if (response.statusCode == HTTP_202_ACCEPTED) {
-                      feedEventsCubit.retrieveFeedEvents();
-                      navigator.pop();
-                      navigator.pop();
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (_) => const RequestFailedDialog(),
-                        barrierDismissible: false,
-                      );
-                    }
-                  },
-                ),
-              );
-            },
+            builder: (_) => const RequestFailedDialog(),
+            barrierDismissible: false,
           );
-        },
-        child: const Text('Send Offer'),
-      ),
-    );
-
-    final Widget cancelButton = Container(
-      padding: const EdgeInsets.all(BUTTON_PADDING),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: CANCEL_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () => {
-          Navigator.of(context).pop(),
-        },
-        child: const Text('Cancel'),
-      ),
-    );
-
-    return EventDetailsDialog(
-      event: event,
-      widgetsAtTheEnd: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [sendOfferButton, cancelButton],
-        ),
-      ],
+        }
+      },
     );
   }
 }

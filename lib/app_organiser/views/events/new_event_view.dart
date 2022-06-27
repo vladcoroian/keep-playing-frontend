@@ -286,8 +286,9 @@ class _NewEventViewState extends State<NewEventView> {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           NewEvent newEvent = NewEvent(
             name: _name,
@@ -330,7 +331,9 @@ class _NewEventViewState extends State<NewEventView> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(title: const Text(NewEventView._title)),
+        appBar: AppBar(
+          title: const Text(NewEventView._title),
+        ),
         body: ListView(
           children: [
             nameForm,

@@ -22,10 +22,11 @@ class PendingEventCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: event.offers.isEmpty
-                ? NO_OFFERS_BUTTON_COLOR
-                : AT_LEAST_ONE_OFFER_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: event.offers.isEmpty
+              ? NO_OFFERS_BUTTON_COLOR
+              : AT_LEAST_ONE_OFFER_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () {
           if (event.offers.isNotEmpty) {
             Navigator.of(context).push(
@@ -50,8 +51,9 @@ class PendingEventCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: MANAGE_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: MANAGE_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () => {
           Navigator.of(context).push(
             MaterialPageRoute(

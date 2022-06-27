@@ -77,8 +77,9 @@ class _UpcomingJobWidget extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: CANCEL_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: CANCEL_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () {
           showDialog(
             context: context,
@@ -118,8 +119,9 @@ class _UpcomingJobWidget extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: DETAILS_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: DETAILS_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () {
           showDialog(
             context: context,
@@ -128,8 +130,9 @@ class _UpcomingJobWidget extends StatelessWidget {
                 padding: const EdgeInsets.all(BUTTON_PADDING),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: BACK_BUTTON_COLOR,
-                      textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+                    primary: BACK_BUTTON_COLOR,
+                    textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+                  ),
                   onPressed: () async {
                     Navigator.of(buildContext).pop();
                   },

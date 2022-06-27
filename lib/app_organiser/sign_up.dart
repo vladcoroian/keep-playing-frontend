@@ -52,8 +52,9 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: SIGN_UP_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: SIGN_UP_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
           OrganiserSignUp organiserSignUp = OrganiserSignUp(

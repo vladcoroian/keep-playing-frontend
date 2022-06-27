@@ -37,14 +37,15 @@ class _EnterPageState extends State<EnterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          _EnterAsOrganiserButton(),
-          SizedBox(height: 50),
-          _EnterAsCoachButton(),
-        ],
-      )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            _EnterAsOrganiserButton(),
+            SizedBox(height: 50),
+            _EnterAsCoachButton(),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -58,8 +59,9 @@ class _EnterAsCoachButton extends StatelessWidget {
       height: 50.0,
       width: 300.0,
       child: ElevatedButton(
-        style:
-            ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 25)),
+        style: ElevatedButton.styleFrom(
+          textStyle: const TextStyle(fontSize: 25),
+        ),
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -82,8 +84,9 @@ class _EnterAsOrganiserButton extends StatelessWidget {
       height: 50.0,
       width: 300.0,
       child: ElevatedButton(
-        style:
-            ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 25)),
+        style: ElevatedButton.styleFrom(
+          textStyle: const TextStyle(fontSize: 25),
+        ),
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(

@@ -89,8 +89,9 @@ class UserInfoListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final Widget messageCoachButton = ElevatedButton(
       style: ElevatedButton.styleFrom(
-          primary: APP_COLOR,
-          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        primary: APP_COLOR,
+        textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+      ),
       onPressed: () {
         _launchEmail(
           toEmail: user.email,

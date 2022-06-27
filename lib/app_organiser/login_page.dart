@@ -114,8 +114,9 @@ class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
       padding: const EdgeInsets.fromLTRB(0, BUTTON_PADDING, 0, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: SIGN_UP_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: SIGN_UP_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           Navigator.of(context).push(
             MaterialPageRoute(

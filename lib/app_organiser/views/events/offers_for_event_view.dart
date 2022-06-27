@@ -194,8 +194,9 @@ class _OfferCard extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
           EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);

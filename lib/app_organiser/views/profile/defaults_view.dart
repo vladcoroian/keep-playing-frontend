@@ -125,8 +125,9 @@ class _DefaultsViewState extends State<DefaultsView> {
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           OrganiserDefaults organiserDefaults = OrganiserDefaults(
             defaultSport: _sport,

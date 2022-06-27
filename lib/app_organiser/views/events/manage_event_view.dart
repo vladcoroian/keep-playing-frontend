@@ -132,8 +132,9 @@ class _ManageEventView extends State<ManageEventView> {
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () {
           final add2calendar.Event event = add2calendar.Event(
             title: widget.event.name,
@@ -385,8 +386,9 @@ class _ManageEventView extends State<ManageEventView> {
           0, BUTTON_PADDING, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
         onPressed: () async {
           sport_event.NewEvent newEvent = sport_event.NewEvent(
             name: _name,

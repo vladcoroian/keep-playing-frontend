@@ -110,12 +110,16 @@ class EventCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(DateFormat("MMMM dd").format(event.date)),
-                Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                    event.startTime,
-                    alwaysUse24HourFormat: true)),
-                Text(const DefaultMaterialLocalizations().formatTimeOfDay(
-                    event.endTime,
-                    alwaysUse24HourFormat: true)),
+                Text(
+                  const DefaultMaterialLocalizations().formatTimeOfDay(
+                      event.startTime,
+                      alwaysUse24HourFormat: true),
+                ),
+                Text(
+                  const DefaultMaterialLocalizations().formatTimeOfDay(
+                      event.endTime,
+                      alwaysUse24HourFormat: true),
+                ),
               ],
             ),
             title: Text(event.name, textAlign: TextAlign.left),
