@@ -3,22 +3,22 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
-import 'package:keep_playing_frontend/app_coach/coach_home_page.dart';
-import 'package:keep_playing_frontend/app_organiser/organiser_home_page.dart';
+import 'package:keep_playing_frontend/app_coach/home_page.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
-class LoginRedirect extends StatefulWidget {
+class CoachLoginRedirect extends StatefulWidget {
   final UserLogin userLogin;
 
-  const LoginRedirect({Key? key, required this.userLogin}) : super(key: key);
+  const CoachLoginRedirect({Key? key, required this.userLogin})
+      : super(key: key);
 
   @override
-  State<LoginRedirect> createState() => _LoginRedirectState();
+  State<CoachLoginRedirect> createState() => _CoachLoginRedirectState();
 }
 
-class _LoginRedirectState extends State<LoginRedirect> {
+class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
   User? _currentUser;
   bool _invalid = false;
 
@@ -58,10 +58,10 @@ class _LoginRedirectState extends State<LoginRedirect> {
       return const LoadingScreen();
     }
 
-    if (_currentUser!.isCoachUser()) {
-      return const CoachHomePage();
+    if (!_currentUser!.isCoachUser()) {
+      Navigator.of(context).pop();
     }
 
-    return const OrganiserHomePage();
+    return const CoachHomePage();
   }
 }

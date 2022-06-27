@@ -19,7 +19,13 @@ class _ApiUserLinks {
 
   static Uri coachInformationLink({required int pk}) => Uri.parse("$COACH$pk/");
 
-  static Uri signInAsCoachLink() => Uri.parse("${API.PREFIX}new_coach/");
+  ////////
+  //////// Sign Up
+  ////////
+
+  static Uri signUpAsCoachLink() => Uri.parse("${API.PREFIX}new_coach/");
+
+  static Uri signUpAsOrganiserLink() => Uri.parse("${API.PREFIX}new_organiser/");
 }
 
 class ApiUsers {
@@ -83,27 +89,50 @@ class ApiUsers {
   }
 
   // **************************************************************************
-  // **************** SIGN IN
+  // **************** SIGN UP
   // **************************************************************************
 
   Future<StreamedResponse> signInAsCoach({
-    required CoachSignIn coachSignIn,
+    required CoachSignUp coachSignUp,
   }) async {
     MultipartRequest multiPartRequest = http.MultipartRequest(
       'POST',
-      _ApiUserLinks.signInAsCoachLink(),
+      _ApiUserLinks.signUpAsCoachLink(),
     );
 
-    if (coachSignIn.qualificationFile != null) {
+    if (coachSignUp.qualificationFile != null) {
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
         'qualification file',
-        coachSignIn.qualificationFile!.path,
+        coachSignUp.qualificationFile!.path,
       );
       multiPartRequest.files.add(multipartFile);
     }
 
-    multiPartRequest.fields['username'] = coachSignIn.username;
-    multiPartRequest.fields['password'] = coachSignIn.password;
+    multiPartRequest.fields['username'] = coachSignUp.username;
+    multiPartRequest.fields['password'] = coachSignUp.password;
+
+    StreamedResponse streamedResponse = await multiPartRequest.send();
+    return streamedResponse;
+  }
+
+  Future<StreamedResponse> signUpAsOrganiser({
+    required OrganiserSignUp organiserSignUp,
+  }) async {
+    MultipartRequest multiPartRequest = http.MultipartRequest(
+      'POST',
+      _ApiUserLinks.signUpAsOrganiserLink(),
+    );
+
+    if (organiserSignUp.qualificationFile != null) {
+      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+        'qualification file',
+        organiserSignUp.qualificationFile!.path,
+      );
+      multiPartRequest.files.add(multipartFile);
+    }
+
+    multiPartRequest.fields['username'] = organiserSignUp.username;
+    multiPartRequest.fields['password'] = organiserSignUp.password;
 
     StreamedResponse streamedResponse = await multiPartRequest.send();
     return streamedResponse;

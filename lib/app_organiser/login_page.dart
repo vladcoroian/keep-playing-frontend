@@ -4,16 +4,16 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 
 import 'login_redirect.dart';
-import 'sign_in.dart';
+import 'sign_up.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class OrganiserLoginPage extends StatefulWidget {
+  const OrganiserLoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<OrganiserLoginPage> createState() => _OrganiserLoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
   TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
   String _username = '';
@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
 
-    final Widget usernameField = TextField(
+    final Widget usernameField = TextFormField(
       obscureText: false,
       style: style,
       decoration: InputDecoration(
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
-    final Widget passwordField = TextField(
+    final Widget passwordField = TextFormField(
       obscureText: true,
       style: style,
       decoration: InputDecoration(
@@ -60,49 +60,54 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
 
-    final Widget signInButton = Container(
-      padding: const EdgeInsets.all(BUTTON_PADDING),
+    final Widget loginButton = Container(
+      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 15.0),
+      width: MediaQuery.of(context).size.width,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () async {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const SignInPage(),
-            ),
-          );
-        },
-        child: const Text('Sign In'),
-      ),
-    );
-
-    final Widget loginButton = Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(30.0),
-      color: APP_COLOR,
-      child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+          elevation: 5.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(32.0),
+          ),
+        ),
         onPressed: () async {
           UserLogin userLogin =
               UserLogin(username: _username, password: _password);
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => LoginRedirect(
+              builder: (_) => CoachLoginRedirect(
                 userLogin: userLogin,
               ),
             ),
           );
         },
         child: Text(
-          "Login",
+          "Log In",
           textAlign: TextAlign.center,
           style: style.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
+      ),
+    );
+
+    final Widget signUpAsOrganiserButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: BUTTON_GRAY_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () async {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const OrganiserSignUpPage(),
+            ),
+          );
+        },
+        child: const Text('Sign Up as Organiser'),
       ),
     );
 
@@ -125,9 +130,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 loginButton,
                 const SizedBox(
-                  height: 15.0,
+                  height: 50.0,
                 ),
-                signInButton,
+                signUpAsOrganiserButton,
               ],
             ),
           ),

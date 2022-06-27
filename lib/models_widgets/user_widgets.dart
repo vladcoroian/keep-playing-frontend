@@ -111,7 +111,7 @@ class CoachInformationDialog {
     );
   }
 
-  static Widget byPK(int pk) {
+  static Widget byUserPK(int pk) {
     return _CoachPKInformationDialog(coachPK: pk);
   }
 }

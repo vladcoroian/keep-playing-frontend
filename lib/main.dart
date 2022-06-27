@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'app_coach/login_page.dart';
+import 'app_organiser/login_page.dart';
 import 'constants.dart';
-import 'login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,21 +18,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: APP_COLOR,
       ),
-      home: const LogInPage(title: 'Log In Page'),
+      home: const EnterPage(title: 'Log In Page'),
     );
   }
 }
 
-class LogInPage extends StatefulWidget {
-  const LogInPage({Key? key, required this.title}) : super(key: key);
+class EnterPage extends StatefulWidget {
+  const EnterPage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<LogInPage> createState() => _LogInPageState();
+  State<EnterPage> createState() => _EnterPageState();
 }
 
-class _LogInPageState extends State<LogInPage> {
+class _EnterPageState extends State<EnterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +68,7 @@ class _EnterAsCoachButton extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const LoginPage(),
+                  builder: (_) => const CoachLoginPage(),
                 ),
               );
             },
@@ -93,7 +94,7 @@ class _EnterAsOrganiserButton extends StatelessWidget {
                 textStyle: const TextStyle(fontSize: 25)),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const LoginPage()),
+                MaterialPageRoute(builder: (_) => const OrganiserLoginPage()),
               );
             },
             child: const Text('Enter as organiser')));

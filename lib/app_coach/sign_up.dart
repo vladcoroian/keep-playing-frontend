@@ -8,16 +8,16 @@ import 'package:keep_playing_frontend/models/user/user_sign_in.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
-import 'api_manager/api.dart';
+import '../api_manager/api.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+class CoachSignUpPage extends StatefulWidget {
+  const CoachSignUpPage({Key? key}) : super(key: key);
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<CoachSignUpPage> createState() => _CoachSignUpPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _CoachSignUpPageState extends State<CoachSignUpPage> {
   String _username = '';
   String _password = '';
   File? _qualification;
@@ -72,7 +72,7 @@ class _SignInPageState extends State<SignInPage> {
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
-          CoachSignIn coachSignIn = CoachSignIn(
+          CoachSignUp coachSignUp = CoachSignUp(
             username: _username,
             password: _password,
             qualificationFile: _qualification,
@@ -80,7 +80,7 @@ class _SignInPageState extends State<SignInPage> {
 
           final StreamedResponse streamedResponse =
               await API.user.signInAsCoach(
-            coachSignIn: coachSignIn,
+            coachSignUp: coachSignUp,
           );
           if (streamedResponse.statusCode == HTTP_200_OK) {
             navigator.pop();
