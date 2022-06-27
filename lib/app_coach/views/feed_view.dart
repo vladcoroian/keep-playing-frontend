@@ -98,8 +98,8 @@ class _FeedEventWidget extends StatelessWidget {
       event: event,
       leftButton: detailsButton,
       rightButton: event.offers.contains(coachPK)
-          ? _AppliedButton()
-          : _AcceptButton(event: event),
+          ? _UnapplyButton(event: event)
+          : _ApplyButton(event: event),
     );
   }
 }
@@ -108,10 +108,10 @@ class _FeedEventWidget extends StatelessWidget {
 // **************** BUTTONS
 // **************************************************************************
 
-class _AcceptButton extends StatelessWidget {
+class _ApplyButton extends StatelessWidget {
   final Event event;
 
-  const _AcceptButton({required this.event});
+  const _ApplyButton({required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +130,7 @@ class _AcceptButton extends StatelessWidget {
             builder: (_) {
               return BlocProvider<FeedEventsCubit>.value(
                 value: feedEventsCubit,
-                child: _AcceptJobDialog(event: event),
+                child: _ApplyToJobDialog(event: event),
               );
             },
           );
@@ -141,17 +141,34 @@ class _AcceptButton extends StatelessWidget {
   }
 }
 
-class _AppliedButton extends StatelessWidget {
+class _UnapplyButton extends StatelessWidget {
+  final Event event;
+
+  const _UnapplyButton({required this.event});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APPLIED_BUTTON_COLOR,
+            primary: UNAPPLY_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () {},
-        child: const Text('Applied'),
+        onPressed: () {
+          final FeedEventsCubit feedEventsCubit =
+              BlocProvider.of<FeedEventsCubit>(context);
+
+          showDialog(
+            context: context,
+            builder: (_) {
+              return BlocProvider<FeedEventsCubit>.value(
+                value: feedEventsCubit,
+                child: _UnapplyFromJobDialog(event: event),
+              );
+            },
+          );
+        },
+        child: const Text('Unapply'),
       ),
     );
   }
@@ -193,10 +210,10 @@ class _DetailsDialog extends StatelessWidget {
   }
 }
 
-class _AcceptJobDialog extends StatelessWidget {
+class _ApplyToJobDialog extends StatelessWidget {
   final Event event;
 
-  const _AcceptJobDialog({required this.event});
+  const _ApplyToJobDialog({required this.event});
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +232,7 @@ class _AcceptJobDialog extends StatelessWidget {
               return BlocProvider<FeedEventsCubit>.value(
                 value: feedEventsCubit,
                 child: ConfirmationDialog(
-                  title: 'Are you sure that you want to accept this job?',
+                  title: 'Are you sure that you want to apply to this job?',
                   onNoPressed: () => {
                     Navigator.of(buildContext).pop(),
                   },
@@ -271,6 +288,37 @@ class _AcceptJobDialog extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _UnapplyFromJobDialog extends StatelessWidget {
+  final Event event;
+
+  const _UnapplyFromJobDialog({required this.event});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConfirmationDialog(
+      title: 'Are you sure that you want to unapply?',
+      onNoPressed: () => Navigator.of(context).pop(),
+      onYesPressed: () async {
+        final NavigatorState navigator = Navigator.of(context);
+        final FeedEventsCubit feedEventsCubit =
+            BlocProvider.of<FeedEventsCubit>(context);
+
+        final Response response = await API.coach.unapplyFromJob(event: event);
+        if (response.statusCode == HTTP_202_ACCEPTED) {
+          feedEventsCubit.retrieveFeedEvents();
+          navigator.pop();
+        } else {
+          showDialog(
+            context: context,
+            builder: (_) => const RequestFailedDialog(),
+            barrierDismissible: false,
+          );
+        }
+      },
     );
   }
 }

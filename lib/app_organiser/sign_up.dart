@@ -78,18 +78,31 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
       ),
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign Up as Organiser'),
-      ),
-      body: ListView(
-        children: [
-          usernameForm,
-          passwordForm,
-          const SizedBox(height: 50.0),
-          Center(child: signUpButton),
-        ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Sign Up as Organiser'),
+        ),
+        body: ListView(
+          children: [
+            usernameForm,
+            passwordForm,
+            const SizedBox(height: 50.0),
+            Center(child: signUpButton),
+          ],
+        ),
       ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (_) => const ExitDialog(
+              title: 'Are you sure that you want to exit?',
+              text: 'You haven\'t created your account.'),
+        )) ??
+        false;
   }
 }

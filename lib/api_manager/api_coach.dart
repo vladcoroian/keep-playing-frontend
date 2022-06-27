@@ -9,19 +9,34 @@ import 'api.dart';
 class _ApiCoachLinks {
   static const String COACH = "${API.PREFIX}coach/";
 
-  static Uri applyToJobLink(int pk) => Uri.parse("${COACH}events/$pk/apply/");
-
-  static Uri cancelJobLink(int pk) => Uri.parse("${COACH}events/$pk/cancel/");
+  ////////
+  //////// Events
+  ////////
 
   static Uri feedEventsLink() => Uri.parse("${COACH}feed/");
 
   static Uri upcomingJobsLink() => Uri.parse("${COACH}upcoming-jobs/");
+
+  ////////
+  //////// Jobs
+  ////////
+
+  static Uri applyToJobLink(int pk) => Uri.parse("${COACH}events/$pk/apply/");
+
+  static Uri unapplyFromJobLink(int pk) =>
+      Uri.parse("${COACH}events/$pk/unapply/");
+
+  static Uri cancelJobLink(int pk) => Uri.parse("${COACH}events/$pk/cancel/");
 }
 
 class ApiCoach {
   final Client client;
 
   ApiCoach({required this.client});
+
+  // **************************************************************************
+  // **************** EVENTS
+  // **************************************************************************
 
   Future<List<Event>> retrieveFeedEvents() async {
     return API.retrieveEvents(_ApiCoachLinks.feedEventsLink());
@@ -31,16 +46,29 @@ class ApiCoach {
     return API.retrieveEvents(_ApiCoachLinks.upcomingJobsLink());
   }
 
+  // **************************************************************************
+  // **************** JOBS
+  // **************************************************************************
+
   Future<Response> applyToJob({required Event event}) async {
     String token = StoredData.getLoginToken();
 
     return client.patch(
       _ApiCoachLinks.applyToJobLink(event.pk),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Token $token',
       },
-      body: jsonEncode(<String, dynamic>{}),
+    );
+  }
+
+  Future<Response> unapplyFromJob({required Event event}) async {
+    String token = StoredData.getLoginToken();
+
+    return client.patch(
+      _ApiCoachLinks.unapplyFromJobLink(event.pk),
+      headers: <String, String>{
+        'Authorization': 'Token $token',
+      },
     );
   }
 

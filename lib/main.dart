@@ -60,19 +60,21 @@ class _EnterAsCoachButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 50.0,
-        width: 300.0,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 25)),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const CoachLoginPage(),
-                ),
-              );
-            },
-            child: const Text('Enter as coach')));
+      height: 50.0,
+      width: 300.0,
+      child: ElevatedButton(
+        style:
+            ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 25)),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const CoachLoginPage(),
+            ),
+          );
+        },
+        child: const Text('Enter as coach'),
+      ),
+    );
   }
 }
 
@@ -87,16 +89,18 @@ class _EnterAsOrganiserButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-        height: 50.0,
-        width: 300.0,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(fontSize: 25)),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const OrganiserLoginPage()),
-              );
-            },
-            child: const Text('Enter as organiser')));
+      height: 50.0,
+      width: 300.0,
+      child: ElevatedButton(
+        style:
+            ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 25)),
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const OrganiserLoginPage()),
+          );
+        },
+        child: const Text('Enter as organiser'),
+      ),
+    );
   }
 }

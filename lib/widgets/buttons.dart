@@ -13,7 +13,7 @@ const Color BACK_BUTTON_COLOR = Colors.black12;
 const Color CANCEL_BUTTON_COLOR = Colors.red;
 const Color BLOCK_BUTTON_COLOR = Colors.red;
 const Color UNBLOCK_BUTTON_COLOR = Colors.red;
-const Color APPLIED_BUTTON_COLOR = Colors.red;
+const Color UNAPPLY_BUTTON_COLOR = Colors.red;
 
 const Color NO_OFFERS_BUTTON_COLOR = Colors.black12;
 const Color AT_LEAST_ONE_OFFER_BUTTON_COLOR = Colors.lightGreen;
