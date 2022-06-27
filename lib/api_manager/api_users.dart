@@ -92,7 +92,7 @@ class ApiUsers {
   // **************** SIGN UP
   // **************************************************************************
 
-  Future<StreamedResponse> signInAsCoach({
+  Future<StreamedResponse> signUpAsCoach({
     required CoachSignUp coachSignUp,
   }) async {
     MultipartRequest multiPartRequest = http.MultipartRequest(

@@ -72,14 +72,14 @@ class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
               UserLogin(username: _username, password: _password);
           Navigator.of(context)
               .push(
-                MaterialPageRoute(
-                  builder: (_) => OrganiserLoginRedirect(
-                    userLogin: userLogin,
-                  ),
-                ),
-              )
+            MaterialPageRoute(
+              builder: (_) => OrganiserLoginRedirect(
+                userLogin: userLogin,
+              ),
+            ),
+          )
               .then(
-                (value) {
+            (value) {
               switch (value) {
                 case LoginStatus.INVALID_CREDENTIALS:
                   showDialog(
@@ -140,13 +140,9 @@ class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
                 usernameField,
                 const SizedBox(height: 25.0),
                 passwordField,
-                const SizedBox(
-                  height: 35.0,
-                ),
+                const SizedBox(height: 35.0),
                 loginButton,
-                const SizedBox(
-                  height: 50.0,
-                ),
+                const SizedBox(height: 50.0),
                 signUpAsOrganiserButton,
               ],
             ),

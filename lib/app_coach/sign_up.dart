@@ -53,22 +53,25 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
       ),
     );
 
-    final Widget uploadQualificationButton = MaterialButton(
-      color: Colors.blue,
-      child: const Text(
-        "Upload qualification",
-        style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
-      ),
-      onPressed: () async {
-        _qualification = await _getImage();
-      },
-    );
-
-    final Widget signInButton = Container(
+    final uploadQualificationButton = Container(
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () async {
+          _qualification = await _getImage();
+        },
+        child: const Text('Upload qualification'),
+      ),
+    );
+
+
+    final Widget signUpButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: SIGN_UP_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
@@ -79,7 +82,7 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
           );
 
           final StreamedResponse streamedResponse =
-              await API.user.signInAsCoach(
+              await API.user.signUpAsCoach(
             coachSignUp: coachSignUp,
           );
           if (streamedResponse.statusCode == HTTP_200_OK) {
@@ -92,7 +95,7 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
             );
           }
         },
-        child: const Text('Sign In'),
+        child: const Text('Sign Up as Coach'),
       ),
     );
 
@@ -105,7 +108,8 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
           usernameForm,
           passwordForm,
           uploadQualificationButton,
-          Center(child: signInButton),
+          const SizedBox(height: 50.0),
+          Center(child: signUpButton),
         ],
       ),
     );

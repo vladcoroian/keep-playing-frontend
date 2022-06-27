@@ -53,22 +53,24 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
       ),
     );
 
-    final Widget uploadQualificationButton = MaterialButton(
-      color: Colors.blue,
-      child: const Text(
-        "Upload qualification",
-        style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+    final uploadQualificationButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: APP_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () async {
+          _qualification = await _getImage();
+        },
+        child: const Text('Upload qualification'),
       ),
-      onPressed: () async {
-        _qualification = await _getImage();
-      },
     );
 
     final Widget signUpButton = Container(
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: APP_COLOR,
+            primary: SIGN_UP_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () async {
           NavigatorState navigator = Navigator.of(context);
@@ -92,7 +94,7 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
             );
           }
         },
-        child: const Text('Sign In'),
+        child: const Text('Sign Up as Organiser'),
       ),
     );
 
@@ -105,6 +107,7 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
           usernameForm,
           passwordForm,
           uploadQualificationButton,
+          const SizedBox(height: 50.0),
           Center(child: signUpButton),
         ],
       ),
