@@ -25,7 +25,8 @@ class _ApiUserLinks {
 
   static Uri signUpAsCoachLink() => Uri.parse("${API.PREFIX}new_coach/");
 
-  static Uri signUpAsOrganiserLink() => Uri.parse("${API.PREFIX}new_organiser/");
+  static Uri signUpAsOrganiserLink() =>
+      Uri.parse("${API.PREFIX}new_organiser/");
 }
 
 class ApiUsers {
@@ -115,26 +116,15 @@ class ApiUsers {
     return streamedResponse;
   }
 
-  Future<StreamedResponse> signUpAsOrganiser({
+  Future<Response> signUpAsOrganiser({
     required OrganiserSignUp organiserSignUp,
   }) async {
-    MultipartRequest multiPartRequest = http.MultipartRequest(
-      'POST',
+    return client.post(
       _ApiUserLinks.signUpAsOrganiserLink(),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(organiserSignUp.toJson()),
     );
-
-    if (organiserSignUp.qualificationFile != null) {
-      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-        'qualification file',
-        organiserSignUp.qualificationFile!.path,
-      );
-      multiPartRequest.files.add(multipartFile);
-    }
-
-    multiPartRequest.fields['username'] = organiserSignUp.username;
-    multiPartRequest.fields['password'] = organiserSignUp.password;
-
-    StreamedResponse streamedResponse = await multiPartRequest.send();
-    return streamedResponse;
   }
 }

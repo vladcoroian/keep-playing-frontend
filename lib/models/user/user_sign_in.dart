@@ -11,15 +11,18 @@ class CoachSignUp {
     required this.qualificationFile,
   });
 }
+
 class OrganiserSignUp {
   final String username;
   final String password;
-  final File? qualificationFile;
 
   OrganiserSignUp({
     required this.username,
     required this.password,
-    required this.qualificationFile,
   });
-}
 
+  Map<String, dynamic> toJson() => {
+        "username": username,
+        "password": password,
+      };
+}

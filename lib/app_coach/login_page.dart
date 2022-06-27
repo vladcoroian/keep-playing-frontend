@@ -140,13 +140,9 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
                 usernameField,
                 const SizedBox(height: 25.0),
                 passwordField,
-                const SizedBox(
-                  height: 35.0,
-                ),
+                const SizedBox(height: 35.0),
                 loginButton,
-                const SizedBox(
-                  height: 50.0,
-                ),
+                const SizedBox(height: 50.0),
                 signUpAsCoachButton,
               ],
             ),
