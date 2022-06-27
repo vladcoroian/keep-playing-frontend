@@ -39,10 +39,10 @@ class _EnterPageState extends State<EnterPage> {
       body: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _EnterAsOrganiserButton(context: context),
-          const SizedBox(height: 50),
-          _EnterAsCoachButton(context: context),
+        children: const [
+          _EnterAsOrganiserButton(),
+          SizedBox(height: 50),
+          _EnterAsCoachButton(),
         ],
       )),
     );
@@ -50,12 +50,7 @@ class _EnterPageState extends State<EnterPage> {
 }
 
 class _EnterAsCoachButton extends StatelessWidget {
-  const _EnterAsCoachButton({
-    Key? key,
-    required this.context,
-  }) : super(key: key);
-
-  final BuildContext context;
+  const _EnterAsCoachButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,12 +74,7 @@ class _EnterAsCoachButton extends StatelessWidget {
 }
 
 class _EnterAsOrganiserButton extends StatelessWidget {
-  const _EnterAsOrganiserButton({
-    Key? key,
-    required this.context,
-  }) : super(key: key);
-
-  final BuildContext context;
+  const _EnterAsOrganiserButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +86,9 @@ class _EnterAsOrganiserButton extends StatelessWidget {
             ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 25)),
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const OrganiserLoginPage()),
+            MaterialPageRoute(
+              builder: (_) => const OrganiserLoginPage(),
+            ),
           );
         },
         child: const Text('Enter as organiser'),

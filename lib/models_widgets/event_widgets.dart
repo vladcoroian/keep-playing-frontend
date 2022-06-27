@@ -23,6 +23,13 @@ class EventWidgets {
   List<Widget> getDetailsTilesAboutEvent() {
     return <Widget>[
       ListTile(
+        leading: EventIcons.NAME_ICON,
+        title: Text(
+          event.name,
+          style: _textStyleForTitle.copyWith(fontSize: 20.0),
+        ),
+      ),
+      ListTile(
         leading: EventIcons.SPORT_ICON,
         title: const Text('Sport', style: _textStyleForTitle),
         subtitle: Text(event.sport),
@@ -63,6 +70,11 @@ class EventWidgets {
             alwaysUse24HourFormat: true,
           ),
         ),
+      ),
+      ListTile(
+        leading: EventIcons.PRICE_ICON,
+        title: const Text('Price', style: _textStyleForTitle),
+        subtitle: Text(event.price.toString()),
       ),
       const Divider(),
       ListTile(

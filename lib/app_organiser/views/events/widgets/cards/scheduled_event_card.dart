@@ -27,7 +27,8 @@ class ScheduledEventCard extends StatelessWidget {
         onPressed: () => {
           showDialog(
               context: context,
-              builder: (_) => CoachInformationDialog.byUserPK(event.coachPK!))
+              builder: (_) => UserInfoDialog(userInfoType: UserInfoType.COACH)
+                  .byUserPK(event.coachPK!))
         },
         child: const Text('Scheduled'),
       ),

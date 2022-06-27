@@ -12,6 +12,7 @@ import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../../models/event.dart';
 import '../cubits/feed_events_cubit.dart';
+import 'details_about_event_page.dart';
 
 class FeedView extends StatefulWidget {
   const FeedView({Key? key}) : super(key: key);
@@ -26,6 +27,7 @@ class _FeedViewState extends State<FeedView> {
   @override
   void initState() {
     super.initState();
+
     timer = Timer.periodic(
       const Duration(seconds: TIMER_DURATION_IN_SECONDS),
       (Timer t) =>
@@ -36,6 +38,7 @@ class _FeedViewState extends State<FeedView> {
   @override
   void dispose() {
     timer.cancel();
+
     super.dispose();
   }
 
@@ -84,11 +87,11 @@ class _FeedEventWidget extends StatelessWidget {
             primary: DETAILS_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () {
-          showDialog(
-              context: context,
-              builder: (_) {
-                return _DetailsDialog(event: event);
-              });
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => DetailsAboutEventPage(event: event),
+            ),
+          );
         },
         child: const Text('Details'),
       ),
@@ -178,38 +181,6 @@ class _UnapplyButton extends StatelessWidget {
 // **************** DIALOGS
 // **************************************************************************
 
-class _DetailsDialog extends StatelessWidget {
-  final Event event;
-
-  const _DetailsDialog({Key? key, required this.event}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final Widget backButton = Container(
-      padding: const EdgeInsets.all(BUTTON_PADDING),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            primary: BACK_BUTTON_COLOR,
-            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
-        onPressed: () => {
-          Navigator.of(context).pop(),
-        },
-        child: const Text('Back'),
-      ),
-    );
-
-    return EventDetailsDialog(
-      event: event,
-      widgetsAtTheEnd: [
-        Align(
-          alignment: Alignment.center,
-          child: backButton,
-        ),
-      ],
-    );
-  }
-}
-
 class _ApplyToJobDialog extends StatelessWidget {
   final Event event;
 
@@ -282,10 +253,7 @@ class _ApplyToJobDialog extends StatelessWidget {
       widgetsAtTheEnd: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            sendOfferButton,
-            cancelButton,
-          ],
+          children: [sendOfferButton, cancelButton],
         ),
       ],
     );

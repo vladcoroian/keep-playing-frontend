@@ -39,7 +39,6 @@ class EventsForDayView extends StatelessWidget {
     );
 
     final Widget newJobButton = NewJobButton(
-      context: context,
       onPressed: () => {
         Navigator.of(context).push(
           MaterialPageRoute(

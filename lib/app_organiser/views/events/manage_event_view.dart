@@ -12,6 +12,7 @@ import 'package:keep_playing_frontend/models/event.dart' as sport_event;
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/models_widgets/user_widgets.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:keep_playing_frontend/widgets/cards.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/icons.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
@@ -119,10 +120,11 @@ class _ManageEventView extends State<ManageEventView> {
     final Widget coachInformationCard = _sessionCoach == null
         ? const SizedBox(height: 0, width: 0)
         : Card(
-            margin: const EdgeInsets.all(BUTTON_PADDING),
-            child: CoachInformationListTile(
-              coach: _sessionCoach!,
+            margin: const EdgeInsets.all(CARD_PADDING),
+            child: UserInfoListTile(
+              user: _sessionCoach!,
               event: widget.event,
+              userInfoType: UserInfoType.COACH,
             ),
           );
 

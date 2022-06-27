@@ -43,14 +43,36 @@ class UserWidgets {
 // **************** COACH INFORMATION
 // **************************************************************************
 
-class CoachInformationListTile extends StatelessWidget {
-  final User coach;
+enum UserInfoType {
+  USER,
+  COACH,
+  ORGANISER,
+}
+
+extension UserInfoTypeExtension on UserInfoType {
+  String getString() {
+    switch (this) {
+      case UserInfoType.USER:
+        return 'User';
+      case UserInfoType.COACH:
+        return 'Coach';
+      case UserInfoType.ORGANISER:
+        return 'Organiser';
+    }
+  }
+}
+
+class UserInfoListTile extends StatelessWidget {
+  final User user;
   final Event event;
 
-  const CoachInformationListTile({
+  final UserInfoType userInfoType;
+
+  const UserInfoListTile({
     super.key,
-    required this.coach,
+    required this.user,
     required this.event,
+    required this.userInfoType,
   });
 
   Future _launchEmail({
@@ -71,7 +93,7 @@ class CoachInformationListTile extends StatelessWidget {
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
       onPressed: () {
         _launchEmail(
-          toEmail: coach.email,
+          toEmail: user.email,
           subject:
               '${event.name}, on: ${DateFormat.MMMEd().format(event.date)}',
         );
@@ -80,29 +102,35 @@ class CoachInformationListTile extends StatelessWidget {
     );
 
     return ListTile(
-      leading: const Text(
-        "Coach\nInformation",
+      leading: Text(
+        "${userInfoType.getString()}\nInformation",
         textAlign: TextAlign.center,
-        style: TextStyle(color: APP_COLOR),
+        style: const TextStyle(color: APP_COLOR),
       ),
-      title: Text(coach.getFullName()),
+      title: Text(user.getFullName()),
       trailing: messageCoachButton,
       onTap: () {
         showDialog(
-            context: context,
-            builder: (_) => CoachInformationDialog.byUser(coach));
+          context: context,
+          builder: (_) =>
+              UserInfoDialog(userInfoType: userInfoType).byUser(user),
+        );
       },
     );
   }
 }
 
-class CoachInformationDialog {
-  static Widget byUser(User user) {
+class UserInfoDialog {
+  final UserInfoType userInfoType;
+
+  UserInfoDialog({required this.userInfoType});
+
+  Widget byUser(User user) {
     return SimpleDialog(
       contentPadding: const EdgeInsets.all(DIALOG_PADDING),
-      title: const Center(
+      title: Center(
         child: Text(
-          'Coach Information',
+          '${userInfoType.getString()} Information',
           style: UserWidgets._textStyleForTitle,
           textScaleFactor: 1.5,
         ),
@@ -111,26 +139,27 @@ class CoachInformationDialog {
     );
   }
 
-  static Widget byUserPK(int pk) {
-    return _CoachPKInformationDialog(coachPK: pk);
+  Widget byUserPK(int pk) {
+    return _UserPKInfoDialog(userPK: pk, userInfoType: userInfoType);
   }
 }
 
-class _CoachPKInformationDialog extends StatefulWidget {
-  final int coachPK;
+class _UserPKInfoDialog extends StatefulWidget {
+  final int userPK;
+  final UserInfoType userInfoType;
 
-  const _CoachPKInformationDialog({
+  const _UserPKInfoDialog({
     Key? key,
-    required this.coachPK,
+    required this.userPK,
+    required this.userInfoType,
   }) : super(key: key);
 
   @override
-  State<_CoachPKInformationDialog> createState() =>
-      _CoachPKInformationDialogState();
+  State<_UserPKInfoDialog> createState() => _UserPKInfoDialogState();
 }
 
-class _CoachPKInformationDialogState extends State<_CoachPKInformationDialog> {
-  User? _coach;
+class _UserPKInfoDialogState extends State<_UserPKInfoDialog> {
+  User? _user;
 
   @override
   void initState() {
@@ -140,21 +169,21 @@ class _CoachPKInformationDialogState extends State<_CoachPKInformationDialog> {
   }
 
   void _retrieveCoachInformation() async {
-    User? retrievedCoach = await API.user.getUser(widget.coachPK);
+    User? retrievedUser = await API.user.getUser(widget.userPK);
 
     setState(() {
-      _coach = retrievedCoach;
+      _user = retrievedUser;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool coachInformationIsNotLoaded = _coach == null;
+    final bool userInfoIsNotLoaded = _user == null;
 
-    if (coachInformationIsNotLoaded) {
+    if (userInfoIsNotLoaded) {
       return const LoadingDialog();
     }
 
-    return CoachInformationDialog.byUser(_coach!);
+    return UserInfoDialog(userInfoType: widget.userInfoType).byUser(_user!);
   }
 }

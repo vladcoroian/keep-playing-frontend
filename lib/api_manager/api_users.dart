@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/models/user/user_sign_in.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
@@ -75,6 +76,11 @@ class ApiUsers {
     final body = jsonDecode(response.body);
 
     return User.fromModel(userModel: UserModel.fromJson(body));
+  }
+
+  Future<User> getOrganiserUserOfEvent(Event event) {
+    // TODO: Replace this with event.organiserPK
+    return getUser(2);
   }
 
   Future<List<User>> retrieveAllUsers() async {

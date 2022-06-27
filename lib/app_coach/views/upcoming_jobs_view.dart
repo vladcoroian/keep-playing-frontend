@@ -25,6 +25,7 @@ class _UpcomingJobsViewState extends State<UpcomingJobsView> {
   @override
   void initState() {
     super.initState();
+
     timer = Timer.periodic(
       const Duration(seconds: TIMER_DURATION_IN_SECONDS),
       (Timer t) =>
@@ -35,6 +36,7 @@ class _UpcomingJobsViewState extends State<UpcomingJobsView> {
   @override
   void dispose() {
     timer.cancel();
+
     super.dispose();
   }
 

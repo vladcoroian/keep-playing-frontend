@@ -117,7 +117,11 @@ class _PastEventDetailsViewState extends State<PastEventDetailsView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CoachInformationListTile(coach: _coach!, event: widget.event),
+                UserInfoListTile(
+                  user: _coach!,
+                  event: widget.event,
+                  userInfoType: UserInfoType.COACH,
+                ),
                 blockButton,
                 favouriteButton,
                 rateButton,

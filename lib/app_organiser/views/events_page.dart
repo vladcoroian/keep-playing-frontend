@@ -31,6 +31,7 @@ class _EventsPageState extends State<EventsPage> {
   @override
   void initState() {
     super.initState();
+
     timer = Timer.periodic(
       const Duration(seconds: TIMER_DURATION_IN_SECONDS),
       (Timer t) => BlocProvider.of<EventsCubit>(context).retrieveEvents(),
@@ -40,6 +41,7 @@ class _EventsPageState extends State<EventsPage> {
   @override
   void dispose() {
     timer.cancel();
+
     super.dispose();
   }
 
@@ -137,7 +139,6 @@ class _EventsPageState extends State<EventsPage> {
     );
 
     final Widget newJobButton = NewJobButton(
-      context: context,
       onPressed: () => {
         Navigator.of(context).push(
           MaterialPageRoute(

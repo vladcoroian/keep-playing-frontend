@@ -6,9 +6,11 @@ class EventIcons {
   static const Icon ROLE_ICON = Icon(Icons.sports);
   static const Icon LOCATION_ICON = Icon(Icons.location_on);
   static const Icon DETAILS_ICON = Icon(Icons.details);
+
   static const Icon DATE_ICON = Icon(Icons.date_range);
   static const Icon START_TIME_ICON = Icon(Icons.access_time);
   static const Icon END_TIME_ICON = Icon(Icons.access_time);
+
   static const Icon PRICE_ICON = Icon(Icons.price_change);
 }
 
