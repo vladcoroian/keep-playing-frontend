@@ -53,7 +53,9 @@ class _OrganiserLoginRedirectState extends State<OrganiserLoginRedirect> {
   @override
   Widget build(BuildContext context) {
     if (_invalidCredentials) {
-      Navigator.of(context).pop(LoginStatus.INVALID_CREDENTIALS);
+      return const InvalidCredentialsScaffold(
+        loginStatus: LoginStatus.INVALID_CREDENTIALS,
+      );
     }
 
     if (_currentUser == null) {
@@ -61,7 +63,9 @@ class _OrganiserLoginRedirectState extends State<OrganiserLoginRedirect> {
     }
 
     if (!_currentUser!.isOrganiserUser()) {
-      Navigator.of(context).pop(LoginStatus.NOT_ORGANISER_CREDENTIALS);
+      return const InvalidCredentialsScaffold(
+        loginStatus: LoginStatus.NOT_ORGANISER_CREDENTIALS,
+      );
     }
 
     return const OrganiserHomePage();

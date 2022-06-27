@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:keep_playing_frontend/constants.dart';
 
+import 'buttons.dart';
 import 'dialogs.dart';
 
 enum LoginStatus {
@@ -8,56 +10,66 @@ enum LoginStatus {
   NOT_ORGANISER_CREDENTIALS,
 }
 
-class InvalidCredentialsDialog extends StatelessWidget {
-  const InvalidCredentialsDialog({Key? key}) : super(key: key);
+extension LoginStatusExtension on LoginStatus {
+  String getTitle() {
+    switch (this) {
+      case LoginStatus.INVALID_CREDENTIALS:
+        return 'Invalid Credentials';
+      case LoginStatus.NOT_COACH_CREDENTIALS:
+        return 'You tried to log in with a non-coach account';
+      case LoginStatus.NOT_ORGANISER_CREDENTIALS:
+        return 'You tried to log in with a non-organiser account';
+    }
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DIALOG_PADDING),
-      title: const Text('Invalid Credentials'),
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: const Text('Please try again.'),
-        ),
-      ],
-    );
+  String getContent() {
+    switch (this) {
+      case LoginStatus.INVALID_CREDENTIALS:
+        return 'Please try again.';
+      case LoginStatus.NOT_COACH_CREDENTIALS:
+        return 'Please log in with a coach account.';
+      case LoginStatus.NOT_ORGANISER_CREDENTIALS:
+        return 'Please log in with an organiser account.';
+    }
   }
 }
 
-class NotCoachCredentialsDialog extends StatelessWidget {
-  const NotCoachCredentialsDialog({Key? key}) : super(key: key);
+class InvalidCredentialsScaffold extends StatelessWidget {
+  final LoginStatus loginStatus;
+
+  const InvalidCredentialsScaffold({
+    Key? key,
+    required this.loginStatus,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
+    final Widget okButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: APP_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: const Text('OK'),
+      ),
+    );
+
+    final Widget invalidCredentialsDialog = SimpleDialog(
       contentPadding: const EdgeInsets.all(DIALOG_PADDING),
-      title: const Text('You tried to log in with a non-coach account'),
+      title: Text(loginStatus.getTitle()),
       children: <Widget>[
         Container(
           padding: const EdgeInsets.all(10),
-          child: const Text('Please log in with a coach account.'),
+          child: Text(loginStatus.getContent()),
         ),
+        Center(child: okButton),
       ],
     );
-  }
-}
 
-class NotOrganiserCredentialsDialog extends StatelessWidget {
-  const NotOrganiserCredentialsDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialog(
-      contentPadding: const EdgeInsets.all(DIALOG_PADDING),
-      title: const Text('You tried to log in with a non-organiser account'),
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(10),
-          child: const Text('Please log in with an organiser account.'),
-        ),
-      ],
-    );
+    return Scaffold(body: invalidCredentialsDialog);
   }
 }

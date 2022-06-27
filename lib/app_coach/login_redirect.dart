@@ -52,7 +52,9 @@ class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
   @override
   Widget build(BuildContext context) {
     if (_invalidCredentials) {
-      Navigator.of(context).pop(LoginStatus.INVALID_CREDENTIALS);
+      return const InvalidCredentialsScaffold(
+        loginStatus: LoginStatus.INVALID_CREDENTIALS,
+      );
     }
 
     if (_currentUser == null) {
@@ -60,7 +62,9 @@ class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
     }
 
     if (!_currentUser!.isCoachUser()) {
-      Navigator.of(context).pop(LoginStatus.NOT_COACH_CREDENTIALS);
+      return const InvalidCredentialsScaffold(
+        loginStatus: LoginStatus.NOT_COACH_CREDENTIALS,
+      );
     }
 
     return const CoachHomePage();

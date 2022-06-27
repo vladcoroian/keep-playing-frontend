@@ -3,7 +3,6 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/images.dart';
-import 'package:keep_playing_frontend/widgets/log_in.dart';
 
 import 'login_redirect.dart';
 import 'sign_up.dart';
@@ -70,33 +69,12 @@ class _CoachLoginPageState extends State<CoachLoginPage> {
         onPressed: () async {
           UserLogin userLogin =
               UserLogin(username: _username, password: _password);
-          Navigator.of(context)
-              .push(
+          Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => CoachLoginRedirect(
                 userLogin: userLogin,
               ),
             ),
-          )
-              .then(
-            (value) {
-              switch (value) {
-                case LoginStatus.INVALID_CREDENTIALS:
-                  showDialog(
-                      context: context,
-                      builder: (_) {
-                        return const InvalidCredentialsDialog();
-                      });
-                  break;
-                case LoginStatus.NOT_COACH_CREDENTIALS:
-                  showDialog(
-                      context: context,
-                      builder: (_) {
-                        return const NotCoachCredentialsDialog();
-                      });
-                  break;
-              }
-            },
           );
         },
         child: Text(
