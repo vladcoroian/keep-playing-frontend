@@ -64,7 +64,7 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
       },
     );
 
-    final Widget signInButton = Container(
+    final Widget signUpButton = Container(
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
@@ -105,7 +105,7 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
           usernameForm,
           passwordForm,
           uploadQualificationButton,
-          Center(child: signInButton),
+          Center(child: signUpButton),
         ],
       ),
     );

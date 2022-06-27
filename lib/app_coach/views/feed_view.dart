@@ -86,7 +86,7 @@ class _FeedEventWidget extends StatelessWidget {
         onPressed: () {
           showDialog(
               context: context,
-              builder: (BuildContext _) {
+              builder: (_) {
                 return _DetailsDialog(event: event);
               });
         },
@@ -127,7 +127,7 @@ class _AcceptButton extends StatelessWidget {
 
           showDialog(
             context: context,
-            builder: (BuildContext _) {
+            builder: (_) {
               return BlocProvider<FeedEventsCubit>.value(
                 value: feedEventsCubit,
                 child: _AcceptJobDialog(event: event),

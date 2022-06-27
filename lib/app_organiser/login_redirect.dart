@@ -6,22 +6,23 @@ import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
+import 'package:keep_playing_frontend/widgets/log_in.dart';
 
 import 'home_page.dart';
 
-class CoachLoginRedirect extends StatefulWidget {
+class OrganiserLoginRedirect extends StatefulWidget {
   final UserLogin userLogin;
 
-  const CoachLoginRedirect({Key? key, required this.userLogin})
+  const OrganiserLoginRedirect({Key? key, required this.userLogin})
       : super(key: key);
 
   @override
-  State<CoachLoginRedirect> createState() => _CoachLoginRedirectState();
+  State<OrganiserLoginRedirect> createState() => _OrganiserLoginRedirectState();
 }
 
-class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
+class _OrganiserLoginRedirectState extends State<OrganiserLoginRedirect> {
   User? _currentUser;
-  bool _invalid = false;
+  bool _invalidCredentials = false;
 
   @override
   void initState() {
@@ -44,15 +45,15 @@ class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
       });
     } else {
       setState(() {
-        _invalid = true;
+        _invalidCredentials = true;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_invalid) {
-      Navigator.of(context).pop();
+    if (_invalidCredentials) {
+      Navigator.of(context).pop(LoginStatus.INVALID_CREDENTIALS);
     }
 
     if (_currentUser == null) {
@@ -60,7 +61,7 @@ class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
     }
 
     if (!_currentUser!.isOrganiserUser()) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(LoginStatus.NOT_ORGANISER_CREDENTIALS);
     }
 
     return const OrganiserHomePage();

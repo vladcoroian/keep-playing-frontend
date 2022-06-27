@@ -47,7 +47,7 @@ class User {
   }
 
   bool isOrganiserUser() {
-    return true;
+    return isOrganiser;
   }
 
   bool isVerified() {

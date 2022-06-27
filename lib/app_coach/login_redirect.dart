@@ -7,6 +7,7 @@ import 'package:keep_playing_frontend/app_coach/home_page.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
+import 'package:keep_playing_frontend/widgets/log_in.dart';
 
 class CoachLoginRedirect extends StatefulWidget {
   final UserLogin userLogin;
@@ -20,7 +21,7 @@ class CoachLoginRedirect extends StatefulWidget {
 
 class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
   User? _currentUser;
-  bool _invalid = false;
+  bool _invalidCredentials = false;
 
   @override
   void initState() {
@@ -43,15 +44,15 @@ class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
       });
     } else {
       setState(() {
-        _invalid = true;
+        _invalidCredentials = true;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_invalid) {
-      Navigator.of(context).pop();
+    if (_invalidCredentials) {
+      Navigator.of(context).pop(LoginStatus.INVALID_CREDENTIALS);
     }
 
     if (_currentUser == null) {
@@ -59,7 +60,7 @@ class _CoachLoginRedirectState extends State<CoachLoginRedirect> {
     }
 
     if (!_currentUser!.isCoachUser()) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pop(LoginStatus.NOT_COACH_CREDENTIALS);
     }
 
     return const CoachHomePage();

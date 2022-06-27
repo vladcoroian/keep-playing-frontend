@@ -3,6 +3,7 @@ import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/images.dart';
+import 'package:keep_playing_frontend/widgets/log_in.dart';
 
 import 'login_redirect.dart';
 import 'sign_up.dart';
@@ -69,16 +70,37 @@ class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
         onPressed: () async {
           UserLogin userLogin =
               UserLogin(username: _username, password: _password);
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => CoachLoginRedirect(
-                userLogin: userLogin,
-              ),
-            ),
+          Navigator.of(context)
+              .push(
+                MaterialPageRoute(
+                  builder: (_) => OrganiserLoginRedirect(
+                    userLogin: userLogin,
+                  ),
+                ),
+              )
+              .then(
+                (value) {
+              switch (value) {
+                case LoginStatus.INVALID_CREDENTIALS:
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return const InvalidCredentialsDialog();
+                      });
+                  break;
+                case LoginStatus.NOT_ORGANISER_CREDENTIALS:
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return const NotOrganiserCredentialsDialog();
+                      });
+                  break;
+              }
+            },
           );
         },
         child: Text(
-          "Log In",
+          "Log In as Organiser",
           textAlign: TextAlign.center,
           style: style.copyWith(
             color: Colors.white,
@@ -92,7 +114,7 @@ class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
       padding: const EdgeInsets.fromLTRB(0, BUTTON_PADDING, 0, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: BUTTON_GRAY_COLOR,
+            primary: SIGN_UP_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () async {
           Navigator.of(context).push(
