@@ -94,7 +94,7 @@ class _NewEventViewState extends State<NewEventView> {
     final Widget nameForm = ListTile(
       title: TextFormField(
         decoration: const InputDecoration(
-          icon: Icon(EventIcons.NAME_ICON),
+          icon: EventIcons.NAME_ICON,
           hintText: 'Enter the name',
           labelText: 'Name',
         ),
@@ -105,7 +105,7 @@ class _NewEventViewState extends State<NewEventView> {
     );
 
     final Widget sportForm = ListTile(
-      leading: const Icon(EventIcons.SPORT_ICON),
+      leading: EventIcons.SPORT_ICON,
       title: DropdownButton<String>(
         value: _sport == "" ? null : _sport,
         items: SPORTS.map<DropdownMenuItem<String>>((String value) {
@@ -124,7 +124,7 @@ class _NewEventViewState extends State<NewEventView> {
     );
 
     final Widget roleForm = ListTile(
-      leading: const Icon(EventIcons.ROLE_ICON),
+      leading: EventIcons.ROLE_ICON,
       title: DropdownButton<String>(
         value: _role == "" ? null : _role,
         items: ROLES.map<DropdownMenuItem<String>>((String value) {
@@ -146,7 +146,7 @@ class _NewEventViewState extends State<NewEventView> {
       title: TextFormField(
         initialValue: _location,
         decoration: const InputDecoration(
-          icon: Icon(EventIcons.LOCATION_ICON),
+          icon: EventIcons.LOCATION_ICON,
           hintText: 'Enter the location',
           labelText: 'Location',
         ),
@@ -159,7 +159,7 @@ class _NewEventViewState extends State<NewEventView> {
     final Widget detailsForm = ListTile(
       title: TextFormField(
         decoration: const InputDecoration(
-          icon: Icon(EventIcons.DETAILS_ICON),
+          icon: EventIcons.DETAILS_ICON,
           hintText: 'Enter details',
           labelText: 'Details',
         ),
@@ -173,7 +173,7 @@ class _NewEventViewState extends State<NewEventView> {
       title: DateTimeField(
         initialValue: _date,
         decoration: const InputDecoration(
-          icon: Icon(EventIcons.DATE_ICON),
+          icon: EventIcons.DATE_ICON,
           hintText: 'Enter the date',
           labelText: 'Date',
         ),
@@ -195,7 +195,7 @@ class _NewEventViewState extends State<NewEventView> {
       title: TextField(
         controller: startTimeInput,
         decoration: const InputDecoration(
-          icon: Icon(EventIcons.START_TIME_ICON),
+          icon: EventIcons.START_TIME_ICON,
           labelText: "Start Time",
         ),
         readOnly: true,
@@ -231,7 +231,7 @@ class _NewEventViewState extends State<NewEventView> {
       title: TextField(
         controller: endTimeInput,
         decoration: const InputDecoration(
-          icon: Icon(EventIcons.END_TIME_ICON),
+          icon: EventIcons.END_TIME_ICON,
           labelText: "End Time",
         ),
         readOnly: true,
@@ -271,7 +271,7 @@ class _NewEventViewState extends State<NewEventView> {
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         initialValue: _price?.toString(),
         decoration: const InputDecoration(
-          icon: Icon(EventIcons.PRICE_ICON),
+          icon: EventIcons.PRICE_ICON,
           hintText: 'Enter the fee',
           labelText: 'Fee',
         ),

@@ -22,7 +22,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.username,
         readOnly: true,
         decoration: const InputDecoration(
-          icon: Icon(UserIcons.USERNAME_ICON),
+          icon: UserIcons.USERNAME_ICON,
           hintText: 'Enter your username',
           labelText: 'Username',
         ),
@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.email,
         readOnly: false,
         decoration: const InputDecoration(
-          icon: Icon(UserIcons.EMAIL_ICON),
+          icon: UserIcons.EMAIL_ICON,
           hintText: 'Enter your Email',
           labelText: 'Email',
         ),
@@ -46,7 +46,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.firstName,
         readOnly: true,
         decoration: const InputDecoration(
-          icon: Icon(UserIcons.FIRST_NAME_ICON),
+          icon: UserIcons.FIRST_NAME_ICON,
           hintText: 'Enter your first name',
           labelText: 'First Name',
         ),
@@ -58,7 +58,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.lastName,
         readOnly: true,
         decoration: const InputDecoration(
-          icon: Icon(UserIcons.LAST_NAME_ICON),
+          icon: UserIcons.LAST_NAME_ICON,
           hintText: 'Enter your last name',
           labelText: 'Last Name',
         ),
@@ -70,7 +70,7 @@ class ProfilePage extends StatelessWidget {
         initialValue: currentUser.location,
         readOnly: false,
         decoration: const InputDecoration(
-          icon: Icon(UserIcons.LOCATION_ICON),
+          icon: UserIcons.LOCATION_ICON,
           hintText: 'Enter your location',
           labelText: 'Location',
         ),

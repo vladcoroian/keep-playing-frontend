@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
@@ -11,8 +13,31 @@ import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import '../../../models/event.dart';
 import '../cubits/feed_events_cubit.dart';
 
-class FeedView extends StatelessWidget {
+class FeedView extends StatefulWidget {
   const FeedView({Key? key}) : super(key: key);
+
+  @override
+  State<FeedView> createState() => _FeedViewState();
+}
+
+class _FeedViewState extends State<FeedView> {
+  late Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(
+      const Duration(seconds: TIMER_DURATION_IN_SECONDS),
+      (Timer t) =>
+          BlocProvider.of<FeedEventsCubit>(context).retrieveFeedEvents(),
+    );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +56,16 @@ class FeedView extends StatelessWidget {
     );
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Feed'),
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            BlocProvider.of<FeedEventsCubit>(context).retrieveFeedEvents();
-          },
-          child: Center(child: viewOfEvents),
-        ));
+      appBar: AppBar(
+        title: const Text('Feed'),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          BlocProvider.of<FeedEventsCubit>(context).retrieveFeedEvents();
+        },
+        child: Center(child: viewOfEvents),
+      ),
+    );
   }
 }
 

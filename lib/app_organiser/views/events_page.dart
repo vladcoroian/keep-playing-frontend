@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/organiser_cubit.dart';
+import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models_widgets/events_views.dart';
 
@@ -22,6 +25,23 @@ class _EventsPageState extends State<EventsPage> {
   static const Color ACTIVE_COLOR = Colors.green;
 
   bool _calendarView = true;
+
+  late Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(
+      const Duration(seconds: TIMER_DURATION_IN_SECONDS),
+      (Timer t) => BlocProvider.of<EventsCubit>(context).retrieveEvents(),
+    );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

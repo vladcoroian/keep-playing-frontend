@@ -14,6 +14,24 @@ class ScheduledEventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Widget scheduledButton = Container(
+      padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: SCHEDULED_BUTTON_COLOR,
+            textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
+        onPressed: () => {
+          // showDialog(
+          //   context: context,
+          //   builder: (_) => CoachInformationDialog(
+          //     coach: null,
+          //   ),
+          // )
+        },
+        child: const Text('Scheduled'),
+      ),
+    );
+
     final Widget manageButton = Container(
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(

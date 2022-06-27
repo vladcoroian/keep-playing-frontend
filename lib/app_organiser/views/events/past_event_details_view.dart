@@ -12,6 +12,7 @@ import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/models_widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/models_widgets/user_widgets.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:keep_playing_frontend/widgets/cards.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 

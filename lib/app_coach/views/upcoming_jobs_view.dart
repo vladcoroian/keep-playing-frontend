@@ -1,18 +1,42 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/app_coach/cubits/upcoming_jobs_cubit.dart';
-import 'package:keep_playing_frontend/models/user.dart';
-import 'package:keep_playing_frontend/stored_data.dart';
+import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../models/event.dart';
 import '../../models_widgets/event_widgets.dart';
 
-class UpcomingJobsView extends StatelessWidget {
+class UpcomingJobsView extends StatefulWidget {
   const UpcomingJobsView({Key? key}) : super(key: key);
+
+  @override
+  State<UpcomingJobsView> createState() => _UpcomingJobsViewState();
+}
+
+class _UpcomingJobsViewState extends State<UpcomingJobsView> {
+  late Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(
+      const Duration(seconds: TIMER_DURATION_IN_SECONDS),
+      (Timer t) =>
+          BlocProvider.of<UpcomingJobsCubit>(context).retrieveUpcomingJobs(),
+    );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +57,7 @@ class UpcomingJobsView extends StatelessWidget {
         ),
         body: RefreshIndicator(
           onRefresh: () async {
-            BlocProvider.of<UpcomingJobsCubit>(context).retrieveUpcomingJobs(
-              withCoachUser: StoredData.getCurrentUser(),
-            );
+            BlocProvider.of<UpcomingJobsCubit>(context).retrieveUpcomingJobs();
           },
           child: Center(child: viewOfEvents),
         ));
@@ -68,13 +90,11 @@ class _UpcomingJobWidget extends StatelessWidget {
                   final NavigatorState navigator = Navigator.of(buildContext);
                   final UpcomingJobsCubit upcomingJobsCubit =
                       BlocProvider.of<UpcomingJobsCubit>(context);
-                  final User coachUser = StoredData.getCurrentUser();
+
                   final Response response =
                       await API.coach.cancelJob(event: event);
                   if (response.statusCode == HTTP_202_ACCEPTED) {
-                    upcomingJobsCubit.retrieveUpcomingJobs(
-                      withCoachUser: coachUser,
-                    );
+                    upcomingJobsCubit.retrieveUpcomingJobs();
                     navigator.pop();
                   } else {
                     showDialog(

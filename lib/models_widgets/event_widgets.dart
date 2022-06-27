@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:keep_playing_frontend/widgets/cards.dart';
 import 'package:keep_playing_frontend/widgets/icons.dart';
 
 import '../constants.dart';
@@ -22,29 +23,29 @@ class EventWidgets {
   List<Widget> getDetailsTilesAboutEvent() {
     return <Widget>[
       ListTile(
-        leading: const Icon(EventIcons.SPORT_ICON),
+        leading: EventIcons.SPORT_ICON,
         title: const Text('Sport', style: _textStyleForTitle),
         subtitle: Text(event.sport),
       ),
       ListTile(
-        leading: const Icon(EventIcons.ROLE_ICON),
+        leading: EventIcons.ROLE_ICON,
         title: const Text('Role', style: _textStyleForTitle),
         subtitle: Text(event.role),
       ),
       ListTile(
-        leading: const Icon(EventIcons.LOCATION_ICON),
+        leading: EventIcons.LOCATION_ICON,
         title: const Text('Location', style: _textStyleForTitle),
         subtitle: Text(event.location),
       ),
       ListTile(
-        leading: const Icon(EventIcons.DATE_ICON),
+        leading: EventIcons.DATE_ICON,
         title: const Text('Date', style: _textStyleForTitle),
         subtitle: Text(
           DateFormat("MMMM dd").format(event.date),
         ),
       ),
       ListTile(
-        leading: const Icon(EventIcons.START_TIME_ICON),
+        leading: EventIcons.START_TIME_ICON,
         title: const Text('Start Time', style: _textStyleForTitle),
         subtitle: Text(
           const DefaultMaterialLocalizations().formatTimeOfDay(
@@ -54,7 +55,7 @@ class EventWidgets {
         ),
       ),
       ListTile(
-        leading: const Icon(EventIcons.END_TIME_ICON),
+        leading: EventIcons.END_TIME_ICON,
         title: const Text('End Time', style: _textStyleForTitle),
         subtitle: Text(
           const DefaultMaterialLocalizations().formatTimeOfDay(
@@ -65,7 +66,7 @@ class EventWidgets {
       ),
       const Divider(),
       ListTile(
-        leading: const Icon(EventIcons.DETAILS_ICON),
+        leading: EventIcons.DETAILS_ICON,
         title: const Text('Details', style: _textStyleForTitle),
         subtitle: Text(event.details),
       ),

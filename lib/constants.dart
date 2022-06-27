@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 // **************************************************************************
+// **************** TIMER
+// **************************************************************************
+
+const int TIMER_DURATION_IN_SECONDS = 5;
+
+// **************************************************************************
 // **************** COLORS
 // **************************************************************************
 
@@ -12,12 +18,6 @@ const MaterialAccentColor BOTTOM_NAVIGATION_BAR_COLOR = Colors.lightBlueAccent;
 
 const double APP_BAR_BUTTON_PADDING = 20;
 const double APP_BAR_BUTTON_SIZE = 26;
-
-////////
-//////// Widgets
-////////
-
-const double CARD_PADDING = 16;
 
 // **************************************************************************
 // **************** SPORTS AND ROLES

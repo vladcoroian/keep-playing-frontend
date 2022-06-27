@@ -17,6 +17,7 @@ const Color APPLIED_BUTTON_COLOR = Colors.red;
 
 const Color NO_OFFERS_BUTTON_COLOR = Colors.black12;
 const Color AT_LEAST_ONE_OFFER_BUTTON_COLOR = Colors.lightGreen;
+const Color SCHEDULED_BUTTON_COLOR = Colors.purple;
 const Color RATE_BUTTON_COLOR = Colors.green;
 const Color RATED_BUTTON_COLOR = Colors.black12;
 const Color SEND_RATING_BUTTON_COLOR = Colors.green;

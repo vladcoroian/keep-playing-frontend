@@ -10,6 +10,7 @@ import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:keep_playing_frontend/widgets/cards.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/icons.dart';
 import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
@@ -116,7 +117,10 @@ class _OfferCard extends StatelessWidget {
     final Widget leadingListTile = Column(
       children: [
         organiser.hasUserAsAFavourite(coach)
-            ? CoachIcons.FAVOURITE_ICON
+            ? const Padding(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, CARD_LEADING_PADDING),
+                child: CoachIcons.FAVOURITE_ICON,
+              )
             : const SizedBox(height: 0, width: 0),
         coach.isVerified()
             ? CoachIcons.VERIFIED_ICON
@@ -169,6 +173,23 @@ class _OfferCard extends StatelessWidget {
       ],
     );
 
+    final Widget title = Padding(
+      padding: const EdgeInsets.fromLTRB(0, CARD_TITLE_PADDING, 0, 0),
+      child: Text(coach.getFullName()),
+    );
+
+    final Widget subtitle = Padding(
+      padding: const EdgeInsets.fromLTRB(
+          0, CARD_SUBTITLE_PADDING, 0, CARD_SUBTITLE_PADDING),
+      child: Column(
+        children: [
+          experienceRow,
+          flexibilityRow,
+          reliabilityRow,
+        ],
+      ),
+    );
+
     final Widget acceptButton = Container(
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
@@ -205,14 +226,8 @@ class _OfferCard extends StatelessWidget {
         children: <Widget>[
           ListTile(
             leading: leadingListTile,
-            title: Text("${coach.firstName} ${coach.lastName}"),
-            subtitle: Column(
-              children: [
-                experienceRow,
-                flexibilityRow,
-                reliabilityRow,
-              ],
-            ),
+            title: title,
+            subtitle: subtitle,
           ),
           Center(child: acceptButton),
         ],

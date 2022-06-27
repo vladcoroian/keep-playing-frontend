@@ -25,9 +25,7 @@ class RateCoachView extends StatefulWidget {
 
 class _RateCoachViewState extends State<RateCoachView> {
   double _experienceRating = 3;
-
   double _flexibilityRating = 3;
-
   double _reliabilityRating = 3;
 
   @override

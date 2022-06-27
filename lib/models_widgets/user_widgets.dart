@@ -19,17 +19,17 @@ class UserWidgets {
   List<Widget> getDetailsAboutUser() {
     return <Widget>[
       ListTile(
-        leading: const Icon(UserIcons.NAME_ICON),
+        leading: UserIcons.NAME_ICON,
         title: const Text('Name', style: _textStyleForTitle),
         subtitle: Text('${user.firstName} ${user.lastName}'),
       ),
       ListTile(
-        leading: const Icon(UserIcons.EMAIL_ICON),
+        leading: UserIcons.EMAIL_ICON,
         title: const Text('Email', style: _textStyleForTitle),
         subtitle: Text(user.email),
       ),
       ListTile(
-        leading: const Icon(UserIcons.LOCATION_ICON),
+        leading: UserIcons.LOCATION_ICON,
         title: const Text('Location', style: _textStyleForTitle),
         subtitle: Text(user.location),
       ),
@@ -70,7 +70,7 @@ class CoachInformationListTile extends StatelessWidget {
               '${event.name}, on: ${DateFormat.MMMEd().format(event.date)}',
         );
       },
-      child: const Icon(UserIcons.EMAIL_ICON),
+      child: UserIcons.EMAIL_ICON,
     );
 
     return ListTile(
@@ -84,7 +84,7 @@ class CoachInformationListTile extends StatelessWidget {
       onTap: () {
         showDialog(
           context: context,
-          builder: (_) => _CoachInformationDialog(
+          builder: (_) => CoachInformationDialog(
             coach: coach,
           ),
         );
@@ -93,10 +93,10 @@ class CoachInformationListTile extends StatelessWidget {
   }
 }
 
-class _CoachInformationDialog extends StatelessWidget {
+class CoachInformationDialog extends StatelessWidget {
   final User coach;
 
-  const _CoachInformationDialog({
+  const CoachInformationDialog({
     Key? key,
     required this.coach,
   }) : super(key: key);
