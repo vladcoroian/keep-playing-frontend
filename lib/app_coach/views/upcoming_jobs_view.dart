@@ -11,6 +11,7 @@ import 'package:keep_playing_frontend/widgets/dialogs.dart';
 
 import '../../models/event.dart';
 import '../../models_widgets/event_widgets.dart';
+import 'details_about_event_page.dart';
 
 class UpcomingJobsView extends StatefulWidget {
   const UpcomingJobsView({Key? key}) : super(key: key);
@@ -123,28 +124,10 @@ class _UpcomingJobWidget extends StatelessWidget {
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext buildContext) {
-              final Widget backButton = Container(
-                padding: const EdgeInsets.all(BUTTON_PADDING),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: BACK_BUTTON_COLOR,
-                    textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
-                  ),
-                  onPressed: () async {
-                    Navigator.of(buildContext).pop();
-                  },
-                  child: const Text('Back'),
-                ),
-              );
-
-              return EventDetailsDialog(
-                event: event,
-                widgetsAtTheEnd: [backButton],
-              );
-            },
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => DetailsAboutEventPage(event: event),
+            ),
           );
         },
         child: const Text('Details'),
