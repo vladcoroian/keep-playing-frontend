@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
+import 'package:keep_playing_frontend/widgets/images.dart';
 
 import 'login_redirect.dart';
 import 'sign_up.dart';
@@ -21,14 +22,7 @@ class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    const Widget appTitle = FittedBox(
-      fit: BoxFit.fitWidth,
-      child: Text(
-        'Keep\nPlaying',
-        textAlign: TextAlign.center,
-        style: TextStyle(color: APP_COLOR, fontSize: 400.0),
-      ),
-    );
+    final Widget appLogo = APP_LOGO;
 
     final Widget usernameField = TextFormField(
       obscureText: false,
@@ -95,7 +89,7 @@ class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
     );
 
     final Widget signUpAsOrganiserButton = Container(
-      padding: const EdgeInsets.all(BUTTON_PADDING),
+      padding: const EdgeInsets.fromLTRB(0, BUTTON_PADDING, 0, 0),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             primary: BUTTON_GRAY_COLOR,
@@ -120,8 +114,7 @@ class _OrganiserLoginPageState extends State<OrganiserLoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                appTitle,
-                const SizedBox(height: 45.0),
+                appLogo,
                 usernameField,
                 const SizedBox(height: 25.0),
                 passwordField,
