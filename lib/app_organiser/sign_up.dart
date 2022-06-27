@@ -60,11 +60,19 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
             primary: APP_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () async {
-          _qualification = await _getImage();
+          File image = await _getImage();
+
+          setState(() {
+            _qualification = image;
+          });
         },
         child: const Text('Upload qualification'),
       ),
     );
+
+    final Widget qualificationImage = _qualification == null
+        ? const SizedBox(width: 0, height: 0)
+        : Image.file(_qualification!, height: 200);
 
     final Widget signUpButton = Container(
       padding: const EdgeInsets.all(BUTTON_PADDING),
@@ -100,13 +108,14 @@ class _OrganiserSignUpPageState extends State<OrganiserSignUpPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign In'),
+        title: const Text('Sign Up as Organiser'),
       ),
       body: ListView(
         children: [
           usernameForm,
           passwordForm,
           uploadQualificationButton,
+          qualificationImage,
           const SizedBox(height: 50.0),
           Center(child: signUpButton),
         ],
