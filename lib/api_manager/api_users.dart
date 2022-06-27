@@ -79,8 +79,7 @@ class ApiUsers {
   }
 
   Future<User> getOrganiserUserOfEvent(Event event) {
-    // TODO: Replace this with event.organiserPK
-    return getUser(2);
+    return getUser(event.organiserPK);
   }
 
   Future<List<User>> retrieveAllUsers() async {

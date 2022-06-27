@@ -25,6 +25,7 @@ class EventModel {
   final bool recurring;
 
   final int? coach_user;
+  final int organiser_user;
 
   final List<int> offers;
 
@@ -48,6 +49,7 @@ class EventModel {
     required this.coach,
     required this.recurring,
     this.coach_user,
+    required this.organiser_user,
     required this.offers,
     required this.voted,
   });
@@ -59,20 +61,29 @@ class EventModel {
 
   DateTime getDate() {
     final splitDate = date.split('-');
-    return DateTime(int.parse(splitDate[0]), int.parse(splitDate[1]),
-        int.parse(splitDate[2]));
+    return DateTime(
+      int.parse(splitDate[0]),
+      int.parse(splitDate[1]),
+      int.parse(splitDate[2]),
+    );
   }
 
   DateTime getCreationStarted() {
     final splitDate = date.split('-');
-    return DateTime(int.parse(splitDate[0]), int.parse(splitDate[1]),
-        int.parse(splitDate[2]), 0, 0, 0);
+    return DateTime(
+      int.parse(splitDate[0]),
+      int.parse(splitDate[1]),
+      int.parse(splitDate[2]),
+    );
   }
 
   DateTime getCreationEnded() {
     final splitDate = date.split('-');
-    return DateTime(int.parse(splitDate[0]), int.parse(splitDate[1]),
-        int.parse(splitDate[2]), 0, 0, 0);
+    return DateTime(
+      int.parse(splitDate[0]),
+      int.parse(splitDate[1]),
+      int.parse(splitDate[2]),
+    );
   }
 
   TimeOfDay getStartTime() {

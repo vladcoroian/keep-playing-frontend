@@ -313,6 +313,7 @@ class _NewEventViewState extends State<NewEventView> {
 
           Response response =
               await API.organiser.addNewEvent(newEvent: newEvent);
+          print(response.body);
           if (response.statusCode == HTTP_201_CREATED) {
             eventsCubit.retrieveEvents();
             navigator.pop();

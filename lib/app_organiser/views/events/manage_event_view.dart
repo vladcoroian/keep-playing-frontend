@@ -342,37 +342,12 @@ class _ManageEventView extends State<ManageEventView> {
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
         onPressed: () {
-          final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
           showDialog(
             context: context,
-            builder: (BuildContext buildContext) {
+            builder: (_) {
               return BlocProvider<EventsCubit>.value(
-                value: eventsCubit,
-                child: ConfirmationDialog(
-                  title: 'Are you sure that you want to cancel this event?',
-                  onNoPressed: () => {
-                    Navigator.of(buildContext).pop(),
-                  },
-                  onYesPressed: () async {
-                    NavigatorState navigator = Navigator.of(buildContext);
-                    final EventsCubit eventsCubit =
-                        BlocProvider.of<EventsCubit>(context);
-
-                    final Response response =
-                        await API.organiser.cancelEvent(event: widget.event);
-                    if (response.statusCode == HTTP_200_OK) {
-                      eventsCubit.retrieveEvents();
-                      navigator.pop();
-                      navigator.pop();
-                    } else {
-                      showDialog(
-                        context: context,
-                        builder: (_) => const RequestFailedDialog(),
-                        barrierDismissible: false,
-                      );
-                    }
-                  },
-                ),
+                value: BlocProvider.of<EventsCubit>(context),
+                child: _CancelEventDialog(event: widget.event),
               );
             },
           );
@@ -468,5 +443,44 @@ class _ManageEventView extends State<ManageEventView> {
               text: 'You haven\'t finished editing the event'),
         )) ??
         false;
+  }
+}
+
+// **************************************************************************
+// **************** DIALOGS
+// **************************************************************************
+
+class _CancelEventDialog extends StatelessWidget {
+  final sport_event.Event event;
+
+  const _CancelEventDialog({
+    required this.event,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ConfirmationDialog(
+      title: 'Are you sure that you want to cancel this event?',
+      onNoPressed: () => {
+        Navigator.of(context).pop(),
+      },
+      onYesPressed: () async {
+        NavigatorState navigator = Navigator.of(context);
+        final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
+
+        final Response response = await API.organiser.cancelEvent(event: event);
+        if (response.statusCode == HTTP_200_OK) {
+          eventsCubit.retrieveEvents();
+          navigator.pop();
+          navigator.pop();
+        } else {
+          showDialog(
+            context: context,
+            builder: (_) => const RequestFailedDialog(),
+            barrierDismissible: false,
+          );
+        }
+      },
+    );
   }
 }

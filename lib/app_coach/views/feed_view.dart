@@ -118,7 +118,9 @@ class _FeedEventWidget extends StatelessWidget {
 class _ApplyButton extends StatelessWidget {
   final Event event;
 
-  const _ApplyButton({required this.event});
+  const _ApplyButton({
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -130,14 +132,11 @@ class _ApplyButton extends StatelessWidget {
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
         onPressed: () {
-          final FeedEventsCubit feedEventsCubit =
-              BlocProvider.of<FeedEventsCubit>(context);
-
           showDialog(
             context: context,
             builder: (_) {
               return BlocProvider<FeedEventsCubit>.value(
-                value: feedEventsCubit,
+                value: BlocProvider.of<FeedEventsCubit>(context),
                 child: _ApplyToJobDialog(event: event),
               );
             },
@@ -152,7 +151,9 @@ class _ApplyButton extends StatelessWidget {
 class _UnapplyButton extends StatelessWidget {
   final Event event;
 
-  const _UnapplyButton({required this.event});
+  const _UnapplyButton({
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -164,14 +165,11 @@ class _UnapplyButton extends StatelessWidget {
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
         onPressed: () {
-          final FeedEventsCubit feedEventsCubit =
-              BlocProvider.of<FeedEventsCubit>(context);
-
           showDialog(
             context: context,
             builder: (_) {
               return BlocProvider<FeedEventsCubit>.value(
-                value: feedEventsCubit,
+                value: BlocProvider.of<FeedEventsCubit>(context),
                 child: _UnapplyFromJobDialog(event: event),
               );
             },
@@ -190,7 +188,9 @@ class _UnapplyButton extends StatelessWidget {
 class _ApplyToJobDialog extends StatelessWidget {
   final Event event;
 
-  const _ApplyToJobDialog({required this.event});
+  const _ApplyToJobDialog({
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -221,7 +221,9 @@ class _ApplyToJobDialog extends StatelessWidget {
 class _UnapplyFromJobDialog extends StatelessWidget {
   final Event event;
 
-  const _UnapplyFromJobDialog({required this.event});
+  const _UnapplyFromJobDialog({
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {

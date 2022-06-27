@@ -59,15 +59,14 @@ class _OrganiserHomePageState extends State<OrganiserHomePage> {
       body: MultiBlocProvider(
         providers: [
           BlocProvider<EventsCubit>(
-            create: (BuildContext context) {
+            create: (_) {
               EventsCubit eventsCubit = EventsCubit();
               eventsCubit.retrieveEvents();
               return eventsCubit;
             },
           ),
           BlocProvider<OrganiserCubit>(
-            create: (BuildContext context) =>
-                OrganiserCubit(organiser: organiser!),
+            create: (_) => OrganiserCubit(organiser: organiser!),
           ),
         ],
         child: _widgetOptions.elementAt(_selectedIndex),

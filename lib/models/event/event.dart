@@ -25,7 +25,9 @@ class Event {
   final int price;
   final bool coach;
   final bool recurring;
+
   final int? coachPK;
+  final int organiserPK;
 
   final List<int> offers;
 
@@ -47,6 +49,7 @@ class Event {
     required this.coach,
     required this.recurring,
     this.coachPK,
+    required this.organiserPK,
     required this.offers,
     required this.creationStarted,
     required this.creationEnded,
@@ -72,6 +75,7 @@ class Event {
           coach: eventModel.coach,
           recurring: eventModel.recurring,
           coachPK: eventModel.coach_user,
+          organiserPK: eventModel.organiser_user,
           offers: eventModel.offers,
           rated: eventModel.voted,
         );

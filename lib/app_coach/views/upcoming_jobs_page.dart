@@ -10,7 +10,7 @@ class UpcomingJobsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) {
+      create: (_) {
         UpcomingJobsCubit upcomingJobsCubit = UpcomingJobsCubit();
         upcomingJobsCubit.retrieveUpcomingJobs();
         return upcomingJobsCubit;

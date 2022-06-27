@@ -10,7 +10,7 @@ class FeedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) {
+      create: (_) {
         FeedEventsCubit feedEventsCubit = FeedEventsCubit();
         feedEventsCubit.retrieveFeedEvents();
         return feedEventsCubit;
