@@ -11,7 +11,10 @@ import '../../manage_event_page.dart';
 class PendingEventCard extends StatelessWidget {
   final Event event;
 
-  const PendingEventCard({super.key, required this.event});
+  const PendingEventCard({
+    super.key,
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {

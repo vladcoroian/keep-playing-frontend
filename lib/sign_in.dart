@@ -75,13 +75,12 @@ class _SignInPageState extends State<SignInPage> {
           CoachSignIn coachSignIn = CoachSignIn(
             username: _username,
             password: _password,
-            qualification: 'qualification',
+            qualificationFile: _qualification,
           );
 
           final StreamedResponse streamedResponse =
               await API.user.signInAsCoach(
             coachSignIn: coachSignIn,
-            file: _qualification,
           );
           if (streamedResponse.statusCode == HTTP_200_OK) {
             navigator.pop();

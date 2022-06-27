@@ -10,7 +10,10 @@ import 'package:keep_playing_frontend/widgets/buttons.dart';
 class PastEventCard extends StatelessWidget {
   final Event event;
 
-  const PastEventCard({super.key, required this.event});
+  const PastEventCard({
+    super.key,
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {

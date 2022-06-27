@@ -1,17 +1,13 @@
+import 'dart:io';
+
 class CoachSignIn {
   final String username;
   final String password;
-  final String qualification;
+  final File? qualificationFile;
 
   CoachSignIn({
     required this.username,
     required this.password,
-    required this.qualification,
+    required this.qualificationFile,
   });
-
-  Map<String, dynamic> toJson() => {
-        "username": username,
-        "password": password,
-        "qualification": qualification,
-      };
 }

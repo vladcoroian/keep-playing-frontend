@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:keep_playing_frontend/app_organiser/cubit/events_cubit.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models_widgets/event_widgets.dart';
+import 'package:keep_playing_frontend/models_widgets/user_widgets.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 
 import '../../manage_event_page.dart';
@@ -10,7 +11,10 @@ import '../../manage_event_page.dart';
 class ScheduledEventCard extends StatelessWidget {
   final Event event;
 
-  const ScheduledEventCard({super.key, required this.event});
+  const ScheduledEventCard({
+    super.key,
+    required this.event,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +25,9 @@ class ScheduledEventCard extends StatelessWidget {
             primary: SCHEDULED_BUTTON_COLOR,
             textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE)),
         onPressed: () => {
-          // showDialog(
-          //   context: context,
-          //   builder: (_) => CoachInformationDialog(
-          //     coach: null,
-          //   ),
-          // )
+          showDialog(
+              context: context,
+              builder: (_) => CoachInformationDialog.byPK(event.coachPK!))
         },
         child: const Text('Scheduled'),
       ),
@@ -54,7 +55,7 @@ class ScheduledEventCard extends StatelessWidget {
 
     return EventCard(
       event: event,
-      leftButton: const SizedBox(width: 0, height: 0),
+      leftButton: scheduledButton,
       rightButton: manageButton,
     );
   }

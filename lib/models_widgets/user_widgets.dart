@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:keep_playing_frontend/api_manager/api.dart';
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/models/event.dart';
 import 'package:keep_playing_frontend/models/user.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/icons.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class UserWidgets {
@@ -36,6 +38,10 @@ class UserWidgets {
     ];
   }
 }
+
+// **************************************************************************
+// **************** COACH INFORMATION
+// **************************************************************************
 
 class CoachInformationListTile extends StatelessWidget {
   final User coach;
@@ -83,35 +89,72 @@ class CoachInformationListTile extends StatelessWidget {
       trailing: messageCoachButton,
       onTap: () {
         showDialog(
-          context: context,
-          builder: (_) => CoachInformationDialog(
-            coach: coach,
-          ),
-        );
+            context: context,
+            builder: (_) => CoachInformationDialog.byUser(coach));
       },
     );
   }
 }
 
-class CoachInformationDialog extends StatelessWidget {
-  final User coach;
+class CoachInformationDialog {
+  static Widget byUser(User user) {
+    return SimpleDialog(
+      contentPadding: const EdgeInsets.all(DIALOG_PADDING),
+      title: const Center(
+        child: Text(
+          'Coach Information',
+          style: UserWidgets._textStyleForTitle,
+          textScaleFactor: 1.5,
+        ),
+      ),
+      children: UserWidgets(user: user).getDetailsAboutUser(),
+    );
+  }
 
-  const CoachInformationDialog({
+  static Widget byPK(int pk) {
+    return _CoachPKInformationDialog(coachPK: pk);
+  }
+}
+
+class _CoachPKInformationDialog extends StatefulWidget {
+  final int coachPK;
+
+  const _CoachPKInformationDialog({
     Key? key,
-    required this.coach,
+    required this.coachPK,
   }) : super(key: key);
 
   @override
+  State<_CoachPKInformationDialog> createState() =>
+      _CoachPKInformationDialogState();
+}
+
+class _CoachPKInformationDialogState extends State<_CoachPKInformationDialog> {
+  User? _coach;
+
+  @override
+  void initState() {
+    _retrieveCoachInformation();
+
+    super.initState();
+  }
+
+  void _retrieveCoachInformation() async {
+    User? retrievedCoach = await API.user.getUser(widget.coachPK);
+
+    setState(() {
+      _coach = retrievedCoach;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SimpleDialog(
-        contentPadding: const EdgeInsets.all(DIALOG_PADDING),
-        title: const Center(
-          child: Text(
-            'Coach Information',
-            style: UserWidgets._textStyleForTitle,
-            textScaleFactor: 1.5,
-          ),
-        ),
-        children: UserWidgets(user: coach).getDetailsAboutUser());
+    final bool coachInformationIsNotLoaded = _coach == null;
+
+    if (coachInformationIsNotLoaded) {
+      return const LoadingDialog();
+    }
+
+    return CoachInformationDialog.byUser(_coach!);
   }
 }
