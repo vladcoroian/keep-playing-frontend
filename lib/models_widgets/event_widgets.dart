@@ -70,7 +70,7 @@ class EventWidgets {
       ),
       ListTile(
         leading: EventIcons.PRICE_ICON,
-        title: const Text('Price', style: _textStyleForTitle),
+        title: const Text('Fee per event', style: _textStyleForTitle),
         subtitle: Text(event.price.toString()),
       ),
       const Divider(),

@@ -205,7 +205,7 @@ class _ManageEventView extends State<ManageEventView> {
         initialValue: _location,
         decoration: const InputDecoration(
           icon: EventIcons.LOCATION_ICON,
-          hintText: 'Enter the location',
+          hintText: 'Enter location of event',
           labelText: 'Location',
         ),
         onChanged: (text) {
@@ -219,7 +219,7 @@ class _ManageEventView extends State<ManageEventView> {
         initialValue: _details,
         decoration: const InputDecoration(
           icon: EventIcons.DETAILS_ICON,
-          hintText: 'Enter details',
+          hintText: 'Enter details about the session',
           labelText: 'Details',
         ),
         onChanged: (text) {
@@ -324,7 +324,7 @@ class _ManageEventView extends State<ManageEventView> {
         decoration: const InputDecoration(
           icon: EventIcons.PRICE_ICON,
           hintText: 'Enter the fee',
-          labelText: 'Fee',
+          labelText: 'Fee per event',
         ),
         onChanged: (text) {
           // TODO: Remove this cast.
