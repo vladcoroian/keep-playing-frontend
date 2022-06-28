@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // **************** TIMER
 // **************************************************************************
 
-const int TIMER_DURATION_IN_SECONDS = 5;
+const int TIMER_DURATION_IN_SECONDS = 3;
 
 // **************************************************************************
 // **************** COLORS
