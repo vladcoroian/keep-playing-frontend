@@ -134,6 +134,7 @@ class _RateCoachViewState extends State<RateCoachView> {
             );
             if (response.statusCode == HTTP_200_OK) {
               await eventsCubit.retrieveEvents();
+              navigator.pop();
               navigator.pop(true);
             } else {
               navigator.pop();
