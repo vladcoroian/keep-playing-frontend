@@ -116,7 +116,7 @@ class ApiUsers {
 
     if (coachSignUp.qualificationFile != null) {
       http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
-        'qualification file',
+        'qualification',
         coachSignUp.qualificationFile!.path,
       );
       multiPartRequest.files.add(multipartFile);
