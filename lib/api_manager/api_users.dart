@@ -20,6 +20,9 @@ class _ApiUserLinks {
 
   static Uri coachInformationLink({required int pk}) => Uri.parse("$COACH$pk/");
 
+  static Uri organiserUserForEventLink({required int eventPK}) =>
+      Uri.parse("${API.PREFIX}event/$eventPK/organiser/");
+
   ////////
   //////// Sign Up
   ////////
@@ -78,9 +81,13 @@ class ApiUsers {
     return User.fromModel(userModel: UserModel.fromJson(body));
   }
 
-  Future<User> getOrganiserUserOfEvent(Event event) {
-    // TODO: Implement this.
-    return getUser(2);
+  Future<User> getOrganiserUserOfEvent(Event event) async {
+    Response response = await client.get(
+      _ApiUserLinks.organiserUserForEventLink(eventPK: event.pk),
+    );
+    final body = jsonDecode(response.body);
+
+    return User.fromModel(userModel: UserModel.fromJson(body));
   }
 
   Future<List<User>> retrieveAllUsers() async {
