@@ -34,10 +34,10 @@ extension LoginStatusExtension on LoginStatus {
   }
 }
 
-class InvalidCredentialsScaffold extends StatelessWidget {
+class InvalidCredentialsDialog extends StatelessWidget {
   final LoginStatus loginStatus;
 
-  const InvalidCredentialsScaffold({
+  const InvalidCredentialsDialog({
     Key? key,
     required this.loginStatus,
   }) : super(key: key);
@@ -58,7 +58,7 @@ class InvalidCredentialsScaffold extends StatelessWidget {
       ),
     );
 
-    final Widget invalidCredentialsDialog = SimpleDialog(
+    return SimpleDialog(
       contentPadding: const EdgeInsets.all(DIALOG_PADDING),
       title: Text(loginStatus.getTitle()),
       children: <Widget>[
@@ -69,7 +69,5 @@ class InvalidCredentialsScaffold extends StatelessWidget {
         Center(child: okButton),
       ],
     );
-
-    return Scaffold(body: invalidCredentialsDialog);
   }
 }
