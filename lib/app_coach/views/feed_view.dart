@@ -9,6 +9,7 @@ import 'package:keep_playing_frontend/models_widgets/event_widgets.dart';
 import 'package:keep_playing_frontend/stored_data.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 import '../../../models/event.dart';
 import '../cubits/feed_events_cubit.dart';
@@ -124,6 +125,42 @@ class _ApplyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onPressed() {
+      final Widget applyToJobDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to apply?',
+        onNoPressed: () => Navigator.of(context).pop(false),
+        onYesPressed: () => Navigator.of(context).pop(true),
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => applyToJobDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            final NavigatorState navigator = Navigator.of(context);
+            final FeedEventsCubit feedEventsCubit =
+                BlocProvider.of<FeedEventsCubit>(context);
+
+            final Response response = await API.coach.applyToJob(event: event);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await feedEventsCubit.retrieveFeedEvents();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
@@ -131,17 +168,7 @@ class _ApplyButton extends StatelessWidget {
           primary: APPLY_BUTTON_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return BlocProvider<FeedEventsCubit>.value(
-                value: BlocProvider.of<FeedEventsCubit>(context),
-                child: _ApplyToJobDialog(event: event),
-              );
-            },
-          );
-        },
+        onPressed: onPressed,
         child: const Text('Apply'),
       ),
     );
@@ -157,6 +184,43 @@ class _UnapplyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onPressed() {
+      final Widget unapplyFromJobDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to unapply?',
+        onNoPressed: () => Navigator.of(context).pop(false),
+        onYesPressed: () => Navigator.of(context).pop(true),
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => unapplyFromJobDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            final NavigatorState navigator = Navigator.of(context);
+            final FeedEventsCubit feedEventsCubit =
+                BlocProvider.of<FeedEventsCubit>(context);
+
+            final Response response =
+                await API.coach.unapplyFromJob(event: event);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await feedEventsCubit.retrieveFeedEvents();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
@@ -164,89 +228,9 @@ class _UnapplyButton extends StatelessWidget {
           primary: UNAPPLY_BUTTON_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return BlocProvider<FeedEventsCubit>.value(
-                value: BlocProvider.of<FeedEventsCubit>(context),
-                child: _UnapplyFromJobDialog(event: event),
-              );
-            },
-          );
-        },
+        onPressed: onPressed,
         child: const Text('Unapply'),
       ),
-    );
-  }
-}
-
-// **************************************************************************
-// **************** DIALOGS
-// **************************************************************************
-
-class _ApplyToJobDialog extends StatelessWidget {
-  final Event event;
-
-  const _ApplyToJobDialog({
-    required this.event,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ConfirmationDialog(
-      title: 'Are you sure that you want to apply?',
-      onNoPressed: () => Navigator.of(context).pop(),
-      onYesPressed: () async {
-        final NavigatorState navigator = Navigator.of(context);
-        final FeedEventsCubit feedEventsCubit =
-            BlocProvider.of<FeedEventsCubit>(context);
-
-        final Response response = await API.coach.applyToJob(event: event);
-        if (response.statusCode == HTTP_202_ACCEPTED) {
-          feedEventsCubit.retrieveFeedEvents();
-          navigator.pop();
-        } else {
-          showDialog(
-            context: context,
-            builder: (_) => const RequestFailedDialog(),
-            barrierDismissible: false,
-          );
-        }
-      },
-    );
-  }
-}
-
-class _UnapplyFromJobDialog extends StatelessWidget {
-  final Event event;
-
-  const _UnapplyFromJobDialog({
-    required this.event,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ConfirmationDialog(
-      title: 'Are you sure that you want to unapply?',
-      onNoPressed: () => Navigator.of(context).pop(),
-      onYesPressed: () async {
-        final NavigatorState navigator = Navigator.of(context);
-        final FeedEventsCubit feedEventsCubit =
-            BlocProvider.of<FeedEventsCubit>(context);
-
-        final Response response = await API.coach.unapplyFromJob(event: event);
-        if (response.statusCode == HTTP_202_ACCEPTED) {
-          feedEventsCubit.retrieveFeedEvents();
-          navigator.pop();
-        } else {
-          showDialog(
-            context: context,
-            builder: (_) => const RequestFailedDialog(),
-            barrierDismissible: false,
-          );
-        }
-      },
     );
   }
 }

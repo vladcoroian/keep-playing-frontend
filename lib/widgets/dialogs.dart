@@ -106,6 +106,10 @@ class ExitDialog extends StatelessWidget {
   }
 }
 
+// **************************************************************************
+// **************** REQUESTS
+// **************************************************************************
+
 class RequestFailedDialog extends StatelessWidget {
   const RequestFailedDialog({super.key});
 
@@ -135,4 +139,12 @@ class RequestFailedDialog extends StatelessWidget {
       ],
     );
   }
+}
+
+showRequestFailedDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => const RequestFailedDialog(),
+    barrierDismissible: false,
+  );
 }

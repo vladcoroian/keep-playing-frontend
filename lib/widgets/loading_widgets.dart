@@ -31,3 +31,11 @@ class LoadingDialog extends StatelessWidget {
     );
   }
 }
+
+showLoadingDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (_) => const LoadingDialog(),
+    barrierDismissible: false,
+  );
+}

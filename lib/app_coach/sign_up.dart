@@ -132,8 +132,9 @@ class _CoachSignUpPageState extends State<CoachSignUpPage> {
     return (await showDialog(
           context: context,
           builder: (_) => const ExitDialog(
-              title: 'Are you sure that you want to exit?',
-              text: 'You haven\'t created your account.'),
+            title: 'Are you sure that you want to exit?',
+            text: 'You haven\'t created your account.',
+          ),
         )) ??
         false;
   }

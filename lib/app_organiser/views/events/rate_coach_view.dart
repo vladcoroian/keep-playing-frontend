@@ -163,8 +163,9 @@ class _RateCoachViewState extends State<RateCoachView> {
     return (await showDialog(
           context: context,
           builder: (_) => const ExitDialog(
-              title: 'Are you sure that you want to exit?',
-              text: 'You didn\'t send the rating.'),
+            title: 'Are you sure that you want to exit?',
+            text: 'You didn\'t send the rating.',
+          ),
         )) ??
         false;
   }

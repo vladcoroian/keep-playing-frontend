@@ -129,8 +129,9 @@ class _BlockedViewState extends State<BlockedView> {
     return (await showDialog(
           context: context,
           builder: (_) => const ExitDialog(
-              title: 'Are you sure that you want to exit?',
-              text: 'You haven\'t saved your changes.'),
+            title: 'Are you sure that you want to exit?',
+            text: 'You haven\'t saved your changes.',
+          ),
         )) ??
         false;
   }

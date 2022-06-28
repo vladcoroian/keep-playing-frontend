@@ -434,8 +434,9 @@ class _ManageEventView extends State<ManageEventView> {
     return (await showDialog(
           context: context,
           builder: (_) => const ExitDialog(
-              title: 'Are you sure that you want to exit?',
-              text: 'You haven\'t finished editing the event'),
+            title: 'Are you sure that you want to exit?',
+            text: 'You haven\'t finished editing the event',
+          ),
         )) ??
         false;
   }

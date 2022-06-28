@@ -8,6 +8,7 @@ import 'package:keep_playing_frontend/app_coach/cubits/upcoming_jobs_cubit.dart'
 import 'package:keep_playing_frontend/constants.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 import '../../models/event.dart';
 import '../../models_widgets/event_widgets.dart';
@@ -74,6 +75,42 @@ class _UpcomingJobWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onCancelButtonPressed() {
+      final Widget cancelJobDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to cancel this job?',
+        onNoPressed: () => Navigator.of(context).pop(false),
+        onYesPressed: () => Navigator.of(context).pop(true),
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => cancelJobDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            final NavigatorState navigator = Navigator.of(context);
+            final UpcomingJobsCubit upcomingJobsCubit =
+                BlocProvider.of<UpcomingJobsCubit>(context);
+
+            final Response response = await API.coach.cancelJob(event: event);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await upcomingJobsCubit.retrieveUpcomingJobs();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     final Widget cancelButton = Container(
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, 0, BUTTON_PADDING),
       child: ElevatedButton(
@@ -81,17 +118,7 @@ class _UpcomingJobWidget extends StatelessWidget {
           primary: CANCEL_BUTTON_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return BlocProvider<UpcomingJobsCubit>.value(
-                value: BlocProvider.of<UpcomingJobsCubit>(context),
-                child: _CancelJobDialog(event: event),
-              );
-            },
-          );
-        },
+        onPressed: onCancelButtonPressed,
         child: const Text('Cancel'),
       ),
     );
@@ -118,45 +145,6 @@ class _UpcomingJobWidget extends StatelessWidget {
       event: event,
       leftButton: cancelButton,
       rightButton: detailsButton,
-    );
-  }
-}
-
-// **************************************************************************
-// **************** DIALOGS
-// **************************************************************************
-
-class _CancelJobDialog extends StatelessWidget {
-  final Event event;
-
-  const _CancelJobDialog({
-    required this.event,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ConfirmationDialog(
-      title: 'Are you sure that you want to cancel this job?',
-      onNoPressed: () {
-        Navigator.of(context).pop();
-      },
-      onYesPressed: () async {
-        final NavigatorState navigator = Navigator.of(context);
-        final UpcomingJobsCubit upcomingJobsCubit =
-            BlocProvider.of<UpcomingJobsCubit>(context);
-
-        final Response response = await API.coach.cancelJob(event: event);
-        if (response.statusCode == HTTP_202_ACCEPTED) {
-          upcomingJobsCubit.retrieveUpcomingJobs();
-          navigator.pop();
-        } else {
-          showDialog(
-            context: context,
-            builder: (_) => const RequestFailedDialog(),
-            barrierDismissible: false,
-          );
-        }
-      },
     );
   }
 }

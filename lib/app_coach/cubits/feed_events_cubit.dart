@@ -5,7 +5,7 @@ import 'package:keep_playing_frontend/models/event.dart';
 class FeedEventsCubit extends Cubit<List<Event>> {
   FeedEventsCubit() : super([]);
 
-  void retrieveFeedEvents() async {
+  Future<void> retrieveFeedEvents() async {
     List<Event> retrievedEvents = await API.coach.retrieveFeedEvents();
     emit(retrievedEvents);
   }
