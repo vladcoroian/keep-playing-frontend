@@ -24,10 +24,7 @@ class EventWidgets {
     return <Widget>[
       ListTile(
         leading: EventIcons.NAME_ICON,
-        title: Text(
-          event.name,
-          style: _textStyleForTitle.copyWith(fontSize: 20.0),
-        ),
+        title: Text(event.name, style: _textStyleForTitle),
       ),
       ListTile(
         leading: EventIcons.SPORT_ICON,
