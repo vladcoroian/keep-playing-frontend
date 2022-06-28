@@ -5,7 +5,7 @@ import 'package:keep_playing_frontend/models/organiser.dart';
 class OrganiserCubit extends Cubit<Organiser> {
   OrganiserCubit({required Organiser organiser}) : super(organiser);
 
-  void retrieveOrganiserInformation() async {
+  Future<void> retrieveOrganiserInformation() async {
     Organiser organiser = await API.organiser.getOrganiser();
     emit(organiser);
   }

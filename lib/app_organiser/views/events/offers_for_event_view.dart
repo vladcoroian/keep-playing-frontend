@@ -190,6 +190,43 @@ class _OfferCard extends StatelessWidget {
       ),
     );
 
+    void onAcceptButtonPressed() {
+      const Widget acceptCoachDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to accept this offer?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => acceptCoachDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            NavigatorState navigator = Navigator.of(context);
+            EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
+
+            final Response response = await API.organiser.acceptCoach(
+              event: event,
+              coach: coach,
+            );
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await eventsCubit.retrieveEvents();
+              navigator.pop();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     final Widget acceptButton = Container(
       padding: const EdgeInsets.fromLTRB(0, 0, BUTTON_PADDING, BUTTON_PADDING),
       child: ElevatedButton(
@@ -197,25 +234,7 @@ class _OfferCard extends StatelessWidget {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () async {
-          NavigatorState navigator = Navigator.of(context);
-          EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-
-          final Response response = await API.organiser.acceptCoach(
-            event: event,
-            coach: coach,
-          );
-          if (response.statusCode == HTTP_202_ACCEPTED) {
-            eventsCubit.retrieveEvents();
-            navigator.pop();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
-        },
+        onPressed: onAcceptButtonPressed,
         child: const Text('Accept'),
       ),
     );

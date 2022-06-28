@@ -162,6 +162,40 @@ class _BlockButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onPressed() {
+      const Widget blockDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to block this coach?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => blockDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            final NavigatorState navigator = Navigator.of(context);
+            OrganiserCubit organiserCubit =
+                BlocProvider.of<OrganiserCubit>(context);
+
+            Response response = await API.organiser.blockCoach(coach);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await organiserCubit.retrieveOrganiserInformation();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
@@ -169,21 +203,7 @@ class _BlockButton extends StatelessWidget {
           primary: BLOCK_BUTTON_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () async {
-          OrganiserCubit organiserCubit =
-              BlocProvider.of<OrganiserCubit>(context);
-
-          Response response = await API.organiser.blockCoach(coach);
-          if (response.statusCode == HTTP_202_ACCEPTED) {
-            organiserCubit.retrieveOrganiserInformation();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
-        },
+        onPressed: onPressed,
         child: const Text('Block'),
       ),
     );
@@ -197,6 +217,40 @@ class _UnblockButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onPressed() {
+      const Widget unblockDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to unblock this coach?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => unblockDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            final NavigatorState navigator = Navigator.of(context);
+            OrganiserCubit organiserCubit =
+                BlocProvider.of<OrganiserCubit>(context);
+
+            Response response = await API.organiser.unblockCoach(coach);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await organiserCubit.retrieveOrganiserInformation();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
@@ -204,21 +258,7 @@ class _UnblockButton extends StatelessWidget {
           primary: UNBLOCK_BUTTON_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () async {
-          OrganiserCubit organiserCubit =
-              BlocProvider.of<OrganiserCubit>(context);
-
-          Response response = await API.organiser.unblockCoach(coach);
-          if (response.statusCode == HTTP_202_ACCEPTED) {
-            organiserCubit.retrieveOrganiserInformation();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
-        },
+        onPressed: onPressed,
         child: const Text('Unblock'),
       ),
     );
@@ -232,6 +272,41 @@ class _AddToFavouritesButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onPressed() {
+      const Widget addCoachAsAFavouriteDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to add this coach as a favourite?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => addCoachAsAFavouriteDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            final NavigatorState navigator = Navigator.of(context);
+            OrganiserCubit organiserCubit =
+                BlocProvider.of<OrganiserCubit>(context);
+
+            Response response =
+                await API.organiser.addCoachToFavouritesList(coach);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await organiserCubit.retrieveOrganiserInformation();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
@@ -239,22 +314,7 @@ class _AddToFavouritesButton extends StatelessWidget {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () async {
-          OrganiserCubit organiserCubit =
-              BlocProvider.of<OrganiserCubit>(context);
-
-          Response response =
-              await API.organiser.addCoachToFavouritesList(coach);
-          if (response.statusCode == HTTP_202_ACCEPTED) {
-            organiserCubit.retrieveOrganiserInformation();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
-        },
+        onPressed: onPressed,
         child: const Text('Add Favourite'),
       ),
     );
@@ -268,6 +328,42 @@ class _RemoveFromFavouritesButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onPressed() {
+      const Widget removeCoachAsAFavouriteDialog = ConfirmationDialog(
+        title:
+            'Are you sure that you want to remove this coach as a favourite?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => removeCoachAsAFavouriteDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            final NavigatorState navigator = Navigator.of(context);
+            OrganiserCubit organiserCubit =
+                BlocProvider.of<OrganiserCubit>(context);
+
+            Response response =
+                await API.organiser.removeCoachFromFavouritesList(coach);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await organiserCubit.retrieveOrganiserInformation();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(BUTTON_PADDING, 0, BUTTON_PADDING, 0),
       child: ElevatedButton(
@@ -275,22 +371,7 @@ class _RemoveFromFavouritesButton extends StatelessWidget {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () async {
-          OrganiserCubit organiserCubit =
-              BlocProvider.of<OrganiserCubit>(context);
-
-          Response response =
-              await API.organiser.removeCoachFromFavouritesList(coach);
-          if (response.statusCode == HTTP_202_ACCEPTED) {
-            organiserCubit.retrieveOrganiserInformation();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
-        },
+        onPressed: onPressed,
         child: const Text('Remove Favourite'),
       ),
     );

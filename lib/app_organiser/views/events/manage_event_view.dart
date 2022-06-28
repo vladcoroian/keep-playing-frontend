@@ -333,6 +333,42 @@ class _ManageEventView extends State<ManageEventView> {
       ),
     );
 
+    void onCancelButtonPressed() {
+      const Widget cancelEventDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to cancel this event?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => cancelEventDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            NavigatorState navigator = Navigator.of(context);
+            final EventsCubit eventsCubit =
+                BlocProvider.of<EventsCubit>(context);
+
+            final Response response =
+                await API.organiser.cancelEvent(event: widget.event);
+            if (response.statusCode == HTTP_200_OK) {
+              await eventsCubit.retrieveEvents();
+              navigator.pop();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     final Widget cancelEventButton = Container(
       padding: const EdgeInsets.fromLTRB(
           BUTTON_PADDING, BUTTON_PADDING, 0, BUTTON_PADDING),
@@ -341,20 +377,66 @@ class _ManageEventView extends State<ManageEventView> {
           primary: CANCEL_BUTTON_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return BlocProvider<EventsCubit>.value(
-                value: BlocProvider.of<EventsCubit>(context),
-                child: _CancelEventDialog(event: widget.event),
-              );
-            },
-          );
-        },
+        onPressed: onCancelButtonPressed,
         child: const Text('Cancel Event'),
       ),
     );
+
+    void onSaveButtonPressed() {
+      const Widget saveChangesDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to save your changes?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => saveChangesDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            NavigatorState navigator = Navigator.of(context);
+            final EventsCubit eventsCubit =
+                BlocProvider.of<EventsCubit>(context);
+
+            sport_event.NewEvent newEvent = sport_event.NewEvent(
+              name: _name,
+              location: _location,
+              details: _details,
+              sport: _sport,
+              role: _role,
+              date: _date,
+              startTime: _startTime,
+              endTime: _endTime,
+              flexibleStartTime: _flexibleStartTime,
+              flexibleEndTime: _flexibleEndTime,
+              price: _price,
+              coach: _coach,
+              recurring: _recurring,
+              creationStarted: widget.event.creationStarted,
+              creationEnded: widget.event.creationEnded,
+            );
+
+            Response response = await API.organiser.changeEvent(
+              event: widget.event,
+              newEvent: newEvent,
+            );
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await eventsCubit.retrieveEvents();
+              navigator.pop();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
 
     final Widget saveChangesButton = Container(
       padding: const EdgeInsets.fromLTRB(
@@ -364,38 +446,7 @@ class _ManageEventView extends State<ManageEventView> {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () {
-          sport_event.NewEvent newEvent = sport_event.NewEvent(
-            name: _name,
-            location: _location,
-            details: _details,
-            sport: _sport,
-            role: _role,
-            date: _date,
-            startTime: _startTime,
-            endTime: _endTime,
-            flexibleStartTime: _flexibleStartTime,
-            flexibleEndTime: _flexibleEndTime,
-            price: _price,
-            coach: _coach,
-            recurring: _recurring,
-            creationStarted: widget.event.creationStarted,
-            creationEnded: widget.event.creationEnded,
-          );
-
-          showDialog(
-            context: context,
-            builder: (_) {
-              return BlocProvider<EventsCubit>.value(
-                value: BlocProvider.of<EventsCubit>(context),
-                child: _SaveChangesDialog(
-                  event: widget.event,
-                  newEvent: newEvent,
-                ),
-              );
-            },
-          );
-        },
+        onPressed: onSaveButtonPressed,
         child: const Text('Save Changes'),
       ),
     );
@@ -439,82 +490,5 @@ class _ManageEventView extends State<ManageEventView> {
           ),
         )) ??
         false;
-  }
-}
-
-// **************************************************************************
-// **************** DIALOGS
-// **************************************************************************
-
-class _CancelEventDialog extends StatelessWidget {
-  final sport_event.Event event;
-
-  const _CancelEventDialog({
-    required this.event,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ConfirmationDialog(
-      title: 'Are you sure that you want to cancel this event?',
-      onNoPressed: () => {
-        Navigator.of(context).pop(),
-      },
-      onYesPressed: () async {
-        NavigatorState navigator = Navigator.of(context);
-        final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-
-        final Response response = await API.organiser.cancelEvent(event: event);
-        if (response.statusCode == HTTP_200_OK) {
-          eventsCubit.retrieveEvents();
-          navigator.pop();
-          navigator.pop();
-        } else {
-          showDialog(
-            context: context,
-            builder: (_) => const RequestFailedDialog(),
-            barrierDismissible: false,
-          );
-        }
-      },
-    );
-  }
-}
-
-class _SaveChangesDialog extends StatelessWidget {
-  final sport_event.Event event;
-  final sport_event.NewEvent newEvent;
-
-  const _SaveChangesDialog({
-    required this.event,
-    required this.newEvent,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ConfirmationDialog(
-      title: 'Are you sure that you want to save your changes?',
-      onNoPressed: () => Navigator.of(context).pop(),
-      onYesPressed: () async {
-        NavigatorState navigator = Navigator.of(context);
-        final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-
-        Response response = await API.organiser.changeEvent(
-          event: event,
-          newEvent: newEvent,
-        );
-        if (response.statusCode == HTTP_202_ACCEPTED) {
-          eventsCubit.retrieveEvents();
-          navigator.pop();
-          navigator.pop();
-        } else {
-          showDialog(
-            context: context,
-            builder: (_) => const RequestFailedDialog(),
-            barrierDismissible: false,
-          );
-        }
-      },
-    );
   }
 }

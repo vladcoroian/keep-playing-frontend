@@ -10,6 +10,7 @@ import 'package:keep_playing_frontend/models/event/event.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/icons.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class RateCoachView extends StatefulWidget {
   final Event event;
@@ -72,42 +73,6 @@ class _RateCoachViewState extends State<RateCoachView> {
       },
     );
 
-    final Widget sendRatingButton = Container(
-      padding: const EdgeInsets.all(BUTTON_PADDING),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          primary: SEND_RATING_BUTTON_COLOR,
-          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
-        ),
-        onPressed: () async {
-          NavigatorState navigator = Navigator.of(context);
-          EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-
-          CoachNewRating coachNewRating = CoachNewRating(
-            experience: _experienceRating.toInt(),
-            flexibility: _flexibilityRating.toInt(),
-            reliability: _reliabilityRating.toInt(),
-          );
-
-          final Response response = await API.organiser.rateEventCoach(
-            event: widget.event,
-            coachNewRating: coachNewRating,
-          );
-          if (response.statusCode == HTTP_200_OK) {
-            eventsCubit.retrieveEvents();
-            navigator.pop(true);
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
-        },
-        child: const Text('Send Rating'),
-      ),
-    );
-
     final Widget experienceRow = Container(
       padding: const EdgeInsets.all(DEFAULT_PADDING),
       child: Row(
@@ -138,6 +103,60 @@ class _RateCoachViewState extends State<RateCoachView> {
           const Spacer(),
           reliabilityRatingBar,
         ],
+      ),
+    );
+
+    void onSendingButtonPressed() {
+      const Widget sendRatingDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to send this rating?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => sendRatingDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            NavigatorState navigator = Navigator.of(context);
+            EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
+
+            CoachNewRating coachNewRating = CoachNewRating(
+              experience: _experienceRating.toInt(),
+              flexibility: _flexibilityRating.toInt(),
+              reliability: _reliabilityRating.toInt(),
+            );
+
+            final Response response = await API.organiser.rateEventCoach(
+              event: widget.event,
+              coachNewRating: coachNewRating,
+            );
+            if (response.statusCode == HTTP_200_OK) {
+              await eventsCubit.retrieveEvents();
+              navigator.pop(true);
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
+    final Widget sendRatingButton = Container(
+      padding: const EdgeInsets.all(BUTTON_PADDING),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: SEND_RATING_BUTTON_COLOR,
+          textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
+        ),
+        onPressed: onSendingButtonPressed,
+        child: const Text('Send Rating'),
       ),
     );
 

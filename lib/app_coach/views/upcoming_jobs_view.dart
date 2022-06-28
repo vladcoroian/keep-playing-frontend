@@ -76,10 +76,8 @@ class _UpcomingJobWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onCancelButtonPressed() {
-      final Widget cancelJobDialog = ConfirmationDialog(
+      const Widget cancelJobDialog = ConfirmationDialog(
         title: 'Are you sure that you want to cancel this job?',
-        onNoPressed: () => Navigator.of(context).pop(false),
-        onYesPressed: () => Navigator.of(context).pop(true),
       );
 
       showDialog(

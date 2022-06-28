@@ -126,10 +126,8 @@ class _ApplyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressed() {
-      final Widget applyToJobDialog = ConfirmationDialog(
+      const Widget applyToJobDialog = ConfirmationDialog(
         title: 'Are you sure that you want to apply?',
-        onNoPressed: () => Navigator.of(context).pop(false),
-        onYesPressed: () => Navigator.of(context).pop(true),
       );
 
       showDialog(
@@ -185,10 +183,8 @@ class _UnapplyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void onPressed() {
-      final Widget unapplyFromJobDialog = ConfirmationDialog(
+      const Widget unapplyFromJobDialog = ConfirmationDialog(
         title: 'Are you sure that you want to unapply?',
-        onNoPressed: () => Navigator.of(context).pop(false),
-        onYesPressed: () => Navigator.of(context).pop(true),
       );
 
       showDialog(

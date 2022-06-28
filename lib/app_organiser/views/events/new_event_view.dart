@@ -282,6 +282,60 @@ class _NewEventViewState extends State<NewEventView> {
       ),
     );
 
+    void onSubmitButtonPressed() {
+      const Widget unapplyFromJobDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to post this event?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => unapplyFromJobDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            NavigatorState navigator = Navigator.of(context);
+            final EventsCubit eventsCubit =
+                BlocProvider.of<EventsCubit>(context);
+
+            NewEvent newEvent = NewEvent(
+              name: _name,
+              location: _location,
+              details: _details,
+              sport: _sport,
+              role: _role,
+              date: _date,
+              startTime: _startTime,
+              endTime: _endTime,
+              flexibleStartTime: _flexibleStartTime,
+              flexibleEndTime: _flexibleEndTime,
+              price: _price == null ? 0 : _price!,
+              coach: false,
+              recurring: _recurring,
+              creationStarted: _creationStarted,
+              creationEnded: DateTime.now(),
+            );
+
+            Response response =
+                await API.organiser.addNewEvent(newEvent: newEvent);
+            if (response.statusCode == HTTP_201_CREATED) {
+              await eventsCubit.retrieveEvents();
+              navigator.pop();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     final Widget submitButton = Container(
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
@@ -289,42 +343,7 @@ class _NewEventViewState extends State<NewEventView> {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () async {
-          NewEvent newEvent = NewEvent(
-            name: _name,
-            location: _location,
-            details: _details,
-            sport: _sport,
-            role: _role,
-            date: _date,
-            startTime: _startTime,
-            endTime: _endTime,
-            flexibleStartTime: _flexibleStartTime,
-            flexibleEndTime: _flexibleEndTime,
-            price: _price!,
-            coach: false,
-            recurring: _recurring,
-            creationStarted: _creationStarted,
-            creationEnded: DateTime.now(),
-          );
-
-          NavigatorState navigator = Navigator.of(context);
-          final EventsCubit eventsCubit = BlocProvider.of<EventsCubit>(context);
-
-          Response response =
-              await API.organiser.addNewEvent(newEvent: newEvent);
-          print(response.body);
-          if (response.statusCode == HTTP_201_CREATED) {
-            eventsCubit.retrieveEvents();
-            navigator.pop();
-          } else {
-            showDialog(
-              context: context,
-              builder: (_) => const RequestFailedDialog(),
-              barrierDismissible: false,
-            );
-          }
-        },
+        onPressed: onSubmitButtonPressed,
         child: const Text('Submit'),
       ),
     );

@@ -7,14 +7,10 @@ const double DIALOG_PADDING = 16;
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
-  final VoidCallback onNoPressed;
-  final VoidCallback onYesPressed;
 
   const ConfirmationDialog({
     super.key,
     required this.title,
-    required this.onNoPressed,
-    required this.onYesPressed,
   });
 
   @override
@@ -26,7 +22,7 @@ class ConfirmationDialog extends StatelessWidget {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: onYesPressed,
+        onPressed: () => Navigator.of(context).pop(true),
         child: const Text('Yes'),
       ),
     );
@@ -38,7 +34,7 @@ class ConfirmationDialog extends StatelessWidget {
           primary: BUTTON_GRAY_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: onNoPressed,
+        onPressed: () => Navigator.of(context).pop(false),
         child: const Text('No'),
       ),
     );

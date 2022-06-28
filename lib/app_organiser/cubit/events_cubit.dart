@@ -11,7 +11,7 @@ class EventsCubit extends Cubit<List<Event>> {
 
   EventsCubit() : super([]);
 
-  void retrieveEvents() async {
+  Future<void> retrieveEvents() async {
     allEvents = await API.organiser.retrieveEvents();
     updateEventsUsingPreferences();
   }

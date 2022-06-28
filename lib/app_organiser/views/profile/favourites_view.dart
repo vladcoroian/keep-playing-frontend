@@ -83,6 +83,42 @@ class _FavouritesViewState extends State<FavouritesView> {
       },
     );
 
+    void onSaveChangesButtonPressed() {
+      const Widget saveChangesDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to save your changes?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => saveChangesDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            NavigatorState navigator = Navigator.of(context);
+            final OrganiserCubit organiserCubit =
+                BlocProvider.of<OrganiserCubit>(context);
+
+            Response response =
+                await API.organiser.updateFavouritesList(_favourites);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await organiserCubit.retrieveOrganiserInformation();
+              navigator.pop();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     final Widget saveChangesButton = Container(
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
@@ -90,17 +126,7 @@ class _FavouritesViewState extends State<FavouritesView> {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return BlocProvider<OrganiserCubit>.value(
-                value: BlocProvider.of<OrganiserCubit>(context),
-                child: _SaveChangesDialog(favourites: _favourites),
-              );
-            },
-          );
-        },
+        onPressed: onSaveChangesButtonPressed,
         child: const Text('Save Changes'),
       ),
     );
@@ -133,44 +159,5 @@ class _FavouritesViewState extends State<FavouritesView> {
           ),
         )) ??
         false;
-  }
-}
-
-// **************************************************************************
-// **************** DIALOGS
-// **************************************************************************
-
-class _SaveChangesDialog extends StatelessWidget {
-  final List<int> favourites;
-
-  const _SaveChangesDialog({
-    required this.favourites,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ConfirmationDialog(
-      title: 'Are you sure that you want to save your changes?',
-      onNoPressed: () => Navigator.of(context).pop(),
-      onYesPressed: () async {
-        NavigatorState navigator = Navigator.of(context);
-        final OrganiserCubit organiserCubit =
-            BlocProvider.of<OrganiserCubit>(context);
-
-        Response response =
-            await API.organiser.updateFavouritesList(favourites);
-        if (response.statusCode == HTTP_202_ACCEPTED) {
-          organiserCubit.retrieveOrganiserInformation();
-          navigator.pop();
-          navigator.pop();
-        } else {
-          showDialog(
-            context: context,
-            builder: (_) => const RequestFailedDialog(),
-            barrierDismissible: false,
-          );
-        }
-      },
-    );
   }
 }

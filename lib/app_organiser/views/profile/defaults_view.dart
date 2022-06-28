@@ -9,6 +9,7 @@ import 'package:keep_playing_frontend/models/organiser.dart';
 import 'package:keep_playing_frontend/widgets/buttons.dart';
 import 'package:keep_playing_frontend/widgets/dialogs.dart';
 import 'package:keep_playing_frontend/widgets/icons.dart';
+import 'package:keep_playing_frontend/widgets/loading_widgets.dart';
 
 class DefaultsView extends StatefulWidget {
   const DefaultsView({Key? key}) : super(key: key);
@@ -121,6 +122,49 @@ class _DefaultsViewState extends State<DefaultsView> {
       },
     );
 
+    void onSaveChangesButtonPressed() {
+      const Widget saveChangesDialog = ConfirmationDialog(
+        title: 'Are you sure that you want to save your changes?',
+      );
+
+      showDialog(
+        context: context,
+        builder: (_) => saveChangesDialog,
+      ).then(
+        (value) async {
+          if (value) {
+            showLoadingDialog(context);
+
+            OrganiserDefaults organiserDefaults = OrganiserDefaults(
+              defaultSport: _sport,
+              defaultRole: _role,
+              defaultLocation: _location,
+              defaultPrice: _price,
+            );
+
+            NavigatorState navigator = Navigator.of(context);
+            final OrganiserCubit organiserCubit =
+                BlocProvider.of<OrganiserCubit>(context);
+
+            Response response = await API.organiser
+                .changeDefaults(organiserDefaults: organiserDefaults);
+            if (response.statusCode == HTTP_202_ACCEPTED) {
+              await organiserCubit.retrieveOrganiserInformation();
+              navigator.pop();
+              navigator.pop();
+            } else {
+              navigator.pop();
+              showDialog(
+                context: context,
+                builder: (_) => const RequestFailedDialog(),
+                barrierDismissible: false,
+              );
+            }
+          }
+        },
+      );
+    }
+
     final Widget saveChangesButton = Container(
       padding: const EdgeInsets.all(BUTTON_PADDING),
       child: ElevatedButton(
@@ -128,24 +172,7 @@ class _DefaultsViewState extends State<DefaultsView> {
           primary: APP_COLOR,
           textStyle: const TextStyle(fontSize: BUTTON_FONT_SIZE),
         ),
-        onPressed: () {
-          OrganiserDefaults organiserDefaults = OrganiserDefaults(
-            defaultSport: _sport,
-            defaultRole: _role,
-            defaultLocation: _location,
-            defaultPrice: _price,
-          );
-
-          showDialog(
-            context: context,
-            builder: (_) {
-              return BlocProvider<OrganiserCubit>.value(
-                value: BlocProvider.of<OrganiserCubit>(context),
-                child: _SaveChangesDialog(organiserDefaults: organiserDefaults),
-              );
-            },
-          );
-        },
+        onPressed: onSaveChangesButtonPressed,
         child: const Text('Save Changes'),
       ),
     );
@@ -178,44 +205,5 @@ class _DefaultsViewState extends State<DefaultsView> {
           ),
         )) ??
         false;
-  }
-}
-
-// **************************************************************************
-// **************** DIALOGS
-// **************************************************************************
-
-class _SaveChangesDialog extends StatelessWidget {
-  final OrganiserDefaults organiserDefaults;
-
-  const _SaveChangesDialog({
-    required this.organiserDefaults,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ConfirmationDialog(
-      title: 'Are you sure that you want to save your changes?',
-      onNoPressed: () => Navigator.of(context).pop(),
-      onYesPressed: () async {
-        NavigatorState navigator = Navigator.of(context);
-        final OrganiserCubit organiserCubit =
-            BlocProvider.of<OrganiserCubit>(context);
-
-        Response response = await API.organiser
-            .changeDefaults(organiserDefaults: organiserDefaults);
-        if (response.statusCode == HTTP_202_ACCEPTED) {
-          organiserCubit.retrieveOrganiserInformation();
-          navigator.pop();
-          navigator.pop();
-        } else {
-          showDialog(
-            context: context,
-            builder: (_) => const RequestFailedDialog(),
-            barrierDismissible: false,
-          );
-        }
-      },
-    );
   }
 }

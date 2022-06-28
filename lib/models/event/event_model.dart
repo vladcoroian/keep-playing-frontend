@@ -25,7 +25,6 @@ class EventModel {
   final bool recurring;
 
   final int? coach_user;
-  final int organiser_user;
 
   final List<int> offers;
 
@@ -49,7 +48,6 @@ class EventModel {
     required this.coach,
     required this.recurring,
     this.coach_user,
-    required this.organiser_user,
     required this.offers,
     required this.voted,
   });
