@@ -93,6 +93,7 @@ class _NewEventViewState extends State<NewEventView> {
 
     final Widget nameForm = ListTile(
       title: TextFormField(
+        initialValue: _name,
         decoration: const InputDecoration(
           icon: EventIcons.NAME_ICON,
           hintText: 'Enter the name',
@@ -158,6 +159,7 @@ class _NewEventViewState extends State<NewEventView> {
 
     final Widget detailsForm = ListTile(
       title: TextFormField(
+        initialValue: _details,
         decoration: const InputDecoration(
           icon: EventIcons.DETAILS_ICON,
           hintText: 'Enter details',
@@ -283,13 +285,13 @@ class _NewEventViewState extends State<NewEventView> {
     );
 
     void onSubmitButtonPressed() {
-      const Widget unapplyFromJobDialog = ConfirmationDialog(
+      const Widget submitJobDialog = ConfirmationDialog(
         title: 'Are you sure that you want to post this event?',
       );
 
       showDialog(
         context: context,
-        builder: (_) => unapplyFromJobDialog,
+        builder: (_) => submitJobDialog,
       ).then(
         (value) async {
           if (value) {
